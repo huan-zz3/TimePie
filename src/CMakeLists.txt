@@ -1,3 +1,9 @@
-add_executable(TimePie main.cpp
+add_executable(TimePie
+        main.cpp
         ${PROJECT_SOURCE_DIR}/include/interface.h
-        ../include/predefine.h)
+        ${PROJECT_SOURCE_DIR}/include/predefine.h
+)
+
+ target_link_libraries(TimePie
+         EPDriver
+ )
