@@ -9,16 +9,19 @@
 
 #include <sigc++/sigc++.h>
 
-void
-on_print(const std::string& str)
+// typedef sigc::signal<void(int)> Signal_int;
+typedef sigc::signal<void(std::string)> Signal_string;
+
+void on_print(const std::string& str)
 {
   std::cout << str;
 }
 
-int
-main()
+int main()
 {
-  sigc::signal<void(const std::string&)> signal_print;
+  // sigc::signal<void(const std::string&)> signal_print;
+  // Signal_int signal_print;
+  Signal_string signal_print;
 
   signal_print.connect(sigc::ptr_fun(&on_print));
 
