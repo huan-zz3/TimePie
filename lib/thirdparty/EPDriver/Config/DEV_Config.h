@@ -6,22 +6,22 @@
 			|\\\					Hardware interface							///|
 			------------------------------------------------------------------------
 ***********************************************************************************************************************/
-#ifdef USE_BCM2835_LIB
-    #include <bcm2835.h>
-#elif USE_WIRINGPI_LIB
-	#include <wiringPi.h>
-    #include <wiringPiSPI.h>
-	#include <wiringPiI2C.h>
-    #include "dev_hardware_i2c.h"  
-#elif USE_LGPIO_LIB
+// #ifdef USE_BCM2835_LIB
+//     #include <bcm2835.h>
+// #elif USE_WIRINGPI_LIB
+// 	#include <wiringPi.h>
+//     #include <wiringPiSPI.h>
+// 	#include <wiringPiI2C.h>
+//     #include "dev_hardware_i2c.h"
+// #elif USE_LGPIO_LIB
     #include <lgpio.h>
     #define LFLAGS 0
     #define NUM_MAXBUF  4
-#elif USE_GPIOD_LIB
-    #include "RPI_gpiod.h"
-    #include "dev_hardware_i2c.h"   
-	#include "dev_hardware_SPI.h"
-#endif
+// #elif USE_GPIOD_LIB
+//     #include "RPI_gpiod.h"
+//     #include "dev_hardware_i2c.h"
+// 	#include "dev_hardware_SPI.h"
+// #endif
 
 #include <errno.h>
 #include <stdio.h>

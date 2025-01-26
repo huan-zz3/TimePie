@@ -46,7 +46,9 @@ set(SOURCES
 
 # 生成静态库
 add_library(EPDriver STATIC ${SOURCES})
+
 target_compile_definitions(EPDriver PRIVATE USE_LGPIO_LIB)
+target_include_directories(EPDriver PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lg)
 
 # 如果需要共享库，可以使用以下命令代替：
 # add_library(EPDriver SHARED ${SOURCES})
