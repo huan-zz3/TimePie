@@ -1,13 +1,9 @@
-# 设置 CMake 的最低版本要求
 cmake_minimum_required(VERSION 3.10)
 
-# 设置项目名称
 project(EPDriver)
 
-# 设置 C 标准
 set(CMAKE_C_STANDARD 99)
 
-# 包含头文件目录（你可以将所有头文件路径传给 target_include_directories）
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/Config
         ${CMAKE_CURRENT_SOURCE_DIR}/Driver
@@ -50,10 +46,9 @@ set(SOURCES
 
 # 生成静态库
 add_library(EPDriver STATIC ${SOURCES})
+target_compile_definitions(EPDriver PRIVATE USE_LGPIO_LIB)
 
 # 如果需要共享库，可以使用以下命令代替：
 # add_library(EPDriver SHARED ${SOURCES})
 
-# 你可以选择将库链接到目标，假设目标是主项目中的可执行文件
-# target_link_libraries(your_target EPDriver)
 
