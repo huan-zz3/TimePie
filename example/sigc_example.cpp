@@ -1,5 +1,6 @@
 #include "predefine.h"
 
+// Result<int> simple_callback(){
 void simple_callback(){
     std::cout<< "Simple triggered!" << std::endl;
 }

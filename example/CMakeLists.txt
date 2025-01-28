@@ -34,3 +34,20 @@ target_link_libraries(${epd_target} PRIVATE
     sigc++
     pthread
 )
+
+# Create a result_example executable
+set(result_example_name result)
+set(result_target ${result_example_name}_${PROJECT_NAME})
+set(result_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${result_target}.cpp)
+add_executable(${result_target}
+    ${result_SRC_LIST}
+)
+target_include_directories(${result_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+)
+target_link_libraries(${result_target} PRIVATE
+    # lg
+    # EPDriver
+    sigc++
+    # pthread
+)
