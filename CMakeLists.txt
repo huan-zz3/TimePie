@@ -8,4 +8,4 @@ set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/toolchain.cmake")
 
 add_subdirectory(src)
 add_subdirectory(lib)
-
+add_subdirectory(example)
