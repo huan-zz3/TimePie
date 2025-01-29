@@ -10,28 +10,30 @@
 #include "itimebook.h"
 #include "idatabase.h"
 
-class ApplicationCore
-{
+#include <iostream>
+#include <memory>
+
+class ApplicationCore {
 public:
     explicit ApplicationCore();
+
     void finishInitObject();
 
-    void setEPDApp(I_EPD_app*);
-    void setPhysicalKey(IPhysicalKey*);
-    void setInternalTime(IInternetTime*);
-    void set4GDTU(I4GDTU*);
-    void setTimeBook(ITimeBook*);
-    void setDatabase(IDatabase*);
+    void setEPDApp(std::unique_ptr<I_EPD_app> epdApp);
+    void setPhysicalKey(std::unique_ptr<IPhysicalKey> physicalKey);
+    void setInternalTime(std::unique_ptr<IInternetTime> internalTime);
+    void set4GDTU(std::unique_ptr<I4GDTU> dtu);
+    void setTimeBook(std::unique_ptr<ITimeBook> timeBook);
+    void setDatabase(std::unique_ptr<IDatabase> database);
 
 private:
-    I_EPD_app* m_pEPDApp_;
-    IPhysicalKey* m_pPhysicalKey_;
-    IInternetTime* m_pInternalTime_;
-    I4GDTU* m_p4GDTU_;
-    ITimeBook* m_pTimeBook_;
-    IDatabase* m_pDatabase_;
-
-
+    std::unique_ptr<I_EPD_app> m_pEPDApp_;
+    std::unique_ptr<IPhysicalKey> m_pPhysicalKey_;
+    std::unique_ptr<IInternetTime> m_pInternalTime_;
+    std::unique_ptr<I4GDTU> m_p4GDTU_;
+    std::unique_ptr<ITimeBook> m_pTimeBook_;
+    std::unique_ptr<IDatabase> m_pDatabase_;
 };
+
 
 #endif

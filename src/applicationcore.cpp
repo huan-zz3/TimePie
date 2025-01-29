@@ -8,26 +8,27 @@ void ApplicationCore::finishInitObject(){
     
 }
 
-void ApplicationCore::setEPDApp(I_EPD_app* _epdapp){
-    m_pEPDApp_ = _epdapp;
+void ApplicationCore::setEPDApp(std::unique_ptr<I_EPD_app> epdApp){
+    m_pEPDApp_ = std::move(epdApp);
 }
 
-void ApplicationCore::setPhysicalKey(IPhysicalKey* _physicalkey){
-    m_pPhysicalKey_ = _physicalkey;
+void ApplicationCore::setPhysicalKey(std::unique_ptr<IPhysicalKey> physicalKey){
+    m_pPhysicalKey_ = std::move(physicalKey);
 }
 
-void ApplicationCore::setInternalTime(IInternetTime* _internaltime){
-    m_pInternalTime_ = _internaltime;
+void ApplicationCore::setInternalTime(std::unique_ptr<IInternetTime> internalTime){
+    m_pInternalTime_ = std::move(internalTime);
 }
 
-void ApplicationCore::set4GDTU(I4GDTU* _4gdtu){
-    m_p4GDTU_ = _4gdtu;
+void ApplicationCore::set4GDTU(std::unique_ptr<I4GDTU> dtu){
+    m_p4GDTU_ = std::move(dtu);
 }
 
-void ApplicationCore::setTimeBook(ITimeBook* _timebook){
-    m_pTimeBook_ = _timebook;
+void ApplicationCore::setTimeBook(std::unique_ptr<ITimeBook> timeBook){
+    m_pTimeBook_ = std::move(timeBook);
 }
 
-void ApplicationCore::setDatabase(IDatabase* _database){
-    m_pDatabase_ = _database;
+void ApplicationCore::setDatabase(std::unique_ptr<IDatabase> database){
+    m_pDatabase_ = std::move(database);
 }
+
