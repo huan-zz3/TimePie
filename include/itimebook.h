@@ -1,8 +1,10 @@
 #ifndef ITIMEBOOK_H
 #define ITIMEBOOK_H
 
+#include "i4gdtu.h"
 #include "predefine.h"
 #include <map>
+#include <memory>
 
 struct timebookitem
 {
@@ -36,9 +38,13 @@ public:
     /* return local data */
     virtual void getTimeItems(Result<std::map<unsigned int, timebookitem>>) = 0;
 
-private:
-    std::map<unsigned int, timebookitem> localTimebookItems;
-    std::map<unsigned int, timebookitem> cloudTimebookItems;
+public:
+    // Signal_void timebook
+
+protected:
+    std::unique_ptr<I4GDTU> i4gdtu_;
+    std::map<unsigned int, timebookitem> localtimebookitems_;
+    std::map<unsigned int, timebookitem> cloudtimebookitems_;
 
 
 };

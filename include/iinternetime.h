@@ -2,6 +2,8 @@
 #define IINETERETIME_H
 
 #include "predefine.h"
+#include "i4gdtu.h"
+#include <memory>
 
 struct timedata
 {
@@ -20,7 +22,7 @@ struct timedata
 class IInternetTime
 {
 public:
-    explicit IInternetTime();
+    explicit IInternetTime(std::unique_ptr<I4GDTU>);
 
     virtual void getNowTime(Result<timedata>) = 0;
     virtual void getNowMonth(Result<int>) = 0;
@@ -31,9 +33,12 @@ public:
     virtual void getNowMillisecond(Result<int>) = 0;
     virtual void getNowtTimeStamp(Result<unsigned long>) = 0;
 
-private:
-    timedata nowTime;
+public:
+    Signal_string updatenowtime_signal_;
 
+protected:
+    timedata nowTime;
+    std::unique_ptr<I4GDTU> gdtu_;
 
 };
 

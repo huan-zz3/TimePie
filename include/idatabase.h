@@ -26,7 +26,7 @@ public:
     virtual void Update(Result<void>, const std::string& tableName, const std::map<std::string, std::string>& data, const std::string& condition) = 0;
     virtual void Remove(Result<void>, const std::string& tableName, const std::string& condition) = 0;
 
-private:
+protected:
     bool connected;
 };
 

@@ -14,7 +14,13 @@ public:
     virtual void longPressNextKey(Result<void>) = 0;
     virtual void longPressPrevKey(Result<void>) = 0;
 
-private:
+public:
+    Signal_void nextkeysignal_;
+    Signal_void prevkeysignal_;
+    Signal_void longpressnextkeysignal_;
+    Signal_void longpressprevkeysignal_;
+
+protected:
 
 };
 

@@ -14,7 +14,7 @@ public:
     virtual void httpPost(Result<std::string>, std::string URL_API) = 0;
     virtual void httpGet(Result<std::string>, std::string URL_API) = 0;
 
-private:
+protected:
 
 
 };
