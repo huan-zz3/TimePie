@@ -9,6 +9,7 @@ add_executable(TimePie
 
 target_include_directories(TimePie PUBLIC 
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/interface
 )
 
 target_link_libraries(TimePie PRIVATE
