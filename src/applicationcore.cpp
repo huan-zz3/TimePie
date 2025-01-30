@@ -8,7 +8,7 @@ void ApplicationCore::finishInitObject(){
     
 }
 
-void ApplicationCore::setEPDApp(std::unique_ptr<I_EPD_app> epdApp){
+void ApplicationCore::setEPDApp(std::unique_ptr<IEPD_app> epdApp){
     m_pEPDApp_ = std::move(epdApp);
 }
 

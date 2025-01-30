@@ -19,7 +19,7 @@ public:
 
     void finishInitObject();
 
-    void setEPDApp(std::unique_ptr<I_EPD_app> epdApp);
+    void setEPDApp(std::unique_ptr<IEPD_app> epdApp);
     void setPhysicalKey(std::unique_ptr<IPhysicalKey> physicalKey);
     void setInternalTime(std::unique_ptr<IInternetTime> internalTime);
     void set4GDTU(std::unique_ptr<I4GDTU> dtu);
@@ -27,7 +27,7 @@ public:
     void setDatabase(std::unique_ptr<IDatabase> database);
 
 private:
-    std::unique_ptr<I_EPD_app> m_pEPDApp_;
+    std::unique_ptr<IEPD_app> m_pEPDApp_;
     std::unique_ptr<IPhysicalKey> m_pPhysicalKey_;
     std::unique_ptr<IInternetTime> m_pInternalTime_;
     std::unique_ptr<I4GDTU> m_p4GDTU_;
