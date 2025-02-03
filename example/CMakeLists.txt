@@ -51,3 +51,20 @@ target_link_libraries(${result_target} PRIVATE
     sigc++
     # pthread
 )
+
+# Create a KeySysfsDetect_example executable
+set(keysysfsdetect_example_name keysysfsdetect)
+set(keysysfsdetect_target ${keysysfsdetect_example_name}_${PROJECT_NAME})
+set(keysysfsdetect_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${keysysfsdetect_target}.cpp)
+add_executable(${keysysfsdetect_target}
+    ${keysysfsdetect_SRC_LIST}
+)
+target_include_directories(${keysysfsdetect_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+)
+target_link_libraries(${keysysfsdetect_target} PRIVATE
+    # lg
+    # EPDriver
+    # sigc++
+    # pthread
+)
