@@ -3,16 +3,15 @@
 
 #include "predefine.h"
 
-
 class IPhysicalKey
 {
 public:
     explicit IPhysicalKey(void);
 
-    virtual void nextKey(Result<void>) = 0;
-    virtual void prevKey(Result<void>) = 0;
-    virtual void longPressNextKey(Result<void>) = 0;
-    virtual void longPressPrevKey(Result<void>) = 0;
+    virtual void slot_nextKey(void) = 0;
+    virtual void slot_prevKey(void) = 0;
+    virtual void slot_longPressNextKey(void) = 0;
+    virtual void slot_longPressPrevKey(void) = 0;
 
 public:
     Signal_void nextkeysignal_;
@@ -21,7 +20,6 @@ public:
     Signal_void longpressprevkeysignal_;
 
 protected:
-
 };
 
 #endif
