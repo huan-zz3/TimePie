@@ -68,3 +68,17 @@ target_link_libraries(${keysysfsdetect_target} PRIVATE
     # sigc++
     # pthread
 )
+
+# Create a timer_example executable
+set(timer_example_name timer)
+set(timer_target ${timer_example_name}_${PROJECT_NAME})
+set(timer_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${timer_target}.cpp)
+add_executable(${timer_target}
+    ${timer_SRC_LIST}
+)
+target_include_directories(${timer_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+)
+target_link_libraries(${timer_target} PRIVATE
+    libtimer
+)

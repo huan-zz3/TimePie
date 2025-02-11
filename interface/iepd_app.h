@@ -9,7 +9,7 @@ class IEPD_app
 {
 public:
     // explicit IEPD_app(std::unique_ptr<IEPDService>);
-    explicit IEPD_app();
+    explicit IEPD_app(){};
 
     virtual void epdappInit(Result<void>) = 0;
     virtual void epdappSleep(Result<void>) = 0;

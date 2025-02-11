@@ -16,4 +16,5 @@ target_link_libraries(TimePie PRIVATE
     EPDriver
     lg
     sigc++
+    libtimer
 )

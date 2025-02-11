@@ -4,13 +4,15 @@
 #include "iphysicalkey.h"
 #include "predefine.h"
 
+#include <functional>
+#include <memory>
+
 // 回调函数类型定义
 using Callback = std::function<void(const std::string &)>;
 
 class GpioButtonMonitor;
 
-class KeySysfs : IPhysicalKey
-{
+class KeySysfs : public IPhysicalKey{
 public:
     KeySysfs();
     void slot_nextKey(void) override;
@@ -20,7 +22,12 @@ public:
 
 private:
     std::unique_ptr<GpioButtonMonitor> nextkey_, prevkey_;
-    Callback nextshortrigger(const std::string &msg), nextlongtrigger(const std::string &msg);
+    Callback nextshortrigger(const std::string& msg), nextlongtrigger(const std::string& msg);
+
+    using IPhysicalKey::nextkeysignal_;
+    using IPhysicalKey::prevkeysignal_;
+    using IPhysicalKey::longpressnextkeysignal_;
+    using IPhysicalKey::longpressprevkeysignal_;
 };
 
 #include <iostream>

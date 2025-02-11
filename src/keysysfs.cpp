@@ -2,7 +2,12 @@
 KeySysfs::KeySysfs()
 {
     nextkeysignal_.connect(Slot_void(Mem_fun(*this, KeySysfs::slot_nextKey)));
-    nextkey_ = std::make_unique<GpioButtonMonitor>(4, nextshortrigger, nextlongtrigger);
+   // 使用std::bind将成员函数与当前实例绑定
+    nextkey_ = std::make_unique<GpioButtonMonitor>(
+        4,
+        std::bind(&KeySysfs::nextshortrigger, this, std::placeholders::_1),
+        std::bind(&KeySysfs::nextlongtrigger, this, std::placeholders::_1)
+    );
 
     // prevkeysignal_.connect(Slot_void(Mem_fun(*this, KeySysfs::prevKey)));
     // prevkey_ = std::make_unique<GpioButtonMonitor>(?, shortrigger, longtrigger);
