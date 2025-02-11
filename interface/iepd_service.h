@@ -3,7 +3,8 @@
 
 #include "predefine.h"
 
-class IEPDService{
+class IEPDService
+{
 public:
     explicit IEPDService();
     virtual void epdserInit(Result<void>) = 0;
@@ -11,10 +12,11 @@ public:
 
     virtual void epdserStartTomatoTimer(Result<void>, uint32_t) = 0;
     virtual void epdserStopTomatoTimer(Result<void>) = 0;
+
+public:
     Signal_string on_timer_updated;
 
-    // virtual void 
-
+    // virtual void
 };
 
 #endif
