@@ -4,10 +4,12 @@
 #include "predefine.h"
 #include <memory>
 
+extern "C" {
 #include "EPD_2in13_V4.h"
 #include "GUI_Paint.h"
 #include "GUI_BMPfile.h"
 #include "fonts.h"
+}
 
 enum class InitMode
 {
@@ -74,7 +76,7 @@ struct PointCoordinates
 enum class PointSize
 {
     X11 = DOT_PIXEL_1X1,
-    X11 = DOT_PIXEL_2X2,
+    X22 = DOT_PIXEL_2X2,
     X33 = DOT_PIXEL_3X3,
     X44 = DOT_PIXEL_4X4,
     X66 = DOT_PIXEL_6X6,
@@ -129,7 +131,7 @@ typedef PAINT_TIME Time;
 class IEPD_Driver
 {
 public:
-    explicit IEPD_Driver();
+    explicit IEPD_Driver(){};
 
     /* Some encapsulations-func of Waveshare IEPD driver, after I know well about it. */
     /*

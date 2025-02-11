@@ -6,7 +6,7 @@
 class IEPDService
 {
 public:
-    explicit IEPDService();
+    explicit IEPDService(){};
     virtual void epdserInit(Result<void>) = 0;
     virtual void epdserExit(Result<void>) = 0;
 
@@ -14,7 +14,7 @@ public:
     virtual void epdserStopTomatoTimer(Result<void>) = 0;
 
 public:
-    Signal_string on_timer_updated;
+    Signal_void on_timer_updated;
 
     // virtual void
 };

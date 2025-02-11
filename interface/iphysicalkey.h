@@ -6,7 +6,7 @@
 class IPhysicalKey
 {
 public:
-    explicit IPhysicalKey(void);
+    explicit IPhysicalKey(void){};
 
     virtual void slot_nextKey(void) = 0;
     virtual void slot_prevKey(void) = 0;
