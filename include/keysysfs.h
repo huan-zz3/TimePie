@@ -5,11 +5,12 @@
 #include "predefine.h"
 
 // 回调函数类型定义
-using Callback = std::function<void(const std::string&)>;
+using Callback = std::function<void(const std::string &)>;
 
 class GpioButtonMonitor;
 
-class KeySysfs : IPhysicalKey{
+class KeySysfs : IPhysicalKey
+{
 public:
     KeySysfs();
     void slot_nextKey(void) override;
@@ -19,8 +20,7 @@ public:
 
 private:
     std::unique_ptr<GpioButtonMonitor> nextkey_, prevkey_;
-    Callback nextshortrigger(const std::string& msg), nextlongtrigger(const std::string& msg);
-
+    Callback nextshortrigger(const std::string &msg), nextlongtrigger(const std::string &msg);
 };
 
 #include <iostream>
@@ -35,18 +35,20 @@ private:
 #include <functional>
 #include <fstream>
 
-class GpioButtonMonitor {
+class GpioButtonMonitor
+{
 public:
-    // 构造函数：创建指定GPIO引脚的监测实例
-    GpioButtonMonitor(int pin, 
-                     Callback short_press_cb = nullptr,
-                     Callback long_press_cb = nullptr)
-                    : pin_(pin),
-                    short_press_cb_(short_press_cb),
-                    long_press_cb_(long_press_cb),
-                    running_(false) {
-        
-        // 配置GPIO
+    // Constructor: Create a monitoring instance for the specified GPIO pin
+    GpioButtonMonitor(int pin,
+                      Callback short_press_cb = nullptr,
+                      Callback long_press_cb = nullptr)
+        : pin_(pin),
+          short_press_cb_(short_press_cb),
+          long_press_cb_(long_press_cb),
+          running_(false)
+    {
+
+        // Configure GPIO
         export_gpio();
         std::string direction_path = "/sys/class/gpio/gpio" + std::to_string(pin_) + "/direction";
         write_file(direction_path, "in");
@@ -56,62 +58,74 @@ public:
         fd_ = open(value_path.c_str(), O_RDONLY);
     }
 
-    // 析构函数：自动清理资源
-    ~GpioButtonMonitor() {
+    // Destructor: Automatically clean up resources
+    ~GpioButtonMonitor()
+    {
         stop();
-        if (fd_ != -1) close(fd_);
+        if (fd_ != -1)
+            close(fd_);
         unexport_gpio();
     }
 
-    // 启动监测线程
-    void start() {
-        if (fd_ == -1) return;
-        
+    // Start monitoring thread
+    void start()
+    {
+        if (fd_ == -1)
+            return;
+
         running_ = true;
         monitor_thread_ = std::thread(&GpioButtonMonitor::monitor_loop, this);
     }
 
-    // 停止监测线程
-    void stop() {
+    // Stop monitoring thread
+    void stop()
+    {
         running_ = false;
-        if (monitor_thread_.joinable()) {
+        if (monitor_thread_.joinable())
+        {
             monitor_thread_.join();
         }
     }
 
 private:
-    const int pin_;                    // GPIO引脚号
-    int fd_ = -1;                      // 文件描述符
-    std::thread monitor_thread_;       // 监测线程
-    std::atomic<bool> running_;        // 运行标志
-    Callback short_press_cb_;          // 短按回调
-    Callback long_press_cb_;           // 长按回调
-    const int debounce_delay = 20;  // 消抖时间(ms)
-    const int long_press_threshold = 1000;  // 长按阈值(ms)
+    const int pin_;                        // GPIO pin number
+    int fd_ = -1;                          // File descriptor
+    std::thread monitor_thread_;           // Monitoring thread
+    std::atomic<bool> running_;            // Running flag
+    Callback short_press_cb_;              // Short press callback
+    Callback long_press_cb_;               // Long press callback
+    const int debounce_delay = 20;         // Debounce time (ms)
+    const int long_press_threshold = 1000; // Long press threshold (ms)
 
-
-    // 导出GPIO
-    void export_gpio() {
+    // Export GPIO
+    void export_gpio()
+    {
         write_file("/sys/class/gpio/export", std::to_string(pin_));
     }
 
-    // 取消导出GPIO
-    void unexport_gpio() {
+    // Unexport GPIO
+    void unexport_gpio()
+    {
         write_file("/sys/class/gpio/unexport", std::to_string(pin_));
     }
 
-    // 通用文件写入函数
-    static void write_file(const std::string& path, const std::string& value) {
+    // General file write function
+    static void write_file(const std::string &path, const std::string &value)
+    {
         std::ofstream file(path);
-        if (file) {
+        if (file)
+        {
             file << value;
-        } else {
+        }
+        else
+        {
             std::cerr << "Error writing to " << path << std::endl;
         }
     }
 
-    // 监测主循环
-    void monitor_loop() {
+    // Monitoring main loop
+    void monitor_loop()
+    {
         struct pollfd pfd;
         pfd.fd = fd_;
         pfd.events = POLLPRI;
@@ -119,24 +133,28 @@ private:
         bool press_detected = false;
         long press_start_time = 0;
 
-        // 首次读取清除状态
+        // Initial read to clear state
         lseek(fd_, 0, SEEK_SET);
         char dummy[2];
         read(fd_, dummy, sizeof(dummy));
 
-        while (running_) {
-            int ret = poll(&pfd, 1, 1000);  // 带超时的poll
-            if (ret < 0) {
+        while (running_)
+        {
+            int ret = poll(&pfd, 1, 1000); // Poll with timeout
+            if (ret < 0)
+            {
                 std::cerr << "Poll error: " << strerror(errno) << std::endl;
                 break;
             }
 
-            if (ret > 0 && (pfd.revents & POLLPRI)) {
+            if (ret > 0 && (pfd.revents & POLLPRI))
+            {
                 std::this_thread::sleep_for(std::chrono::milliseconds(debounce_delay));
-                
+
                 lseek(fd_, 0, SEEK_SET);
                 char buf[2];
-                if (read(fd_, buf, sizeof(buf)) > 0) {
+                if (read(fd_, buf, sizeof(buf)) > 0)
+                {
                     const int value = atoi(buf);
                     handle_button_event(value, press_start_time, press_detected);
                 }
@@ -144,53 +162,40 @@ private:
         }
     }
 
-    // 处理按键事件
-    void handle_button_event(int value, long& press_start_time, bool& press_detected) {
+    // Handle button event
+    void handle_button_event(int value, long &press_start_time, bool &press_detected)
+    {
         const auto now = std::chrono::system_clock::now();
         const auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-            now.time_since_epoch()).count();
+                                   now.time_since_epoch())
+                                   .count();
 
-        if (value == 0) {  // 按下事件
+        if (value == 0)
+        { // Press event
             press_start_time = timestamp;
             press_detected = true;
-        } else if (value == 1 && press_detected) {  // 释放事件
+        }
+        else if (value == 1 && press_detected)
+        { // Release event
             const auto duration = timestamp - press_start_time;
             press_detected = false;
 
-            if (duration >= long_press_threshold) {
-                if (long_press_cb_) {
+            if (duration >= long_press_threshold)
+            {
+                if (long_press_cb_)
+                {
                     long_press_cb_("GPIO" + std::to_string(pin_) + " Long press");
                 }
-            } else {
-                if (short_press_cb_) {
+            }
+            else
+            {
+                if (short_press_cb_)
+                {
                     short_press_cb_("GPIO" + std::to_string(pin_) + " Short press");
                 }
             }
         }
     }
 };
-
-// 示例用法
-// int main() {
-//     // 创建监测实例（GPIO4）
-//     GpioButtonMonitor monitor(4, 
-//         [](const std::string& msg) {  // 短按回调
-//             std::cout << "[EVENT] " << msg << std::endl;
-//         },
-//         [](const std::string& msg) {  // 长按回调
-//             std::cout << "[EVENT] " << msg << std::endl;
-//         });
-
-//     // 启动监测线程
-//     monitor.start();
-
-//     // 主线程继续其他工作...
-//     std::cout << "Monitoring started. Press Enter to exit..." << std::endl;
-//     std::cin.get();
-
-//     // 停止监测（析构函数会自动调用）
-//     monitor.stop();
-//     return 0;
-// }
 
 #endif
