@@ -9,7 +9,7 @@
 class IDatabase
 {
 public:
-    explicit IDatabase();
+    explicit IDatabase(){};
     virtual ~IDatabase() = 0;
 
     virtual void Connect(Result<void>, const std::string& connectionString) = 0;

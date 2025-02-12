@@ -25,7 +25,7 @@ struct timebookitem
 class ITimeBook
 {
 public:
-    explicit ITimeBook(void);
+    explicit ITimeBook(void){};
 
     virtual void timebookInit(Result<void>) = 0;
     virtual void timebookExit(Result<void>) = 0;

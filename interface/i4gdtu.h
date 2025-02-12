@@ -6,7 +6,7 @@
 class I4GDTU
 {
 public:
-    explicit I4GDTU(void);
+    explicit I4GDTU(void){};
 
     virtual void dtuInit(Result<void>) = 0;
     virtual void dtuEnit(Result<void>) = 0;

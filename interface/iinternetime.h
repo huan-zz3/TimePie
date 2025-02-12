@@ -22,7 +22,7 @@ struct timedata
 class IInternetTime
 {
 public:
-    explicit IInternetTime(std::unique_ptr<I4GDTU>);
+    explicit IInternetTime(std::unique_ptr<I4GDTU>){};
 
     virtual void getNowTime(Result<timedata>) = 0;
     virtual void getNowMonth(Result<int>) = 0;
