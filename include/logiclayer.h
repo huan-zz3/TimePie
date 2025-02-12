@@ -11,11 +11,11 @@
 class LogicLayer : public IEPDService
 {
 public:
-    void epdserInit(Result<void>);
-    void epdserExit(Result<void>);
+    Result<void> epdserInit();
+    Result<void> epdserExit();
 
-    void epdserStartTomatoTimer(Result<void>, uint32_t);
-    void epdserStopTomatoTimer(Result<void>);
+    Result<void> epdserStartTomatoTimer(uint32_t);
+    Result<void> epdserStopTomatoTimer();
 
 public:
     using IEPDService::on_timer_updated;

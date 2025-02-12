@@ -4,13 +4,13 @@ UILayer::UILayer(std::unique_ptr<IEPDService> _epds)
 {
     epd_service_ = std::move(_epds);
 }
-void UILayer::epdappInit(Result<void>)
+Result<void> UILayer::epdappInit()
 {
 }
-void UILayer::epdappSleep(Result<void>)
+Result<void> UILayer::epdappSleep()
 {
 }
-void UILayer::reFreshPage(Result<void>)
+Result<void> UILayer::reFreshPage()
 {
 }
 

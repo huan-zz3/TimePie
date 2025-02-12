@@ -138,46 +138,46 @@ public:
     /*
      * Encapsulations-func from DEV_Config.h
      */
-    virtual void epdriver_Delay(Result<void>, uint32_t) = 0;
-    virtual void epdriver_ReadPin(Result<PinVal>, PinNum) = 0;
-    virtual void epdriver_WritePin(Result<void>, PinNum, PinVal) = 0;
+    virtual Result<void> epdriver_Delay(uint32_t) = 0;
+    virtual Result<PinVal> epdriver_ReadPin(PinNum) = 0;
+    virtual Result<void> epdriver_WritePin(PinNum, PinVal) = 0;
 
     /*
      * Encapsulations-func from EPD_2in13_V4.h
      */
-    virtual void epdriver_Init(Result<void>, InitMode) = 0; // the Hardware mode use the DEV_ModuleInit() from DEV_Config.h
-    virtual void epdriver_Clear(Result<void>, ClearMode) = 0;
-    virtual void epdriver_Display(Result<void>, ImageBuffer, DisplayMode) = 0;
-    virtual void epdriver_Sleep(Result<void>) = 0;
-    virtual void epdriver_Exit(Result<void>) = 0;
+    virtual Result<void> epdriver_Init(InitMode) = 0; // the Hardware mode use the DEV_ModuleInit() from DEV_Config.h
+    virtual Result<void> epdriver_Clear(ClearMode) = 0;
+    virtual Result<void> epdriver_Display(ImageBuffer, DisplayMode) = 0;
+    virtual Result<void> epdriver_Sleep() = 0;
+    virtual Result<void> epdriver_Exit() = 0;
 
     /*
      * Encapsulations-func from GUI_Paint.h
      */
-    virtual void epdriver_NewImage(Result<void>, ImageBuffer, ImageColor) = 0;
-    // virtual void epdriverSelect(Result<void>, ImageBuffer) = 0;
-    virtual void epdriver_SetRotate(Result<void>, ImageBuffer, RotateMode) = 0;
-    virtual void epdriver_SetMirroring(Result<void>, ImageBuffer, MirrorMode) = 0;
-    // virtual void epdriverSetScale(Result<void>, ScaleMode) = 0;
+    virtual Result<void> epdriver_NewImage(ImageBuffer, ImageColor) = 0;
+    // virtual Result<void> epdriverSelect(ImageBuffer) = 0;
+    virtual Result<void> epdriver_SetRotate(ImageBuffer, RotateMode) = 0;
+    virtual Result<void> epdriver_SetMirroring(ImageBuffer, MirrorMode) = 0;
+    // virtual Result<void> epdriverSetScale(ScaleMode) = 0;
 
-    virtual void epdriver_Clear(Result<void>, ImageBuffer, ImageColor) = 0;
-    virtual void epdriver_Clear(Result<void>, ImageBuffer, ImageColor, PointCoordinates, PointCoordinates) = 0;
+    virtual Result<void> epdriver_Clear(ImageBuffer, ImageColor) = 0;
+    virtual Result<void> epdriver_Clear(ImageBuffer, ImageColor, PointCoordinates, PointCoordinates) = 0;
 
-    virtual void epdriver_DrawPoint(Result<void>, ImageBuffer, PointCoordinates, ImageColor, PointSize, PointStyle) = 0;
-    virtual void epdriver_DrawLine(Result<void>, ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle) = 0;
-    virtual void epdriver_DrawRectangle(Result<void>, ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill) = 0;
-    virtual void epdriver_DrawCircle(Result<void>, ImageBuffer, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill) = 0;
+    virtual Result<void> epdriver_DrawPoint(ImageBuffer, PointCoordinates, ImageColor, PointSize, PointStyle) = 0;
+    virtual Result<void> epdriver_DrawLine(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle) = 0;
+    virtual Result<void> epdriver_DrawRectangle(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill) = 0;
+    virtual Result<void> epdriver_DrawCircle(ImageBuffer, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill) = 0;
 
-    virtual void epdriver_DrawChar(Result<void>, ImageBuffer, PointCoordinates, char, Fontype, ImageColor, ImageColor) = 0;
-    virtual void epdriver_DrawString_EN(Result<void>, ImageBuffer, PointCoordinates, std::string, Fontype, ImageColor, ImageColor) = 0;
-    virtual void epdriver_DrawNum(Result<void>, ImageBuffer, PointCoordinates, Number, Fontype, ImageColor, ImageColor) = 0;
-    virtual void epdriver_DrawTime(Result<void>, ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
-    virtual void epdriver_DrawDate(Result<void>, ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawChar(ImageBuffer, PointCoordinates, char, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawString_EN(ImageBuffer, PointCoordinates, std::string, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawNum(ImageBuffer, PointCoordinates, Number, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawTime(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawDate(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
 
     /*
      * Encapsulations-func from GUI_BMPfile.h
      */
-    virtual void epdriver_ReadBmp(Result<void>, ImageBuffer, std::string, PointCoordinates) = 0;
+    virtual Result<void> epdriver_ReadBmp(ImageBuffer, std::string, PointCoordinates) = 0;
 };
 
 #endif

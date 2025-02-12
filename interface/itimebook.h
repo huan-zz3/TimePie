@@ -27,16 +27,16 @@ class ITimeBook
 public:
     explicit ITimeBook(void){};
 
-    virtual void timebookInit(Result<void>) = 0;
-    virtual void timebookExit(Result<void>) = 0;
+    virtual Result<void> timebookInit() = 0;
+    virtual Result<void> timebookExit() = 0;
     /* handle in local*/
-    virtual void addTimeItem(Result<void>) = 0;
-    virtual void submitTimeItem(Result<void>) = 0;
+    virtual Result<void> addTimeItem() = 0;
+    virtual Result<void> submitTimeItem() = 0;
     /* sync with cloud */
-    virtual void pushTimeItems(Result<void>) = 0;
-    virtual void pullTimeItems(Result<void>) = 0;
+    virtual Result<void> pushTimeItems() = 0;
+    virtual Result<void> pullTimeItems() = 0;
     /* return local data */
-    virtual void getTimeItems(Result<std::map<unsigned int, timebookitem>>) = 0;
+    virtual Result<std::map<unsigned int, timebookitem>> getTimeItems() = 0;
 
 public:
     // Signal_void timebook

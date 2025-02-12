@@ -7,35 +7,35 @@
 class DeviceLayer : public IEPD_Driver
 {
 public:
-    void epdriver_Delay(Result<void>, uint32_t);
-    void epdriver_ReadPin(Result<PinVal>, PinNum);
-    void epdriver_WritePin(Result<void>, PinNum, PinVal);
+    Result<void> epdriver_Delay(uint32_t);
+    Result<PinVal> epdriver_ReadPin(PinNum);
+    Result<void> epdriver_WritePin(PinNum, PinVal);
 
-    void epdriver_Init(Result<void>, InitMode);
-    void epdriver_Clear(Result<void>, ClearMode);
-    void epdriver_Display(Result<void>, ImageBuffer, DisplayMode);
-    void epdriver_Sleep(Result<void>);
-    void epdriver_Exit(Result<void>);
+    Result<void> epdriver_Init(InitMode);
+    Result<void> epdriver_Clear(ClearMode);
+    Result<void> epdriver_Display(ImageBuffer, DisplayMode);
+    Result<void> epdriver_Sleep();
+    Result<void> epdriver_Exit();
 
-    void epdriver_NewImage(Result<void>, ImageBuffer, ImageColor);
-    void epdriver_SetRotate(Result<void>, ImageBuffer, RotateMode);
-    void epdriver_SetMirroring(Result<void>, ImageBuffer, MirrorMode);
+    Result<void> epdriver_NewImage(ImageBuffer, ImageColor);
+    Result<void> epdriver_SetRotate(ImageBuffer, RotateMode);
+    Result<void> epdriver_SetMirroring(ImageBuffer, MirrorMode);
 
-    void epdriver_Clear(Result<void>, ImageBuffer, ImageColor);
-    void epdriver_Clear(Result<void>, ImageBuffer, ImageColor, PointCoordinates, PointCoordinates);
+    Result<void> epdriver_Clear(ImageBuffer, ImageColor);
+    Result<void> epdriver_Clear(ImageBuffer, ImageColor, PointCoordinates, PointCoordinates);
 
-    void epdriver_DrawPoint(Result<void>, ImageBuffer, PointCoordinates, ImageColor, PointSize, PointStyle);
-    void epdriver_DrawLine(Result<void>, ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle);
-    void epdriver_DrawRectangle(Result<void>, ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill);
-    void epdriver_DrawCircle(Result<void>, ImageBuffer, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill);
+    Result<void> epdriver_DrawPoint(ImageBuffer, PointCoordinates, ImageColor, PointSize, PointStyle);
+    Result<void> epdriver_DrawLine(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle);
+    Result<void> epdriver_DrawRectangle(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill);
+    Result<void> epdriver_DrawCircle(ImageBuffer, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill);
 
-    void epdriver_DrawChar(Result<void>, ImageBuffer, PointCoordinates, char, Fontype, ImageColor, ImageColor);
-    void epdriver_DrawString_EN(Result<void>, ImageBuffer, PointCoordinates, std::string, Fontype, ImageColor, ImageColor);
-    void epdriver_DrawNum(Result<void>, ImageBuffer, PointCoordinates, Number, Fontype, ImageColor, ImageColor);
-    void epdriver_DrawTime(Result<void>, ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
-    void epdriver_DrawDate(Result<void>, ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawChar(ImageBuffer, PointCoordinates, char, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawString_EN(ImageBuffer, PointCoordinates, std::string, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawNum(ImageBuffer, PointCoordinates, Number, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawTime(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawDate(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
 
-    void epdriver_ReadBmp(Result<void>, ImageBuffer, std::string, PointCoordinates);
+    Result<void> epdriver_ReadBmp(ImageBuffer, std::string, PointCoordinates);
 };
 
 #endif

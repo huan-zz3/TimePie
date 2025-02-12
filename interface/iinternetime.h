@@ -24,14 +24,14 @@ class IInternetTime
 public:
     explicit IInternetTime(std::unique_ptr<I4GDTU>){};
 
-    virtual void getNowTime(Result<timedata>) = 0;
-    virtual void getNowMonth(Result<int>) = 0;
-    virtual void getNowDay(Result<int>) = 0;
-    virtual void getNowHour(Result<int>) = 0;
-    virtual void getNowMinute(Result<int>) = 0;
-    virtual void getNowSecond(Result<int>) = 0;
-    virtual void getNowMillisecond(Result<int>) = 0;
-    virtual void getNowtTimeStamp(Result<unsigned long>) = 0;
+    virtual Result<timedata> getNowTime() = 0;
+    virtual Result<int> getNowMonth() = 0;
+    virtual Result<int> getNowDay() = 0;
+    virtual Result<int> getNowHour() = 0;
+    virtual Result<int> getNowMinute() = 0;
+    virtual Result<int> getNowSecond() = 0;
+    virtual Result<int> getNowMillisecond() = 0;
+    virtual Result<unsigned long> getNowtTimeStamp() = 0;
 
 public:
     Signal_string updatenowtime_signal_;

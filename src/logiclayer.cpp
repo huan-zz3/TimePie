@@ -1,28 +1,27 @@
 #include "logiclayer.h"
 
-void LogicLayer::epdserInit(Result<void>)
+Result<void> LogicLayer::epdserInit()
 {
-    
+    return Result<void>::Success();
 }
-void LogicLayer::epdserExit(Result<void>)
+Result<void> LogicLayer::epdserExit()
 {
-
+    return Result<void>::Success();
 }
 
-void LogicLayer::epdserStartTomatoTimer(Result<void> _rt, uint32_t _seconds)
+Result<void> LogicLayer::epdserStartTomatoTimer(uint32_t _seconds)
 {
     try{
         timer_ptr = std::make_shared<Timer>([this]()
                     { this->on_timer_updated.emit(); }, _seconds);
         timer_ptr->start(); 
     }catch (std::exception& e){
-        _rt.Error(e.what());
-        return;
+        return Result<void>::Error(e.what());
     }
-    _rt.Success();
+    return Result<void>::Success();
 }
-void LogicLayer::epdserStopTomatoTimer(Result<void> _rt)
+Result<void> LogicLayer::epdserStopTomatoTimer()
 {
     timer_ptr->stop();
-    _rt.Success();
+    return Result<void>::Success();
 }

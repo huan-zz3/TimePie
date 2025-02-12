@@ -8,9 +8,9 @@ class UILayer : public IEPD_app
 {
 public:
     UILayer(std::unique_ptr<IEPDService>);
-    void epdappInit(Result<void>);
-    void epdappSleep(Result<void>);
-    void reFreshPage(Result<void>);
+    Result<void> epdappInit();
+    Result<void> epdappSleep();
+    Result<void> reFreshPage();
 
     void on_showMenu(Result<void>);
 

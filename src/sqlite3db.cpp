@@ -8,60 +8,59 @@ Sqlite3Database::~Sqlite3Database()
     }
 }
 
-void Sqlite3Database::Connect(Result<void> result, const std::string &connectionString)
+Result<void> Sqlite3Database::Connect(const std::string &connectionString)
 {
     if (sqlite3_open(connectionString.c_str(), &db_) == SQLITE_OK)
     {
         connected = true;
-        result.Success();
+        return Result<void>::Success();
     }
     else
     {
         connected = false;
-        result.Error(sqlite3_errmsg(db_));
+        return Result<void>::Error(sqlite3_errmsg(db_));
     }
 }
 
-void Sqlite3Database::disConnect(Result<void> result)
+Result<void> Sqlite3Database::disConnect()
 {
     if (db_)
     {
         sqlite3_close(db_);
         db_ = nullptr;
         connected = false;
-        result.Success();
+        return Result<void>::Success();
     }
     else
     {
-        result.Error("Database is not connected.");
+        return Result<void>::Error("Database is not connected.");
     }
 }
 
 // 定义一个名为 Sqlite3Database 的类中的成员函数 isConnected
 // 该函数用于检查数据库是否已连接，并根据连接状态设置结果
-void Sqlite3Database::isConnected(Result<void> result)
+Result<void> Sqlite3Database::isConnected()
 {
     // 检查成员变量 connected 的值，以确定数据库是否已连接
     if (connected)
     {
         // 如果 connected 为 true，表示数据库已连接，调用 result 的 Success 方法
-        result.Success();
+        return Result<void>::Success();
     }
     else
     {
-        result.Error("Database is not connected.");
+        return Result<void>::Error("Database is not connected.");
     }
 }
 
 // 定义一个函数executeQuery，用于执行SQL查询
-void Sqlite3Database::executeQuery(Result<std::vector<std::map<std::string, std::string>>> result, const std::string &query)
+Result<std::vector<std::map<std::string, std::string>>> Sqlite3Database::executeQuery(const std::string &query)
 {
     // 检查数据库是否已连接
     if (!connected)
     {
         // 如果未连接，调用result的Error方法返回错误信息
-        result.Error("Database is not connected.");
-        return;
+        return Result<std::vector<std::map<std::string, std::string>>>::Error("Database is not connected.");
     }
 
     // 定义一个指向错误信息的指针
@@ -76,50 +75,49 @@ void Sqlite3Database::executeQuery(Result<std::vector<std::map<std::string, std:
     if (sqlite3_exec(db_, query.c_str(), callback, &rows, &errMsg) != SQLITE_OK)
     {
         // 如果查询执行失败，调用result的Error方法返回错误信息
-        result.Error(errMsg);
-        // 释放错误信息内存
+        auto result = Result<std::vector<std::map<std::string, std::string>>>::Error(errMsg);
         sqlite3_free(errMsg);
+        return result;
     }
     else
     {
         // 如果查询执行成功，调用result的Success方法返回查询结果
-        result.Success(rows);
+        return Result<std::vector<std::map<std::string, std::string>>>::Success(rows);
     }
 }
 
 // 定义一个名为 executeNonQuery 的函数，用于执行不返回结果集的 SQL 查询
-void Sqlite3Database::executeNonQuery(Result<void> result, const std::string &query)
+Result<void> Sqlite3Database::executeNonQuery(const std::string &query)
 {
     // 检查数据库是否已连接
     if (!connected)
     {
         // 如果未连接，则调用 result 的 Error 方法返回错误信息 "Database is not connected."
-        result.Error("Database is not connected.");
-        return;
+        return Result<void>::Error("Database is not connected.");
     }
 
     char *errMsg;
 
     if (sqlite3_exec(db_, query.c_str(), 0, 0, &errMsg) != SQLITE_OK)
     {
-        result.Error(errMsg);
+        auto result = Result<void>::Error(errMsg);
         sqlite3_free(errMsg);
+        return result;
     }
     else
     {
-        result.Success();
+        return Result<void>::Success();
     }
 }
 
 // 定义一个函数，用于向SQLite数据库中插入数据
-void Sqlite3Database::Insert(Result<void> result, const std::string &tableName, const std::map<std::string, std::string> &data)
+Result<void> Sqlite3Database::Insert(const std::string &tableName, const std::map<std::string, std::string> &data)
 {
     // 检查数据库是否已连接
     if (!connected)
     {
         // 如果未连接，设置错误信息并返回
-        result.Error("Database is not connected.");
-        return;
+        return Result<void>::Error("Database is not connected.");
     }
 
     // 初始化列名和值的字符串
@@ -142,18 +140,17 @@ void Sqlite3Database::Insert(Result<void> result, const std::string &tableName, 
 
     std::string query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ");";
 
-    executeNonQuery(result, query);
+    return executeNonQuery(query);
 }
 
 // 定义一个函数，用于更新数据库中的数据
-void Sqlite3Database::Update(Result<void> result, const std::string &tableName, const std::map<std::string, std::string> &data, const std::string &condition)
+Result<void> Sqlite3Database::Update(const std::string &tableName, const std::map<std::string, std::string> &data, const std::string &condition)
 {
     // 检查数据库是否已连接
     if (!connected)
     {
         // 如果未连接，则返回错误信息
-        result.Error("Database is not connected.");
-        return;
+        return Result<void>::Error("Database is not connected.");
     }
 
     // 初始化一个字符串，用于存储SQL语句中的SET子句
@@ -171,19 +168,18 @@ void Sqlite3Database::Update(Result<void> result, const std::string &tableName, 
 
     std::string query = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition + ";";
 
-    executeNonQuery(result, query);
+    return executeNonQuery(query);
 }
 
 // 定义Sqlite3Database类的Remove成员函数
 // 参数result用于存储操作结果，tableName表示要删除记录的表名，condition表示删除记录的条件
-void Sqlite3Database::Remove(Result<void> result, const std::string &tableName, const std::string &condition)
+Result<void> Sqlite3Database::Remove(const std::string &tableName, const std::string &condition)
 {
     // 检查数据库是否已连接
     if (!connected)
     {
         // 如果数据库未连接，设置错误信息并返回
-        result.Error("Database is not connected.");
-        return;
+        return Result<void>::Error("Database is not connected.");
     }
 
     // 构建SQL删除语句
@@ -192,7 +188,7 @@ void Sqlite3Database::Remove(Result<void> result, const std::string &tableName, 
     std::string query = "DELETE FROM " + tableName + " WHERE " + condition + ";";
 
     // 执行非查询SQL语句，即删除操作
-    executeNonQuery(result, query);
+    return executeNonQuery(query);
 }
 
 // 定义一个回调函数，用于处理SQLite查询结果
