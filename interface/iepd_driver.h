@@ -13,6 +13,7 @@ extern "C" {
 
 enum class InitMode
 {
+    Hardware,
     Full,
     Part,
     Fast
@@ -144,10 +145,11 @@ public:
     /*
      * Encapsulations-func from EPD_2in13_V4.h
      */
-    virtual void epdriver_Init(Result<void>, InitMode) = 0;
+    virtual void epdriver_Init(Result<void>, InitMode) = 0; // the Hardware mode use the DEV_ModuleInit() from DEV_Config.h
     virtual void epdriver_Clear(Result<void>, ClearMode) = 0;
     virtual void epdriver_Display(Result<void>, ImageBuffer, DisplayMode) = 0;
     virtual void epdriver_Sleep(Result<void>) = 0;
+    virtual void epdriver_Exit(Result<void>) = 0;
 
     /*
      * Encapsulations-func from GUI_Paint.h

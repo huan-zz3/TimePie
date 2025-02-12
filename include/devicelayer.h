@@ -15,6 +15,7 @@ public:
     void epdriver_Clear(Result<void>, ClearMode);
     void epdriver_Display(Result<void>, ImageBuffer, DisplayMode);
     void epdriver_Sleep(Result<void>);
+    void epdriver_Exit(Result<void>);
 
     void epdriver_NewImage(Result<void>, ImageBuffer, ImageColor);
     void epdriver_SetRotate(Result<void>, ImageBuffer, RotateMode);

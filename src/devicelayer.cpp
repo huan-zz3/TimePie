@@ -25,6 +25,9 @@ void DeviceLayer::epdriver_Init(Result<void> _rt, InitMode _initMode)
 {
     switch (_initMode)
     {
+    case InitMode::Hardware:
+        DEV_ModuleInit();
+        break;
     case InitMode::Full:
         EPD_2in13_V4_Init(EPD_2IN13_V4_FULL);
         break;
@@ -35,6 +38,10 @@ void DeviceLayer::epdriver_Init(Result<void> _rt, InitMode _initMode)
         EPD_2in13_V4_Init(EPD_2IN13_V4_Fast);
         break;
     }
+    _rt.Success();
+}
+void DeviceLayer::epdriver_Exit(Result<void> _rt){
+    DEV_ModuleExit(); 
     _rt.Success();
 }
 void DeviceLayer::epdriver_Clear(Result<void> _rt, ClearMode _clearmode)
