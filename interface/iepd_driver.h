@@ -59,7 +59,7 @@ struct ImageBuffer_struct
 {
     UBYTE *imgbuff_ptr;
 };
-typedef std::shared_ptr<ImageBuffer_struct> ImageBuffer;
+typedef std::shared_ptr<ImageBuffer_struct> ImageBuffer_ptr;
 
 enum class ScaleMode
 {
@@ -147,37 +147,37 @@ public:
      */
     virtual Result<void> epdriver_Init(InitMode) = 0; // the Hardware mode use the DEV_ModuleInit() from DEV_Config.h
     virtual Result<void> epdriver_Clear(ClearMode) = 0;
-    virtual Result<void> epdriver_Display(ImageBuffer, DisplayMode) = 0;
+    virtual Result<void> epdriver_Display(ImageBuffer_ptr, DisplayMode) = 0;
     virtual Result<void> epdriver_Sleep() = 0;
     virtual Result<void> epdriver_Exit() = 0;
 
     /*
      * Encapsulations-func from GUI_Paint.h
      */
-    virtual Result<void> epdriver_NewImage(ImageBuffer, ImageColor) = 0;
-    // virtual Result<void> epdriverSelect(ImageBuffer) = 0;
-    virtual Result<void> epdriver_SetRotate(ImageBuffer, RotateMode) = 0;
-    virtual Result<void> epdriver_SetMirroring(ImageBuffer, MirrorMode) = 0;
+    virtual Result<ImageBuffer_ptr> epdriver_NewImage(ImageColor) = 0;
+    // virtual Result<void> epdriverSelect(ImageBuffer_ptr) = 0;
+    virtual Result<void> epdriver_SetRotate(ImageBuffer_ptr, RotateMode) = 0;
+    virtual Result<void> epdriver_SetMirroring(ImageBuffer_ptr, MirrorMode) = 0;
     // virtual Result<void> epdriverSetScale(ScaleMode) = 0;
 
-    virtual Result<void> epdriver_Clear(ImageBuffer, ImageColor) = 0;
-    virtual Result<void> epdriver_Clear(ImageBuffer, ImageColor, PointCoordinates, PointCoordinates) = 0;
+    virtual Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor) = 0;
+    virtual Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor, PointCoordinates, PointCoordinates) = 0;
 
-    virtual Result<void> epdriver_DrawPoint(ImageBuffer, PointCoordinates, ImageColor, PointSize, PointStyle) = 0;
-    virtual Result<void> epdriver_DrawLine(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle) = 0;
-    virtual Result<void> epdriver_DrawRectangle(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill) = 0;
-    virtual Result<void> epdriver_DrawCircle(ImageBuffer, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill) = 0;
+    virtual Result<void> epdriver_DrawPoint(ImageBuffer_ptr, PointCoordinates, ImageColor, PointSize, PointStyle) = 0;
+    virtual Result<void> epdriver_DrawLine(ImageBuffer_ptr, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle) = 0;
+    virtual Result<void> epdriver_DrawRectangle(ImageBuffer_ptr, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill) = 0;
+    virtual Result<void> epdriver_DrawCircle(ImageBuffer_ptr, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill) = 0;
 
-    virtual Result<void> epdriver_DrawChar(ImageBuffer, PointCoordinates, char, Fontype, ImageColor, ImageColor) = 0;
-    virtual Result<void> epdriver_DrawString_EN(ImageBuffer, PointCoordinates, std::string, Fontype, ImageColor, ImageColor) = 0;
-    virtual Result<void> epdriver_DrawNum(ImageBuffer, PointCoordinates, Number, Fontype, ImageColor, ImageColor) = 0;
-    virtual Result<void> epdriver_DrawTime(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
-    virtual Result<void> epdriver_DrawDate(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawChar(ImageBuffer_ptr, PointCoordinates, char, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawString_EN(ImageBuffer_ptr, PointCoordinates, std::string, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawNum(ImageBuffer_ptr, PointCoordinates, Number, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawTime(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
+    virtual Result<void> epdriver_DrawDate(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
 
     /*
      * Encapsulations-func from GUI_BMPfile.h
      */
-    virtual Result<void> epdriver_ReadBmp(ImageBuffer, std::string, PointCoordinates) = 0;
+    virtual Result<void> epdriver_ReadBmp(ImageBuffer_ptr, std::string, PointCoordinates) = 0;
 };
 
 #endif

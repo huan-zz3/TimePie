@@ -13,29 +13,29 @@ public:
 
     Result<void> epdriver_Init(InitMode);
     Result<void> epdriver_Clear(ClearMode);
-    Result<void> epdriver_Display(ImageBuffer, DisplayMode);
+    Result<void> epdriver_Display(ImageBuffer_ptr, DisplayMode);
     Result<void> epdriver_Sleep();
     Result<void> epdriver_Exit();
 
-    Result<void> epdriver_NewImage(ImageBuffer, ImageColor);
-    Result<void> epdriver_SetRotate(ImageBuffer, RotateMode);
-    Result<void> epdriver_SetMirroring(ImageBuffer, MirrorMode);
+    Result<ImageBuffer_ptr> epdriver_NewImage(ImageColor);
+    Result<void> epdriver_SetRotate(ImageBuffer_ptr, RotateMode);
+    Result<void> epdriver_SetMirroring(ImageBuffer_ptr, MirrorMode);
 
-    Result<void> epdriver_Clear(ImageBuffer, ImageColor);
-    Result<void> epdriver_Clear(ImageBuffer, ImageColor, PointCoordinates, PointCoordinates);
+    Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor);
+    Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor, PointCoordinates, PointCoordinates);
 
-    Result<void> epdriver_DrawPoint(ImageBuffer, PointCoordinates, ImageColor, PointSize, PointStyle);
-    Result<void> epdriver_DrawLine(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle);
-    Result<void> epdriver_DrawRectangle(ImageBuffer, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill);
-    Result<void> epdriver_DrawCircle(ImageBuffer, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill);
+    Result<void> epdriver_DrawPoint(ImageBuffer_ptr, PointCoordinates, ImageColor, PointSize, PointStyle);
+    Result<void> epdriver_DrawLine(ImageBuffer_ptr, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle);
+    Result<void> epdriver_DrawRectangle(ImageBuffer_ptr, PointCoordinates, PointCoordinates, ImageColor, PointSize, DrawFill);
+    Result<void> epdriver_DrawCircle(ImageBuffer_ptr, PointCoordinates, RaiusLength, ImageColor, PointSize, DrawFill);
 
-    Result<void> epdriver_DrawChar(ImageBuffer, PointCoordinates, char, Fontype, ImageColor, ImageColor);
-    Result<void> epdriver_DrawString_EN(ImageBuffer, PointCoordinates, std::string, Fontype, ImageColor, ImageColor);
-    Result<void> epdriver_DrawNum(ImageBuffer, PointCoordinates, Number, Fontype, ImageColor, ImageColor);
-    Result<void> epdriver_DrawTime(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
-    Result<void> epdriver_DrawDate(ImageBuffer, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawChar(ImageBuffer_ptr, PointCoordinates, char, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawString_EN(ImageBuffer_ptr, PointCoordinates, std::string, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawNum(ImageBuffer_ptr, PointCoordinates, Number, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawTime(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
+    Result<void> epdriver_DrawDate(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor);
 
-    Result<void> epdriver_ReadBmp(ImageBuffer, std::string, PointCoordinates);
+    Result<void> epdriver_ReadBmp(ImageBuffer_ptr, std::string, PointCoordinates);
 };
 
 #endif
