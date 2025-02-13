@@ -82,3 +82,28 @@ target_include_directories(${timer_target} PRIVATE
 target_link_libraries(${timer_target} PRIVATE
     libtimer
 )
+
+# Create a draw1_example executable
+set(draw1_example_name draw1)
+set(draw1_target ${draw1_example_name}_${PROJECT_NAME})
+set(draw1_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw1_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${draw1_target}
+    ${draw1_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw1_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw1_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
