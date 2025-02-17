@@ -18,4 +18,5 @@ target_link_libraries(TimePie PRIVATE
     sigc++
     libtimer
     sqlite3
+    serialib
 )

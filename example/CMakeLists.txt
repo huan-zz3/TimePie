@@ -107,3 +107,29 @@ target_link_libraries(${draw1_target} PRIVATE
     pthread
     libtimer
 )
+
+# Create a serialib_example executable
+set(serialib_example_name serialib)
+set(serialib_target ${serialib_example_name}_${PROJECT_NAME})
+set(serialib_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${serialib_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${serialib_target}
+    ${serialib_SRC_LIST}
+    # ${SRC_LIST}
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${serialib_target} PRIVATE 
+    # ${CMAKE_SOURCE_DIR}/include
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${serialib_target} PRIVATE
+    # lg
+    # EPDriver
+    # sigc++
+    # pthread
+    # libtimer
+    serialib
+)
