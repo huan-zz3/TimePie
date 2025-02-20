@@ -46,7 +46,7 @@ public:
 
     // virtual Result<void> timebookInit() = 0;
     // virtual Result<void> timebookExit() = 0;
-    virtual Result<void> setI4GDTU(std::unique_ptr<I4GDTU>) = 0;
+    virtual Result<void> setI4GDTU(std::shared_ptr<I4GDTU>) = 0;
     virtual Result<void> timebookLogin() = 0;
     /* handle in local*/
     virtual Result<std::string> addTimeItem(int _category, std::string _date, std::string _start, std::string _end, int duration) = 0;
@@ -65,7 +65,7 @@ protected:
     std::string token_;
     unsigned long expire_timestamp_;
 
-    std::unique_ptr<I4GDTU> i4gdtu_;
+    std::shared_ptr<I4GDTU> i4gdtu_;
     std::map<std::string, timebookitem> localtimebookitems_;
 };
 

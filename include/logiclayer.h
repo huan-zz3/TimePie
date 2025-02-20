@@ -21,7 +21,7 @@ public:
     using IEPDService::on_timer_updated;
 
 private:
-    std::shared_ptr<Timer> timer_ptr;
+    std::unique_ptr<Timer> timer_ptr;
 };
 
 #endif

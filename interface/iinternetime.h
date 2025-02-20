@@ -22,7 +22,7 @@ struct timedata
 class IInternetTime
 {
 public:
-    explicit IInternetTime(std::unique_ptr<I4GDTU>){};
+    explicit IInternetTime(){};
 
     virtual Result<timedata> getNowTime() = 0;
     virtual Result<int> getNowMonth() = 0;
@@ -34,12 +34,10 @@ public:
     virtual Result<unsigned long> getNowtTimeStamp() = 0;
 
 public:
-    Signal_string updatenowtime_signal_;
+    Signal_string updatenowtime_signal_;    // 照预定格式，主动上报更新时间内容
 
 protected:
     timedata nowTime;
-    std::unique_ptr<I4GDTU> gdtu_;
-
 };
 
 #endif

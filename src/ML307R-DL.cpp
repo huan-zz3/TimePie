@@ -7,9 +7,9 @@ ML307R::~ML307R()
 
 Result<void> ML307R::dtuInit(std::unique_ptr<serialib> _serial_ptr)
 {
-    serial_ptr = std::move(_serial_ptr);
+    serial_ptr_ = std::move(_serial_ptr);
     // 打开串口设备
-    char errorOpening = serial_ptr->openDevice(SERIAL_PORT, BAUDRATE);
+    char errorOpening = serial_ptr_->openDevice(SERIAL_PORT, BAUDRATE);
     if (errorOpening == '1')
     {
         return Result<void>::Success();
@@ -21,8 +21,8 @@ Result<void> ML307R::dtuInit(std::unique_ptr<serialib> _serial_ptr)
 }
 Result<void> ML307R::dtuExit()
 {
-    serial_ptr->closeDevice();
-    serial_ptr.reset();
+    serial_ptr_->closeDevice();
+    serial_ptr_.reset();
 }
 Result<void> ML307R::dtuReset()
 {
@@ -42,7 +42,7 @@ Result<void> ML307R::dtuReset()
         {
             // 尝试发送一个简单的AT指令
             result = dtuSendandRec("AT", 2000);
-            if (result.isSuccess())
+            if (result.isSuccess() && result.successvalue().find("OK") != std::string::npos)
             {
                 std::cout << "DTU已成功重启并响应。" << std::endl;
                 return Result<void>::Success();
@@ -71,8 +71,9 @@ Result<void> ML307R::dtuIsOnline()
     if (result.isSuccess())
     {
         std::cout << "DTU查询驻网指令发送成功" << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        if (result.errormsg().find("1") != std::string::npos || result.errormsg().find("5") != std::string::npos)
+        // std::this_thread::sleep_for(std::chrono::seconds(2));
+        // auto _rt = dtuATRecvExtract(result.successvalue());  // 无需提取，直接判断
+        if (result.successvalue().find("1") != std::string::npos || result.successvalue().find("5") != std::string::npos)
         {
             return Result<void>::Success();
         }
@@ -84,10 +85,34 @@ Result<void> ML307R::dtuIsOnline()
     }
 }
 /* there may be some Return value*/
-Result<std::string> ML307R::dtuSendandRec(std::string data, unsigned int timeout)
+Result<std::string> ML307R::dtuTIME(void)
+{
+    // 发送AT+TIME指令查询DTU设备网路时间，请务必确保设备已驻网
+    Result<std::string> result = dtuSendandRec("AT+TIME", 1000);
+    if (result.isSuccess())
+    {
+        std::cout << "查询DTU设备网路时间指令发送成功" << std::endl;
+        auto _rt = dtuATRecvExtract(result.successvalue());
+        if (_rt.isSuccess())
+        {
+            return Result<std::string>::Success(_rt.successvalue());
+        }
+        else
+        {
+            std::cout << "Failed to extract data: " << _rt.errormsg() << std::endl;
+            return Result<std::string>::Error("No data received");
+        }
+        return Result<std::string>::Success(std::move(result.successvalue()));
+    }
+    else
+    {
+        return Result<std::string>::Error("发送AT+TIME指令失败。");
+    }
+}
+Result<std::string> ML307R::dtuSendandRec(std::string _data, unsigned int _timeout)
 {
     // 发送数据
-    if (serial_ptr->writeString(data.c_str()) != 1)
+    if (serial_ptr_->writeString(_data.c_str()) != 1)
     {
         return Result<std::string>::Error("Failed to send data");
     }
@@ -112,7 +137,7 @@ Result<std::string> ML307R::dtuSendandRec(std::string data, unsigned int timeout
         // total_timeout = (total_timeout < read_timeout) ? 0 : total_timeout - read_timeout;
 
         // 从串口读取数据到缓冲区，直到换行符或超时
-        int bytesRead = serial_ptr->readString(buffer, '\n', sizeof(buffer) - 1, timeout); // old read_timeout
+        int bytesRead = serial_ptr_->readString(buffer, '\n', sizeof(buffer) - 1, _timeout); // old read_timeout
 
         // 处理读取结果
         switch (bytesRead)
@@ -159,32 +184,7 @@ Result<std::string> ML307R::dtuSendandRec(std::string data, unsigned int timeout
     //     return Result<std::string>::Error("No data received");
     // }
 }
-
-Result<std::string> ML307R::dtuNTP(void)
-{
-    // 发送AT+TIME指令查询DTU设备网路时间，请务必确保设备已驻网
-    Result<std::string> result = dtuSendandRec("AT+TIME", 1000);
-    if (result.isSuccess())
-    {
-        std::cout << "查询DTU设备网路时间指令发送成功" << std::endl;
-        auto _rt = dtuRecvExtract(result.successvalue());
-        if (_rt.isSuccess())
-        {
-            return Result<std::string>::Success(_rt.successvalue());
-        }
-        else
-        {
-            std::cout << "Failed to extract data: " << _rt.errormsg() << std::endl;
-            return Result<std::string>::Error("No data received");
-        }
-        return Result<std::string>::Success(std::move(result.successvalue()));
-    }
-    else
-    {
-        return Result<std::string>::Error("发送AT+TIME指令失败。");
-    }
-}
-Result<std::string> ML307R::dtuRecvExtract(const std::string input)
+Result<std::string> ML307R::dtuATRecvExtract(const std::string input)
 {
     size_t start_pos = input.find('"');
     if (start_pos == std::string::npos)
@@ -197,4 +197,20 @@ Result<std::string> ML307R::dtuRecvExtract(const std::string input)
         return Result<std::string>::Error("No closing quote found" + input);
     }
     return Result<std::string>::Success(input.substr(start_pos + 1, end_pos - start_pos - 1));
+}
+Result<std::string> ML307R::dtuJSONCommunication(std::string _data, unsigned int _timeout)
+{
+    auto result = dtuSendandRec(_data, _timeout);
+    if (!result.isSuccess())
+    {
+        return Result<std::string>::Error("Failed to send data: " + result.errormsg());
+    }
+    auto _rt = result.successvalue();
+    size_t start_pos = _rt.find('{');
+    size_t end_pos = _rt.find_last_of('}');
+    if( start_pos == std::string::npos || end_pos == std::string::npos)
+    {
+        return Result<std::string>::Error("No {} data found");
+    }
+    return Result<std::string>::Success(_rt.substr(start_pos, end_pos - start_pos + 1));
 }
