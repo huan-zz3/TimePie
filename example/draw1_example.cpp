@@ -8,12 +8,12 @@ int main() {
     // 初始化设备层
     auto result = deviceLayer.epdriver_Init(InitMode::Hardware);
     if (!result.isSuccess()) {
-        std::cerr << "Failed to initialize hardware: " << result.error() << std::endl;
+        std::cerr << "Failed to initialize hardware: " << result.errormsg() << std::endl;
         return 1;
     }
     result = deviceLayer.epdriver_Init(InitMode::Full);
     if (!result.isSuccess()) {
-        std::cerr << "Failed to initialize device layer: " << result.error() << std::endl;
+        std::cerr << "Failed to initialize device layer: " << result.errormsg() << std::endl;
         return 1;
     }
 
@@ -22,15 +22,15 @@ int main() {
     // imageBuffer->imgbuff_ptr = new UBYTE[EPD_2in13_V4_WIDTH * EPD_2in13_V4_HEIGHT / 8];
     auto result2 = deviceLayer.epdriver_NewImage(ImageColor::White);
     if (!result2.isSuccess()) {
-        std::cerr << "Failed to create new image: " << result.error() << std::endl;
+        std::cerr << "Failed to create new image: " << result.errormsg() << std::endl;
         return 1;
     }
-    auto imageblank = result2.value();
+    auto imageblank = result2.successvalue();
 
     // 设置图像的镜像角度
     result = deviceLayer.epdriver_SetMirroring(imageblank, MirrorMode::Origin);
     if (!result.isSuccess()) {
-        std::cerr << "Failed to set mirror: " << result.error() << std::endl;
+        std::cerr << "Failed to set mirror: " << result.errormsg() << std::endl;
         return 1;
     }
 
@@ -38,14 +38,14 @@ int main() {
     PointCoordinates center = {50, 50};
     result = deviceLayer.epdriver_DrawCircle(imageblank, center, 2, ImageColor::Black, PointSize::X11, DrawFill::Fill);
     if (!result.isSuccess()) {
-        std::cerr << "Failed to draw circle: " << result.error() << std::endl;
+        std::cerr << "Failed to draw circle: " << result.errormsg() << std::endl;
         return 1;
     }
 
     // 显示图像
     result = deviceLayer.epdriver_Display(imageblank, DisplayMode::Partial_Wait);
     if (!result.isSuccess()) {
-        std::cerr << "Failed to display image: " << result.error() << std::endl;
+        std::cerr << "Failed to display image: " << result.errormsg() << std::endl;
         return 1;
     }
 

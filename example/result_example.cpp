@@ -19,18 +19,18 @@ int main() {
     auto result = divide(10, 2);
 
     if (result.isSuccess()) {
-        std::cout << "Division successful, result: " << result.value() << std::endl;
+        std::cout << "Division successful, result: " << result.successvalue() << std::endl;
     } else {
-        std::cout << "Error occurred: " << result.error() << std::endl;
+        std::cout << "Error occurred: " << result.errormsg() << std::endl;
     }
 
     // 测试错误情况
     auto errorResult = divide(10, 0);
 
     if (errorResult.isSuccess()) {
-        std::cout << "Division successful, result: " << errorResult.value() << std::endl;
+        std::cout << "Division successful, result: " << errorResult.successvalue() << std::endl;
     } else {
-        std::cout << "Error occurred: " << errorResult.error() << std::endl;
+        std::cout << "Error occurred: " << errorResult.errormsg() << std::endl;
     }
 
     // 无返回值的例子
@@ -38,7 +38,7 @@ int main() {
     if (voidResult.isSuccess()) {
         std::cout << "Operation succeeded." << std::endl;
     } else {
-        std::cout << "Error occurred: " << voidResult.error() << std::endl;
+        std::cout << "Error occurred: " << voidResult.errormsg() << std::endl;
     }
 
     return 0;

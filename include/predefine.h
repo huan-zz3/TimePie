@@ -57,7 +57,7 @@ public:
     bool isSuccess() const { return success; }
 
     // Get the success value (only available when successful)
-    const T& value() const {
+    const T& successvalue() const {
         if (!success) {
             throw std::logic_error("Attempted to access value in an error state.");
         }
@@ -65,7 +65,7 @@ public:
     }
 
     // Get the error message (only available when failed)
-    const std::string& error() const {
+    const std::string& errormsg() const {
         if (success) {
             throw std::logic_error("Attempted to access error in a success state.");
         }
@@ -100,7 +100,7 @@ public:
     bool isSuccess() const { return success; }
 
     // Get the error message (only available when failed)
-    const std::string& error() const {
+    const std::string& errormsg() const {
         if (success) {
             throw std::logic_error("Attempted to access error in a success state.");
         }
