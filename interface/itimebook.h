@@ -6,12 +6,14 @@
 #include <map>
 #include <memory>
 
-struct Metric {
+struct Metric
+{
     int metric;
     int value;
 };
 
-struct timebookitem {
+struct timebookitem
+{
     std::string id = "";
     int category;
     std::string date;
@@ -36,11 +38,11 @@ struct timebookitem {
 /*
  * 刚添加的item先通过sqlite存储，然后通过pushTimeItems()上传到服务器。
  * 本地存储除timebookitem内还需另加两个字段：_itemid、_synced。前者是本地存储区分的id，后者是标明是否已经上传到服务器。
-*/
+ */
 class ITimeBook
 {
 public:
-    explicit ITimeBook(std::string, std::string){};
+    explicit ITimeBook(std::string _username, std::string _password) : username_(_username), password_(_password) {};
 
     // virtual Result<void> timebookInit() = 0;
     // virtual Result<void> timebookExit() = 0;
@@ -65,7 +67,6 @@ protected:
 
     std::unique_ptr<I4GDTU> i4gdtu_;
     std::map<std::string, timebookitem> localtimebookitems_;
-
 };
 
 #endif
