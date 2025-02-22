@@ -5,6 +5,10 @@ Result<void> TimeBook::setI4GDTU(std::shared_ptr<I4GDTU> _i4gdtu)
     i4gdtu_ = std::move(_i4gdtu);
     return Result<void>::Success();
 }
+Result<void> TimeBook::setIDatabase(std::shared_ptr<IDatabase> _idatabase){
+    idatabase_ = std::move(_idatabase);
+    return Result<void>::Success();
+}
 Result<void> TimeBook::timebookLogin()
 {
     if (!i4gdtu_->dtuIsOnline().isSuccess())
@@ -17,8 +21,9 @@ Result<void> TimeBook::timebookLogin()
 
     try
     {
-        std::cout << "LoginData: " << _logindata.dump() << std::endl;
-        auto _rt = i4gdtu_->dtuJSONCommunication(_logindata.dump(), 5000);
+        std::string _sendata = std::string(METHOD_POST) + "||" + std::string(URL_LOGIN) + "||||" +  _logindata.dump();
+        std::cout << "LoginData: " << _sendata << std::endl;
+        auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, 5000);
         if (!_rt.isSuccess())
         {
             std::cout << _rt.errormsg() << std::endl;
@@ -27,6 +32,10 @@ Result<void> TimeBook::timebookLogin()
         json jsonData = json::parse(_rt.successvalue());
         token_ = jsonData["data"]["token"];
         expire_timestamp_ = jsonData["data"]["expire_at"];
+
+        std::cout << "token_: " << token_ << std::endl;
+        std::cout << "expire_timestamp_: " << expire_timestamp_ << std::endl;
+        
         return Result<void>::Success();
     }
     catch (const std::exception &e)

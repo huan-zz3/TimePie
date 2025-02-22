@@ -1,8 +1,12 @@
 #include "ML307R-DL.h"
 
+ML307R::ML307R()
+{
+}
 ML307R::~ML307R()
 {
     dtuExit();
+    std::cout << "ML307R instance is deleted now." << std::endl;
 }
 
 Result<void> ML307R::dtuInit(std::unique_ptr<serialib> _serial_ptr)
@@ -10,24 +14,25 @@ Result<void> ML307R::dtuInit(std::unique_ptr<serialib> _serial_ptr)
     serial_ptr_ = std::move(_serial_ptr);
     // 打开串口设备
     char errorOpening = serial_ptr_->openDevice(SERIAL_PORT, BAUDRATE);
-    if (errorOpening == '1')
+    if (std::to_string(errorOpening) == "1")
     {
         return Result<void>::Success();
     }
     else
     {
-        return Result<void>::Error("Error Code: " + errorOpening);
+        return Result<void>::Error("Error Code: " + std::to_string(errorOpening));
     }
 }
 Result<void> ML307R::dtuExit()
 {
-    serial_ptr_->closeDevice();
-    serial_ptr_.reset();
+    // serial_ptr_->closeDevice();
+    serial_ptr_.reset(); // serialib的析构函数默认会调用closeDevice()，这会引起两次销毁的问题，这里选择仅主动释放指针
+    return Result<void>::Success();
 }
 Result<void> ML307R::dtuReset()
 {
     // 发送AT+REST指令重启DTU
-    Result<std::string> result = dtuSendandRec("AT+REST", MAX_WAITIME);
+    Result<std::string> result = dtuSendandRec("AT+REST", REST_WAITIME);
     if (result.isSuccess())
     {
         std::cout << "DTU重启指令已发送，开始等待重启..." << std::endl;
@@ -41,7 +46,7 @@ Result<void> ML307R::dtuReset()
         while (retryCount < MAX_RETRY)
         {
             // 尝试发送一个简单的AT指令
-            result = dtuSendandRec("AT", 2000);
+            result = dtuSendandRec("AT", 500);
             if (result.isSuccess() && result.successvalue().find("OK") != std::string::npos)
             {
                 std::cout << "DTU已成功重启并响应。" << std::endl;
@@ -111,33 +116,28 @@ Result<std::string> ML307R::dtuTIME(void)
 }
 Result<std::string> ML307R::dtuSendandRec(std::string _data, unsigned int _timeout)
 {
+    // 清空接收缓冲区
+    auto _rt = dtuRecvClear();
+    if(_rt.isSuccess() == false){
+        return Result<std::string>::Error("Failed to clear receive buffer");
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));    // wait for 100ms to ensure the buffer is cleared
+
     // 发送数据
-    if (serial_ptr_->writeString(_data.c_str()) != 1)
+    if (serial_ptr_->writeString((_data + "\r\n").c_str()) != 1)    // \r\n is necessary
     {
         return Result<std::string>::Error("Failed to send data");
     }
 
-    // 初始化缓冲区和接收数据的总超时时间
-    char buffer[512] = {0};
+    char buffer[2048] = {0};
     std::string receivedData = "";
-    // unsigned int total_timeout = timeout;
 
     // 循环接收数据，直到接收到所有数据部分或超时
-    unsigned int interval = 0;
+    unsigned int interval = 3;
     while (true)
     {
-        // 每次读取数据，使用较小的超时以避免长时间阻塞
-        // unsigned int read_timeout = 200; // 每次读取的超时时间200ms
-        // if (total_timeout <= 0)
-        // {
-        //     break; // 总超时已到，不再继续接收
-        // }
 
-        // 计算剩余总超时时间
-        // total_timeout = (total_timeout < read_timeout) ? 0 : total_timeout - read_timeout;
-
-        // 从串口读取数据到缓冲区，直到换行符或超时
-        int bytesRead = serial_ptr_->readString(buffer, '\n', sizeof(buffer) - 1, _timeout); // old read_timeout
+        int bytesRead = serial_ptr_->readString(buffer, '~', sizeof(buffer) - 1, _timeout);
 
         // 处理读取结果
         switch (bytesRead)
@@ -149,15 +149,16 @@ Result<std::string> ML307R::dtuSendandRec(std::string _data, unsigned int _timeo
         case -3:
             return Result<std::string>::Error("MaxNbBytes reached");
         case 0:
-            // 未接收到任何数据，判定为数据接收完毕，退出循环
-            // std::cout << "Timeout while reading, remained time:" << total_timeout << std::endl;
+            std::cout << "buffer: " << buffer << std::endl;
             std::cout << "Timeout while reading" << std::endl;
+
+            return Result<std::string>::Success(std::string(buffer));
             break;
         default:
             // if (bytesRead > 0)
             // {
             // 将读取到的数据拼接到receivedData中
-            std::this_thread::sleep_for(std::chrono::milliseconds(INTERVAL));
+            // std::this_thread::sleep_for(std::chrono::milliseconds(INTERVAL));
             receivedData += std::string(buffer, bytesRead);
             // }
             // 检查是否已经读取到换行符，即数据部分结束
@@ -203,14 +204,23 @@ Result<std::string> ML307R::dtuJSONCommunication(std::string _data, unsigned int
     auto result = dtuSendandRec(_data, _timeout);
     if (!result.isSuccess())
     {
+        std::cout<< result.errormsg() << std::endl;
         return Result<std::string>::Error("Failed to send data: " + result.errormsg());
     }
     auto _rt = result.successvalue();
     size_t start_pos = _rt.find('{');
     size_t end_pos = _rt.find_last_of('}');
-    if( start_pos == std::string::npos || end_pos == std::string::npos)
+    if (start_pos == std::string::npos || end_pos == std::string::npos)
     {
         return Result<std::string>::Error("No {} data found");
     }
     return Result<std::string>::Success(_rt.substr(start_pos, end_pos - start_pos + 1));
+}
+Result<void> ML307R::dtuRecvClear(void)
+{
+    if(serial_ptr_->flushReceiver()){
+        return Result<void>::Success();
+    }else{
+        return Result<void>::Error("Failed to clear the receive buffer");
+    }
 }

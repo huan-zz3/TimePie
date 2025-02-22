@@ -3,8 +3,10 @@
 
 #include "i4gdtu.h"
 #include "predefine.h"
+#include "idatabase.h"
 #include <map>
 #include <memory>
+#include <vector>
 
 struct Metric
 {
@@ -47,6 +49,7 @@ public:
     // virtual Result<void> timebookInit() = 0;
     // virtual Result<void> timebookExit() = 0;
     virtual Result<void> setI4GDTU(std::shared_ptr<I4GDTU>) = 0;
+    virtual Result<void> setIDatabase(std::shared_ptr<IDatabase>) = 0;
     virtual Result<void> timebookLogin() = 0;
     /* handle in local*/
     virtual Result<std::string> addTimeItem(int _category, std::string _date, std::string _start, std::string _end, int duration) = 0;
@@ -66,6 +69,7 @@ protected:
     unsigned long expire_timestamp_;
 
     std::shared_ptr<I4GDTU> i4gdtu_;
+    std::shared_ptr<IDatabase> idatabase_;
     std::map<std::string, timebookitem> localtimebookitems_;
 };
 
