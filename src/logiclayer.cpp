@@ -12,7 +12,7 @@ Result<void> LogicLayer::epdserExit()
 Result<void> LogicLayer::epdserStartTomatoTimer(uint32_t _seconds)
 {
     try{
-        timer_ptr = std::make_shared<Timer>([this]()
+        timer_ptr = std::make_unique<Timer>([this]()
                     { this->on_timer_updated.emit(); }, _seconds);
         timer_ptr->start(); 
     }catch (std::exception& e){

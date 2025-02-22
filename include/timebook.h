@@ -6,7 +6,7 @@
 using json = nlohmann::json;
 // #include "ML307R-DL.h"
 
-class TimeBook : ITimeBook
+class TimeBook : public ITimeBook
 {
 public:
     TimeBook(std::string _username, std::string _password) : ITimeBook(_username, _password) {};
