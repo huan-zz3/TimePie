@@ -116,6 +116,7 @@ Result<std::string> ML307R::dtuTIME(void)
 }
 Result<std::string> ML307R::dtuSendandRec(std::string _data, unsigned int _timeout)
 {
+    std::lock_guard<std::mutex> lock(serial_mutex_); // 使用互斥量进行同步
     // 清空接收缓冲区
     auto _rt = dtuRecvClear();
     if(_rt.isSuccess() == false){

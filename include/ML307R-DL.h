@@ -13,6 +13,7 @@
 #include <thread>
 #include <chrono>
 #include <unistd.h>
+#include <mutex>
 
 class ML307R : public I4GDTU
 {
@@ -31,6 +32,7 @@ public:
 
 private:
     using I4GDTU::serial_ptr_;
+    std::mutex serial_mutex_;
     Result<std::string> dtuSendandRec(std::string data, unsigned int timeout) override;
     Result<std::string> dtuATRecvExtract(std::string data);
     Result<void> dtuRecvClear(void);
