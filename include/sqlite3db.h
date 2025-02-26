@@ -14,19 +14,14 @@ public:
     ~Sqlite3Database() override;
 
     Result<void> Connect(const std::string& connectionString) override;
-
     Result<void> disConnect() override;
-
     Result<void> isConnected() override;
 
     Result<std::vector<std::map<std::string, std::string>>> executeQuery(const std::string& query) override;
-
     Result<void> executeNonQuery(const std::string& query) override;
 
     Result<void> Insert(const std::string& tableName, const std::map<std::string, std::string>& data) override;
-
     Result<void> Update(const std::string& tableName, const std::map<std::string, std::string>& data, const std::string& condition) override;
-
     Result<void> Remove(const std::string& tableName, const std::string& condition) override;
 
 private:

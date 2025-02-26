@@ -29,11 +29,12 @@ add_test(NAME uart-tests
         COMMAND uart-tests
 )
 
-# Add a test-case for dtuart
+# Add a test-case for timebook
 set(main tests-main.cpp)
 set(SRC_LIST
     ${CMAKE_SOURCE_DIR}/src/timebook.cpp
     ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+    ${CMAKE_SOURCE_DIR}/src/sqlite3db.cpp
 )
 add_executable(timebook-tests
     ${main}
@@ -49,7 +50,7 @@ target_link_libraries(timebook-tests
     # lg
     sigc++
     libtimer
-    # sqlite3
+    sqlite
     serialib
 )
 add_test(NAME timebook-tests
@@ -81,9 +82,36 @@ target_link_libraries(dtutime-tests
     # lg
     sigc++
     libtimer
-    # sqlite3
+    # sqlite
     serialib
 )
 add_test(NAME dtutime-tests
         COMMAND dtutime-tests
+)
+
+# Add a test-case for sqlite
+set(main tests-main.cpp)
+set(SRC_LIST
+    ${CMAKE_SOURCE_DIR}/src/sqlite3db.cpp
+    # ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+)
+add_executable(sqlite-tests
+    ${main}
+    ${SRC_LIST}
+    sqlite-tests.cpp
+)
+target_include_directories(sqlite-tests PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(sqlite-tests
+    # EPDriver
+    # lg
+    sigc++
+    # libtimer
+    sqlite
+    # serialib
+)
+add_test(NAME sqlite-tests
+        COMMAND sqlite-tests
 )

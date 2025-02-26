@@ -34,7 +34,7 @@ struct timebookitem
     std::string location = "";
     std::string thing = "";
     std::string attachments = "";
-    std::vector<Metric> metrics = {{0, 0}};
+    std::vector<Metric> metrics = {{0, 0}}; //上传时必选，但保持默认为空（基本用不上）
 };
 
 /*
