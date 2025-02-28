@@ -43,20 +43,19 @@ void Handler_2in13_V4(int signo)
     DEV_ModuleExit();     // 退出硬件模块
     exit(0);             // 退出程序
 }
+
+// 触摸中断处理线程：不断检测是否有新的触摸事件发生
 void *pthread_irq_2in13_V4(void *arg)
 {
 	while(flag_t_2in13_V4) {
 		if(DEV_Digital_Read(INT) == 0) { // 如果检测到触摸
 			Dev_Now.Touch = 1; // 标记为有触摸
-			static size_t i = 0;
-			Debug( "Touched: %d\n", i++);
+			// Debug( "Touched\n");
 		} else {
 			Dev_Now.Touch = 0; // 否则标记为无触摸
-			static size_t i = 0;
-			Debug( "noTouched: %d\n", i++);
 			// Debug( "noTouched\n");
 		}
-		DEV_Delay_ms(100); // 延迟100毫秒
+		DEV_Delay_ms(10); // 延迟10毫秒
 	}
 	printf("thread:exit\r\n");
 	pthread_exit(NULL);
@@ -168,7 +167,6 @@ int TestCode_2in13_V4(void)
 		if(Dev_Now.TouchpointFlag) {
 			i++;
 			Dev_Now.TouchpointFlag = 0;
-			Debug( "enter TouchpointFlag\n");
 
 			// 根据当前页面和触摸位置执行不同操作
 			if(Page == 0  && ReFlag == 0) {		// 主菜单

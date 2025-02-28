@@ -42,8 +42,8 @@
 #define UDOUBLE uint32_t
 
 //TP Define
-#define TRST		21  // old 22
-#define INT			4   // old 27
+#define TRST		3  // old 22
+#define INT			2   // old 27
 
 #define TRST_0		DEV_Digital_Write(TRST, 0)
 #define TRST_1		DEV_Digital_Write(TRST, 1)
