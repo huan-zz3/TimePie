@@ -21,8 +21,8 @@ public:
     Result<void> epdriver_SetRotate(ImageBuffer_ptr, RotateMode);
     Result<void> epdriver_SetMirroring(ImageBuffer_ptr, MirrorMode);
 
-    Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor);
-    Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor, PointCoordinates, PointCoordinates);
+    Result<void> epdriver_imgClear(ImageBuffer_ptr, ImageColor);
+    Result<void> epdriver_imgClear(ImageBuffer_ptr, ImageColor, PointCoordinates, PointCoordinates);
 
     Result<void> epdriver_DrawPoint(ImageBuffer_ptr, PointCoordinates, ImageColor, PointSize, PointStyle);
     Result<void> epdriver_DrawLine(ImageBuffer_ptr, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle);

@@ -10,6 +10,7 @@ extern "C" {
 #include "GUI_BMPfile.h"
 #include "fonts.h"
 }
+extern int IIC_Address;
 
 enum class InitMode
 {
@@ -160,8 +161,8 @@ public:
     virtual Result<void> epdriver_SetMirroring(ImageBuffer_ptr, MirrorMode) = 0;
     // virtual Result<void> epdriverSetScale(ScaleMode) = 0;
 
-    virtual Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor) = 0;
-    virtual Result<void> epdriver_Clear(ImageBuffer_ptr, ImageColor, PointCoordinates, PointCoordinates) = 0;
+    virtual Result<void> epdriver_imgClear(ImageBuffer_ptr, ImageColor) = 0;
+    virtual Result<void> epdriver_imgClear(ImageBuffer_ptr, ImageColor, PointCoordinates, PointCoordinates) = 0;
 
     virtual Result<void> epdriver_DrawPoint(ImageBuffer_ptr, PointCoordinates, ImageColor, PointSize, PointStyle) = 0;
     virtual Result<void> epdriver_DrawLine(ImageBuffer_ptr, PointCoordinates, PointCoordinates, ImageColor, PointSize, LineStyle) = 0;

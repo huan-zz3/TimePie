@@ -25,7 +25,11 @@ Result<void> DeviceLayer::epdriver_Init(InitMode _initMode)
     switch (_initMode)
     {
     case InitMode::Hardware:
-        DEV_ModuleInit();
+        IIC_Address = 0x14;
+        if(DEV_ModuleInit()){
+            Debug( "DEV_ModuleInit Failed!\n");
+            return Result<void>::Error("DEV_ModuleInit Failed!");
+        }
         break;
     case InitMode::Full:
         EPD_2in13_V4_Init(EPD_2IN13_V4_FULL);
@@ -87,11 +91,12 @@ Result<void> DeviceLayer::epdriver_Sleep()
 Result<ImageBuffer_ptr> DeviceLayer::epdriver_NewImage(ImageColor _imagecolor)
 {
     ImageBuffer_ptr _imagebuffer = std::make_shared<ImageBuffer_struct>();
-    _imagebuffer->imgbuff_ptr = (UBYTE *)malloc(EPD_2in13_V4_WIDTH / 8 + 1);    // the imagesize is fixed in EPD_2in13_V4: EPD_2in13_V4_WIDTH / 8 + 1
+    _imagebuffer->imgbuff_ptr = (UBYTE *)malloc((EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT);    // the imagesize is fixed in EPD_2in13_V4: (EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT
     switch (_imagecolor)
     {
     case ImageColor::White:
-        Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, static_cast<UWORD>(_imagecolor));
+        // Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, static_cast<UWORD>(_imagecolor));
+        Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, WHITE);
         break;
     case ImageColor::Black:
         Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, BLACK);
@@ -112,13 +117,13 @@ Result<void> DeviceLayer::epdriver_SetMirroring(ImageBuffer_ptr _imagebuffer, Mi
     return Result<void>::Success();
 }
 
-Result<void> DeviceLayer::epdriver_Clear(ImageBuffer_ptr _imagebuffer, ImageColor _imagecolor)
+Result<void> DeviceLayer::epdriver_imgClear(ImageBuffer_ptr _imagebuffer, ImageColor _imagecolor)
 {
     Paint_SelectImage(_imagebuffer->imgbuff_ptr);
     Paint_Clear(static_cast<UWORD>(_imagecolor));
     return Result<void>::Success();
 }
-Result<void> DeviceLayer::epdriver_Clear(ImageBuffer_ptr _imagebuffer, ImageColor _imagecolor, PointCoordinates _pcs, PointCoordinates _pce)
+Result<void> DeviceLayer::epdriver_imgClear(ImageBuffer_ptr _imagebuffer, ImageColor _imagecolor, PointCoordinates _pcs, PointCoordinates _pce)
 {
     Paint_SelectImage(_imagebuffer->imgbuff_ptr);
     Paint_ClearWindows(_pcs.x, _pcs.y, _pce.x, _pce.y, static_cast<UWORD>(_imagecolor));
@@ -145,8 +150,11 @@ Result<void> DeviceLayer::epdriver_DrawRectangle(ImageBuffer_ptr _imagebuffer, P
 }
 Result<void> DeviceLayer::epdriver_DrawCircle(ImageBuffer_ptr _imagebuffer, PointCoordinates _pc, RaiusLength _radius, ImageColor _imagecolor, PointSize _pointsize, DrawFill _drawfill)
 {
+    // Debug("DeviceLayer::epdriver_DrawCircle - select\n");
     Paint_SelectImage(_imagebuffer->imgbuff_ptr);
+    // Debug("DeviceLayer::epdriver_DrawCircle - select ok\n");
     Paint_DrawCircle(_pc.x, _pc.y, _radius, static_cast<UWORD>(_imagecolor), static_cast<DOT_PIXEL>(_pointsize), static_cast<DRAW_FILL>(_drawfill));
+    // Debug("DeviceLayer::epdriver_DrawCircle - draw ok\n");
     return Result<void>::Success();
 }
 
