@@ -116,7 +116,55 @@ private:
         : errorMsg_(std::move(errorMsg)), success(success) {}
 };
 
+#include <chrono>
+#include <iostream>
+#include <string>
 
+namespace TimeRecorder {
+
+    // 使用稳定的、不断倒退的时钟进行持续时间测量
+    using Clock = std::chrono::steady_clock;
+    using Duration = std::chrono::duration<double>; // 持续时间以秒为单位
+
+    // 帮助类：用于自动记录函数运行时间（RAII风格）
+    class FunctionTimer {
+    public:
+        explicit FunctionTimer(const std::string& functionName) 
+            : functionName_(functionName), start_(Clock::now()) {}
+
+        ~FunctionTimer() {
+            auto end = Clock::now();
+            auto duration = std::chrono::duration_cast<Duration>(end - start_);
+            std::cout << "Function '" << functionName_ << "' used: " 
+                      << duration.count() << " seconds" << std::endl;
+        }
+
+    private:
+        std::string functionName_;
+        Clock::time_point start_;
+    };
+
+    // 手动控制的开始和结束接口
+    struct TimeRecord {
+        Clock::time_point start_; // 开始时间
+
+        explicit TimeRecord() {
+            start_ = Clock::now();
+        }
+
+        void Start(){
+            start_ = Clock::now();
+        }
+
+        double End(const std::string& message) {
+            auto end = Clock::now();
+            auto duration = std::chrono::duration_cast<Duration>(end - start_);
+            std::cout << message << duration.count() << " seconds" << std::endl;
+            return duration.count();
+        }
+    };
+
+} // namespace TimeRecorder
 
 
 
