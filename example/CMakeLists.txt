@@ -160,3 +160,153 @@ target_link_libraries(${json_target} PRIVATE
     # libtimer
     # json
 )
+
+# Create a draw_plrc_example executable (Point Line Rectangle Circle)
+set(draw_plrc_example_name draw_plrc)
+set(draw_plrc_target ${draw_plrc_example_name}_${PROJECT_NAME})
+set(draw_plrc_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_plrc_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_plrc_target}
+    ${draw_plrc_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_plrc_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_plrc_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a draw_charstrnum_example executable (Point Line Rectangle Circle)
+set(draw_charstrnum_example_name draw_charstrnum)
+set(draw_charstrnum_target ${draw_charstrnum_example_name}_${PROJECT_NAME})
+set(draw_charstrnum_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_charstrnum_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_charstrnum_target}
+    ${draw_charstrnum_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_charstrnum_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_charstrnum_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a draw_timedate_example executable (Point Line Rectangle Circle)
+set(draw_timedate_example_name draw_timedate)
+set(draw_timedate_target ${draw_timedate_example_name}_${PROJECT_NAME})
+set(draw_timedate_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_timedate_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_timedate_target}
+    ${draw_timedate_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_timedate_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_timedate_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a draw_bmpvarymode_example executable (Point Line Rectangle Circle)
+set(draw_bmpvarymode_example_name draw_bmpvarymode)
+set(draw_bmpvarymode_target ${draw_bmpvarymode_example_name}_${PROJECT_NAME})
+set(draw_bmpvarymode_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_bmpvarymode_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_bmpvarymode_target}
+    ${draw_bmpvarymode_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_bmpvarymode_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_bmpvarymode_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a draw_partcleanshow_example executable (Point Line Rectangle Circle)
+set(draw_partcleanshow_example_name draw_partcleanshow)
+set(draw_partcleanshow_target ${draw_partcleanshow_example_name}_${PROJECT_NAME})
+set(draw_partcleanshow_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_partcleanshow_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_partcleanshow_target}
+    ${draw_partcleanshow_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_partcleanshow_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_partcleanshow_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a draw_gesture_example executable (Point Line Rectangle Circle)
+set(draw_gesture_example_name draw_gesture)
+set(draw_gesture_target ${draw_gesture_example_name}_${PROJECT_NAME})
+set(draw_gesture_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_gesture_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_gesture_target}
+    ${draw_gesture_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_gesture_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_gesture_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)

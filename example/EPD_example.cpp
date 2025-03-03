@@ -52,8 +52,8 @@ void *pthread_irq_2in13_V4(void *arg)
 			Debug( "Touched: %d\n", i++);
 		} else {
 			Dev_Now.Touch = 0; // 否则标记为无触摸
-			static size_t i = 0;
-			Debug( "noTouched: %d\n", i++);
+			// static size_t i = 0;
+			// Debug( "noTouched: %d\n", i++);
 			// Debug( "noTouched\n");
 		}
 		DEV_Delay_ms(100); // 延迟100毫秒
