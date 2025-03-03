@@ -365,7 +365,7 @@ void EPD_2in13_V4_Display_Partial(UBYTE *Image)
     Width = (EPD_2in13_V4_WIDTH % 8 == 0)? (EPD_2in13_V4_WIDTH / 8 ): (EPD_2in13_V4_WIDTH / 8 + 1);
     Height = EPD_2in13_V4_HEIGHT;
 
-	printf("1111/r/n");
+	// printf("1111/r/n");
 
 	//Reset
 	DEV_Digital_Write(EPD_RST_PIN, 0);

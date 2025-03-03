@@ -151,8 +151,7 @@ parameter:
 ******************************************************************************/
 void Paint_SetMirroring(UBYTE mirror)
 {
-    if(mirror == MIRROR_NONE || mirror == MIRROR_HORIZONTAL || 
-        mirror == MIRROR_VERTICAL || mirror == MIRROR_ORIGIN) {
+    if(mirror == MIRROR_NONE || mirror == MIRROR_HORIZONTAL || mirror == MIRROR_VERTICAL || mirror == MIRROR_ORIGIN) {
         Debug("mirror image x:%s, y:%s\r\n",(mirror & 0x01)? "mirror":"none", ((mirror >> 1) & 0x01)? "mirror":"none");
         Paint.Mirror = mirror;
     } else {
@@ -580,7 +579,7 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char * pString,
             Xpoint = Xstart;
             Ypoint = Ystart;
         }
-        Paint_DrawChar(Xpoint, Ypoint, * pString, Font, Color_Background, Color_Foreground);
+        Paint_DrawChar(Xpoint, Ypoint, * pString, Font, Color_Foreground, Color_Background);
 
         //The next character of the address
         pString ++;
@@ -726,7 +725,7 @@ void Paint_DrawNum(UWORD Xpoint, UWORD Ypoint, int32_t Nummber,
     }
 
     //show
-    Paint_DrawString_EN(Xpoint, Ypoint, (const char*)pStr, Font, Color_Background, Color_Foreground);
+    Paint_DrawString_EN(Xpoint, Ypoint, (const char*)pStr, Font, Color_Foreground, Color_Background);
 }
 
 /******************************************************************************
@@ -747,11 +746,11 @@ void Paint_DrawTime(UWORD Xstart, UWORD Ystart, PAINT_TIME *pTime, sFONT* Font,
     UWORD Dx = Font->Width;
 
     //Write data into the cache
-    Paint_DrawChar(Xstart                           , Ystart, value[pTime->Hour / 10], Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx                      , Ystart, value[pTime->Hour % 10], Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx  + Dx / 4 + Dx / 2   , Ystart, ':'                    , Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 2 + Dx / 2         , Ystart, value[pTime->Min / 10] , Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 3 + Dx / 2         , Ystart, value[pTime->Min % 10] , Font, Color_Background, Color_Foreground);
+    Paint_DrawChar(Xstart                           , Ystart, value[pTime->Hour / 10], Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx                      , Ystart, value[pTime->Hour % 10], Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx  + Dx / 4 + Dx / 2   , Ystart, ':'                    , Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 2 + Dx / 2         , Ystart, value[pTime->Min / 10] , Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 3 + Dx / 2         , Ystart, value[pTime->Min % 10] , Font, Color_Foreground, Color_Background);
     // Paint_DrawChar(Xstart + Dx * 4 + Dx / 2 - Dx / 4, Ystart, ':'                    , Font, Color_Background, Color_Foreground);
     // Paint_DrawChar(Xstart + Dx * 5                  , Ystart, value[pTime->Sec / 10] , Font, Color_Background, Color_Foreground);
     // Paint_DrawChar(Xstart + Dx * 6                  , Ystart, value[pTime->Sec % 10] , Font, Color_Background, Color_Foreground);
@@ -764,16 +763,16 @@ void Paint_DrawDate(UWORD Xstart, UWORD Ystart, PAINT_TIME *pTime, sFONT* Font,
     UWORD Dx = Font->Width;
 
     //Write data into the cache
-    Paint_DrawChar(Xstart				, Ystart, value[pTime->Year / 1000]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx			, Ystart, value[pTime->Year / 100 % 10]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 2		, Ystart, value[pTime->Year / 10 %100]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 3		, Ystart, value[pTime->Year % 1000 % 100 % 10]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 4		, Ystart, '-'                    	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 5		, Ystart, value[pTime->Month / 10]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 6		, Ystart, value[pTime->Month % 10]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 7		, Ystart, '-'                    	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 8		, Ystart, value[pTime->Day / 10]	, Font, Color_Background, Color_Foreground);
-    Paint_DrawChar(Xstart + Dx * 9		, Ystart, value[pTime->Day % 10]	, Font, Color_Background, Color_Foreground);
+    Paint_DrawChar(Xstart				, Ystart, value[pTime->Year / 1000]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx			, Ystart, value[pTime->Year / 100 % 10]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 2		, Ystart, value[pTime->Year / 10 %100]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 3		, Ystart, value[pTime->Year % 1000 % 100 % 10]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 4		, Ystart, '-'                    	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 5		, Ystart, value[pTime->Month / 10]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 6		, Ystart, value[pTime->Month % 10]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 7		, Ystart, '-'                    	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 8		, Ystart, value[pTime->Day / 10]	, Font, Color_Foreground, Color_Background);
+    Paint_DrawChar(Xstart + Dx * 9		, Ystart, value[pTime->Day % 10]	, Font, Color_Foreground, Color_Background);
 }
 
 /******************************************************************************
