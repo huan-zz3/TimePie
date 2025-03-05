@@ -18,6 +18,20 @@ target_link_libraries(${sigc_target} PRIVATE
     sigc++
 )
 
+# Create a sigc_mutilthread_example executable
+set(sigc_mutilthread_example_name sigc_mutilthread)
+set(sigc_mutilthread_target ${sigc_mutilthread_example_name}_${PROJECT_NAME})
+set(sigc_mutilthread_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${sigc_mutilthread_target}.cpp)
+add_executable(${sigc_mutilthread_target}
+    ${sigc_mutilthread_SRC_LIST}
+)
+target_include_directories(${sigc_mutilthread_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+)
+target_link_libraries(${sigc_mutilthread_target} PRIVATE
+    sigc++
+)
+
 # Create a EPD_example executable
 set(epd_example_name EPD)
 set(epd_target ${epd_example_name}_${PROJECT_NAME})
@@ -304,6 +318,31 @@ target_include_directories(${draw_gesture_target} PRIVATE
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_gesture_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a EPD_touch_example executable (Point Line Rectangle Circle)
+set(EPD_touch_example_name EPD_touch)
+set(EPD_touch_target ${EPD_touch_example_name}_${PROJECT_NAME})
+set(EPD_touch_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${EPD_touch_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${EPD_touch_target}
+    ${EPD_touch_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${EPD_touch_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${EPD_touch_target} PRIVATE
     lg
     EPDriver
     sigc++
