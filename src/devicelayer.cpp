@@ -26,8 +26,9 @@ Result<void> DeviceLayer::epdriver_Init(InitMode _initMode)
     {
     case InitMode::Hardware:
         IIC_Address = 0x14;
-        if(DEV_ModuleInit()){
-            Debug( "DEV_ModuleInit Failed!\n");
+        if (DEV_ModuleInit())
+        {
+            Debug("DEV_ModuleInit Failed!\n");
             return Result<void>::Error("DEV_ModuleInit Failed!");
         }
         break;
@@ -43,8 +44,9 @@ Result<void> DeviceLayer::epdriver_Init(InitMode _initMode)
     }
     return Result<void>::Success();
 }
-Result<void> DeviceLayer::epdriver_Exit(){
-    DEV_ModuleExit(); 
+Result<void> DeviceLayer::epdriver_Exit()
+{
+    DEV_ModuleExit();
     return Result<void>::Success();
 }
 Result<void> DeviceLayer::epdriver_Clear(ClearMode _clearmode)
@@ -91,7 +93,7 @@ Result<void> DeviceLayer::epdriver_Sleep()
 Result<ImageBuffer_ptr> DeviceLayer::epdriver_NewImage(ImageColor _imagecolor)
 {
     ImageBuffer_ptr _imagebuffer = std::make_shared<ImageBuffer_struct>();
-    _imagebuffer->imgbuff_ptr = (UBYTE *)malloc((EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT);    // the imagesize is fixed in EPD_2in13_V4: (EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT
+    _imagebuffer->imgbuff_ptr = (UBYTE *)malloc((EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT); // the imagesize is fixed in EPD_2in13_V4: (EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT
     switch (_imagecolor)
     {
     case ImageColor::White:
@@ -193,5 +195,15 @@ Result<void> DeviceLayer::epdriver_ReadBmp(ImageBuffer_ptr _imagebuffer, std::st
 {
     Paint_SelectImage(_imagebuffer->imgbuff_ptr);
     GUI_ReadBmp(_path.c_str(), _pc.x, _pc.y);
+    return Result<void>::Success();
+}
+Result<void> DeviceLayer::epdriver_TouchInit(void)
+{
+    GT_Init();
+    return Result<void>::Success();
+}
+Result<void> DeviceLayer::epdriver_TouchScan(void)
+{
+    GT_Scan();
     return Result<void>::Success();
 }

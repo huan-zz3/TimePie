@@ -9,6 +9,7 @@ extern "C" {
 #include "GUI_Paint.h"
 #include "GUI_BMPfile.h"
 #include "fonts.h"
+#include "GT1151.h"
 }
 extern int IIC_Address;
 
@@ -179,6 +180,13 @@ public:
      * Encapsulations-func from GUI_BMPfile.h
      */
     virtual Result<void> epdriver_ReadBmp(ImageBuffer_ptr, std::string, PointCoordinates) = 0;
+
+    /*
+     * Encapsulations-func from GT1151.h
+     */
+    virtual Result<void> epdriver_TouchInit(void) = 0;
+    virtual Result<void> epdriver_TouchScan(void) = 0;
+    
 };
 
 #endif

@@ -12,6 +12,14 @@ void ApplicationCore::setEPDApp(std::unique_ptr<IEPD_app> epdApp){
     m_pEPDApp_ = std::move(epdApp);
 }
 
+void ApplicationCore::setEPDService(std::unique_ptr<IEPDService> epdService){
+    m_pEPDService_ = std::move(epdService);
+}
+
+void ApplicationCore::setEPDDriver(std::unique_ptr<IEPD_Driver> epdDriver){
+    m_pEPDDriver_ = std::move(epdDriver);
+}
+
 void ApplicationCore::setPhysicalKey(std::unique_ptr<IPhysicalKey> physicalKey){
     m_pPhysicalKey_ = std::move(physicalKey);
 }

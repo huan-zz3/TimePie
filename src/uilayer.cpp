@@ -1,13 +1,14 @@
 #include "uilayer.h"
 
-UILayer::UILayer(std::unique_ptr<IEPDService> _epds)
+UILayer::UILayer(std::unique_ptr<IEPDService> _epds, std::unique_ptr<IEPD_Pages> _epdp)
 {
     epd_service_ = std::move(_epds);
+    epd_pages_ = std::move(_epdp);
 }
 Result<void> UILayer::epdappInit()
 {
 }
-Result<void> UILayer::epdappSleep()
+Result<void> UILayer::epdappStop()
 {
 }
 Result<void> UILayer::reFreshPage()
