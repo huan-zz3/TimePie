@@ -67,19 +67,19 @@ Result<void> DeviceLayer::epdriver_Display(ImageBuffer_ptr _imagebuffer, Display
     switch (_displaymode)
     {
     case DisplayMode::Normal:
-        EPD_2in13_V4_Display(_imagebuffer->imgbuff_ptr);
+        EPD_2in13_V4_Display(_imagebuffer->imgbuff_ptr->Image);
         break;
     case DisplayMode::Fast:
-        EPD_2in13_V4_Display_Fast(_imagebuffer->imgbuff_ptr);
+        EPD_2in13_V4_Display_Fast(_imagebuffer->imgbuff_ptr->Image);
         break;
     case DisplayMode::Base:
-        EPD_2in13_V4_Display_Base(_imagebuffer->imgbuff_ptr);
+        EPD_2in13_V4_Display_Base(_imagebuffer->imgbuff_ptr->Image);
         break;
     case DisplayMode::Partial:
-        EPD_2in13_V4_Display_Partial(_imagebuffer->imgbuff_ptr);
+        EPD_2in13_V4_Display_Partial(_imagebuffer->imgbuff_ptr->Image);
         break;
     case DisplayMode::Partial_Wait:
-        EPD_2in13_V4_Display_Partial_Wait(_imagebuffer->imgbuff_ptr);
+        EPD_2in13_V4_Display_Partial_Wait(_imagebuffer->imgbuff_ptr->Image);
         break;
     }
     return Result<void>::Success();
@@ -93,15 +93,17 @@ Result<void> DeviceLayer::epdriver_Sleep()
 Result<ImageBuffer_ptr> DeviceLayer::epdriver_NewImage(ImageColor _imagecolor)
 {
     ImageBuffer_ptr _imagebuffer = std::make_shared<ImageBuffer_struct>();
-    _imagebuffer->imgbuff_ptr = (UBYTE *)malloc((EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT); // the imagesize is fixed in EPD_2in13_V4: (EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT
+    _imagebuffer->imgbuff_ptr = &_imagebuffer->imgbuff;
+    _imagebuffer->imgbuff_ptr->Image = (UBYTE *)malloc((EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT); // the imagesize is fixed in EPD_2in13_V4: (EPD_2in13_V4_WIDTH / 8 + 1) * EPD_2in13_V4_HEIGHT
     switch (_imagecolor)
     {
     case ImageColor::White:
-        // Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, static_cast<UWORD>(_imagecolor));
         Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, WHITE);
+        epdriver_imgClear(_imagebuffer, _imagecolor);
         break;
     case ImageColor::Black:
         Paint_NewImage(_imagebuffer->imgbuff_ptr, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, BLACK);
+        epdriver_imgClear(_imagebuffer, _imagecolor);
         break;
     }
     return Result<ImageBuffer_ptr>::Success(_imagebuffer);

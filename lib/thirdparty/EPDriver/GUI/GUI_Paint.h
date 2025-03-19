@@ -8,9 +8,16 @@
 *   Achieve display characters: Display a single character, string, number
 *   Achieve time display: adaptive size display time minutes and seconds
 *----------------
-* |	This version:   V3.1
-* | Date        :   2019-10-10
+* |	This version:   V3.2
+* | Date        :   2025-03-19
 * | Info        :
+* -----------------------------------------------------------------------------
+* V3.2(2025-03-19):
+1.Change: Paint_NewImage(UBYTE *image, UWORD Width, UWORD Height, UWORD Rotate, UWORD Color)
+        For supporting multi PAINT image
+2.Change: Paint_SelectImage(UBYTE *image)
+        For supporting multi PAINT image
+3.Add: static PAINT *Paint_oldpointer
 * -----------------------------------------------------------------------------
 * V3.1(2019-10-10):
 * 1. Add gray level
@@ -90,6 +97,7 @@ typedef struct {
     UWORD Scale;
 } PAINT;
 extern PAINT Paint;
+static PAINT *Paint_oldpointer;
 
 /**
  * Display rotate
@@ -180,8 +188,8 @@ typedef struct {
 extern PAINT_TIME sPaint_time;
 
 //init and Clear
-void Paint_NewImage(UBYTE *image, UWORD Width, UWORD Height, UWORD Rotate, UWORD Color);
-void Paint_SelectImage(UBYTE *image);
+void Paint_NewImage(PAINT *imageinstance, UWORD Width, UWORD Height, UWORD Rotate, UWORD Color);
+void Paint_SelectImage(PAINT *imageinstance);
 void Paint_SetRotate(UWORD Rotate);
 void Paint_SetMirroring(UBYTE mirror);
 void Paint_SetPixel(UWORD Xpoint, UWORD Ypoint, UWORD Color);

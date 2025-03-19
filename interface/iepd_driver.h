@@ -59,7 +59,8 @@ enum class MirrorMode
 
 struct ImageBuffer_struct
 {
-    UBYTE *imgbuff_ptr;
+    PAINT *imgbuff_ptr;
+    PAINT imgbuff;
 };
 typedef std::shared_ptr<ImageBuffer_struct> ImageBuffer_ptr;
 
@@ -74,6 +75,12 @@ struct PointCoordinates
 {
     UWORD x;
     UWORD y;
+};
+
+struct Dimensions
+{
+    UWORD w;
+    UWORD h;
 };
 
 enum class PointSize

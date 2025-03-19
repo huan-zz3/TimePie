@@ -8,9 +8,18 @@
 *   Achieve display characters: Display a single character, string, number
 *   Achieve time display: adaptive size display time minutes and seconds
 *----------------
-* |	This version:   V3.2
-* | Date        :   2020-07-10
+* |	This version:   V3.3
+* | Date        :   2025-03-19
 * | Info        :
+* -----------------------------------------------------------------------------
+* V3.3(2025-03-19):
+1.Change: Paint_NewImage(UBYTE *image, UWORD Width, UWORD Height, UWORD Rotate, UWORD Color)
+        For supporting multi PAINT image
+2.Change: Paint_SelectImage(UBYTE *image)
+        For supporting multi PAINT image
+3.Change: Paint_DrawChar(UWORD Xpoint, UWORD Ypoint, const char Acsii_Char,
+                    sFONT* Font, UWORD Color_Foreground, UWORD Color_Background)
+        For supporting black font and white background
 * -----------------------------------------------------------------------------
 * V3.2(2020-07-10):
 * 1.Change: Paint_SetScale(UBYTE scale)
@@ -88,45 +97,87 @@ PAINT Paint;
 /******************************************************************************
 function: Create Image
 parameter:
-    image   :   Pointer to the image cache
+    imageinstance   :   Pointer to the PAINT cache
     width   :   The width of the picture
     Height  :   The height of the picture
     Color   :   Whether the picture is inverted
 ******************************************************************************/
-void Paint_NewImage(UBYTE *image, UWORD Width, UWORD Height, UWORD Rotate, UWORD Color)
+void Paint_NewImage(PAINT *imageinstance, UWORD Width, UWORD Height, UWORD Rotate, UWORD Color)
 {
-    Paint.Image = NULL;
-    Paint.Image = image;
+    // Paint.Image = NULL;
+    // Paint.Image = imageinstance->Image;
 
-    Paint.WidthMemory = Width;
-    Paint.HeightMemory = Height;
-    Paint.Color = Color;    
-    Paint.Scale = 2;
-    Paint.WidthByte = (Width % 8 == 0)? (Width / 8 ): (Width / 8 + 1);
-    Paint.HeightByte = Height;    
-//    printf("WidthByte = %d, HeightByte = %d\r\n", Paint.WidthByte, Paint.HeightByte);
-//    printf(" EPD_WIDTH / 8 = %d\r\n",  122 / 8);
+    imageinstance->WidthMemory = Width;
+    imageinstance->HeightMemory = Height;
+    imageinstance->Color = Color;    
+    imageinstance->Scale = 2;
+    imageinstance->WidthByte = (Width % 8 == 0)? (Width / 8 ): (Width / 8 + 1);
+    imageinstance->HeightByte = Height;    
    
-    Paint.Rotate = Rotate;
-    Paint.Mirror = MIRROR_NONE;
+    imageinstance->Rotate = Rotate;
+    imageinstance->Mirror = MIRROR_NONE;
     
     if(Rotate == ROTATE_0 || Rotate == ROTATE_180) {
-        Paint.Width = Width;
-        Paint.Height = Height;
+        imageinstance->Width = Width;
+        imageinstance->Height = Height;
     } else {
-        Paint.Width = Height;
-        Paint.Height = Width;
+        imageinstance->Width = Height;
+        imageinstance->Height = Width;
     }
+
+    // Paint_oldpointer = imageinstance;
+
+    // Paint_SelectImage(imageinstance);
 }
 
 /******************************************************************************
 function: Select Image
 parameter:
-    image : Pointer to the image cache
+    imageinstance   :   Pointer to the PAINT cache
 ******************************************************************************/
-void Paint_SelectImage(UBYTE *image)
+void Paint_SelectImage(PAINT *imageinstance)
 {
-    Paint.Image = image;
+    // Save the image information
+    if(Paint_oldpointer != NULL) {
+        // printf("指针地址: %p\n", (void*)imageinstance);
+        // Debug("指针地址: %p\n", (void*)imageinstance);
+        Paint_oldpointer->WidthMemory = Paint.WidthMemory;
+        Paint_oldpointer->HeightMemory = Paint.HeightMemory;
+        Paint_oldpointer->Color = Paint.Color;    
+        Paint_oldpointer->Scale = Paint.Scale;
+        Paint_oldpointer->WidthByte = Paint.WidthByte;
+        Paint_oldpointer->HeightByte = Paint.HeightByte;
+    
+        Paint_oldpointer->Rotate = Paint.Rotate;
+        Paint_oldpointer->Mirror = Paint.Mirror;
+        
+        Paint_oldpointer->Width = Paint.Width;
+        Paint_oldpointer->Height = Paint.Height;
+    }
+
+
+    // extract the image information
+    Paint.Image = imageinstance->Image;
+
+    Paint.WidthMemory = imageinstance->WidthMemory;
+    Paint.HeightMemory = imageinstance->HeightMemory;
+    Paint.Color = imageinstance->Color;    
+    Paint.Scale = imageinstance->Scale;
+    Paint.WidthByte = imageinstance->WidthByte;
+    Paint.HeightByte = imageinstance->HeightByte;    
+   
+    Paint.Rotate = imageinstance->Rotate;
+    Paint.Mirror = imageinstance->Mirror;
+
+    // if(imageinstance->Rotate == ROTATE_0 || imageinstance->Rotate == ROTATE_180) {
+        Paint.Width = imageinstance->Width;
+        Paint.Height = imageinstance->Height;
+    // } else {
+    //     Paint.Width = imageinstance->Height;
+    //     Paint.Height = imageinstance->Width;
+    // }
+
+    Paint_oldpointer = imageinstance;
 }
 
 /******************************************************************************
@@ -139,6 +190,11 @@ void Paint_SetRotate(UWORD Rotate)
     if(Rotate == ROTATE_0 || Rotate == ROTATE_90 || Rotate == ROTATE_180 || Rotate == ROTATE_270) {
         Debug("Set image Rotate %d\r\n", Rotate);
         Paint.Rotate = Rotate;
+        if(Rotate == ROTATE_90 || Rotate == ROTATE_270) {
+            uint16_t tmp = Paint.Width;
+            Paint.Width = Paint.Height;
+            Paint.Height = tmp;
+        }
     } else {
         Debug("rotate = 0, 90, 180, 270\r\n");
     }
@@ -524,11 +580,11 @@ void Paint_DrawChar(UWORD Xpoint, UWORD Ypoint, const char Acsii_Char,
         for (Column = 0; Column < Font->Width; Column ++ ) {
 
             //To determine whether the font background color and screen background color is consistent
-            if (FONT_BACKGROUND == Color_Background) { //this process is to speed up the scan
-                if (*ptr & (0x80 >> (Column % 8)))
-                    Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
-                    // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Foreground, DOT_PIXEL_DFT, DOT_STYLE_DFT);
-            } else {
+            // if (FONT_BACKGROUND == Color_Background) { //this process is to speed up the scan
+            //     if (*ptr & (0x80 >> (Column % 8)))
+            //         Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
+            //         // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Foreground, DOT_PIXEL_DFT, DOT_STYLE_DFT);
+            // } else {
                 if (*ptr & (0x80 >> (Column % 8))) {
                     Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Foreground);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Foreground, DOT_PIXEL_DFT, DOT_STYLE_DFT);
@@ -536,7 +592,7 @@ void Paint_DrawChar(UWORD Xpoint, UWORD Ypoint, const char Acsii_Char,
                     Paint_SetPixel(Xpoint + Column, Ypoint + Page, Color_Background);
                     // Paint_DrawPoint(Xpoint + Column, Ypoint + Page, Color_Background, DOT_PIXEL_DFT, DOT_STYLE_DFT);
                 }
-            }
+            // }
             //One pixel is 8 bits
             if (Column % 8 == 7)
                 ptr++;
