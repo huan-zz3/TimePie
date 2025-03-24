@@ -192,6 +192,36 @@ Result<void> DeviceLayer::epdriver_DrawDate(ImageBuffer_ptr _imagebuffer, PointC
     Paint_DrawDate(_pc.x, _pc.y, &_time, _fontype, static_cast<UWORD>(_imagecolorF), static_cast<UWORD>(_imagecolorB));
     return Result<void>::Success();
 }
+Result<Dimensions> DeviceLayer::epdriver_GetDrawRange(std::string _string, PointCoordinates _pc, Fontype _fontype)
+{
+    auto pString = _string.c_str();
+    UWORD Xpoint = _pc.x;
+    UWORD Ypoint = _pc.y;
+
+    while (* pString != '\0') {
+        //if X direction filled , reposition to(Xstart,Ypoint),Ypoint is Y direction plus the Height of the character
+        if ((Xpoint + _fontype->Width ) > Paint.Width ) {
+            Xpoint = _pc.x;
+            Ypoint += _fontype->Height;
+        }
+
+        // If the Y direction is full, reposition to(Xstart, Ystart)
+        if ((Ypoint  + _fontype->Height ) > Paint.Height ) {
+            Xpoint = _pc.x;
+            Ypoint = _pc.y;
+        }
+
+        //The next character of the address
+        pString ++;
+
+        //The next word of the abscissa increases the font of the broadband
+        Xpoint += _fontype->Width;
+    }
+    // Xpoint += _fontype->Width;
+    Ypoint += _fontype->Height;
+    return Result<Dimensions>::Success(Dimensions{static_cast<unsigned short>(Xpoint - _pc.x), static_cast<unsigned short>(Ypoint - _pc.y)});
+
+}
 
 Result<void> DeviceLayer::epdriver_ReadBmp(ImageBuffer_ptr _imagebuffer, std::string _path, PointCoordinates _pc)
 {

@@ -35,6 +35,8 @@ public:
     Result<void> epdriver_DrawTime(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor) override;
     Result<void> epdriver_DrawDate(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor) override;
 
+    Result<Dimensions> epdriver_GetDrawRange(std::string, PointCoordinates, Fontype) override;
+
     Result<void> epdriver_ReadBmp(ImageBuffer_ptr, std::string, PointCoordinates) override;
 
     Result<void> epdriver_TouchInit(void) override;
