@@ -33,21 +33,22 @@ int main()
     }
     auto imageblank = result2.successvalue();
 
-    // 设置图像的镜像角度
+    // 设置图像的旋转角度
     // result = deviceLayer.epdriver_SetMirroring(imageblank, MirrorMode::Origin);
-    // if (!result.isSuccess())
-    // {
-    //     std::cerr << "Failed to set mirror: " << result.errormsg() << std::endl;
-    //     return 1;
-    // }
-    // else
-    // {
-    //     std::cout << "Set mirror successfully." << std::endl;
-    // }
+    result = deviceLayer.epdriver_SetRotate(imageblank, RotateMode::Rotate_90);
+    if (!result.isSuccess())
+    {
+        std::cerr << "Failed to set mirror: " << result.errormsg() << std::endl;
+        return 1;
+    }
+    else
+    {
+        std::cout << "Set mirror successfully." << std::endl;
+    }
 
     // 绘制一个字符
     PointCoordinates char_pc = {10, 10};
-    result = deviceLayer.epdriver_DrawChar(imageblank, char_pc, 'A', Font8, ImageColor::White, ImageColor::Black);
+    result = deviceLayer.epdriver_DrawChar(imageblank, char_pc, 'A', Font8, ImageColor::Black, ImageColor::White);
     if (!result.isSuccess())
     {
         std::cerr << "Failed to draw char: " << result.errormsg() << std::endl;
@@ -58,7 +59,7 @@ int main()
         std::cout << "Draw char successfully." << std::endl;
     }
     PointCoordinates char_pc2 = {40, 40};
-    result = deviceLayer.epdriver_DrawChar(imageblank, char_pc2, 'B', Font16, ImageColor::White, ImageColor::Black);    // (貌似这里的前后颜色都是字白景黑)好像也不对
+    result = deviceLayer.epdriver_DrawChar(imageblank, char_pc2, 'B', Font16, ImageColor::Black, ImageColor::White);    // (貌似这里的前后颜色都是字白景黑)好像也不对
     if (!result.isSuccess())
     {
         std::cerr << "Failed to draw char: " << result.errormsg() << std::endl;
@@ -69,7 +70,7 @@ int main()
         std::cout << "Draw char successfully." << std::endl;
     }
     PointCoordinates char_pc3 = {80, 80};
-    result = deviceLayer.epdriver_DrawChar(imageblank, char_pc3, 'D', Font24, ImageColor::White, ImageColor::Black);
+    result = deviceLayer.epdriver_DrawChar(imageblank, char_pc3, 'D', Font24, ImageColor::Black, ImageColor::White);
     if (!result.isSuccess())
     {
         std::cerr << "Failed to draw char: " << result.errormsg() << std::endl;
@@ -80,9 +81,9 @@ int main()
         std::cout << "Draw char successfully." << std::endl;
     }
 
-    PointCoordinates str_pcstart = {20, 100};
+    PointCoordinates str_pcstart = {180, 0};
     // PointCoordinates str_pcend = {80, 80};
-    result = deviceLayer.epdriver_DrawString_EN(imageblank, str_pcstart, "Hello World!", Font16, ImageColor::White, ImageColor::Black); // 超出显示区域会换行
+    result = deviceLayer.epdriver_DrawString_EN(imageblank, str_pcstart, "Hello World!", Font16, ImageColor::Black, ImageColor::White); // 超出显示区域会换行
     if (!result.isSuccess())
     {
         std::cerr << "Failed to draw str: " << result.errormsg() << std::endl;
@@ -93,9 +94,8 @@ int main()
         std::cout << "Draw str successfully." << std::endl;
     }
 
-    PointCoordinates num_pcstart = {20, 200};
-    // PointCoordinates str_pcend = {80, 80};
-    result = deviceLayer.epdriver_DrawNum(imageblank, num_pcstart, 1234567890, Font16, ImageColor::White, ImageColor::Black);   // 超出显示区域会换行
+    PointCoordinates num_pcstart = {20, 40};
+    result = deviceLayer.epdriver_DrawNum(imageblank, num_pcstart, 1234567890, Font16, ImageColor::Black, ImageColor::White);   // 超出显示区域会换行
     if (!result.isSuccess())
     {
         std::cerr << "Failed to draw num: " << result.errormsg() << std::endl;

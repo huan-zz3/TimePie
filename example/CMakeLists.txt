@@ -349,3 +349,60 @@ target_link_libraries(${EPD_touch_target} PRIVATE
     pthread
     libtimer
 )
+
+# Create a draw_multidirectionalbmp_example executable (Point Line Rectangle Circle)
+set(draw_multidirectionalbmp_example_name draw_multidirectionalbmp)
+set(draw_multidirectionalbmp_target ${draw_multidirectionalbmp_example_name}_${PROJECT_NAME})
+set(draw_multidirectionalbmp_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_multidirectionalbmp_target}.cpp)
+# aux_source_directory(
+    # ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+    # SRC_LIST
+# )
+add_executable(${draw_multidirectionalbmp_target}
+    ${draw_multidirectionalbmp_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_multidirectionalbmp_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${draw_multidirectionalbmp_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+
+# Create a draw_pagecomp_example executable (Point Line Rectangle Circle)
+set(draw_pagecomp_example_name draw_pagecomp)
+set(draw_pagecomp_target ${draw_pagecomp_example_name}_${PROJECT_NAME})
+set(draw_pagecomp_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_pagecomp_target}.cpp)
+aux_source_directory(
+    ${CMAKE_SOURCE_DIR}/page
+    SRC_LIST1
+)
+aux_source_directory(
+    ${CMAKE_SOURCE_DIR}/component
+    SRC_LIST2
+)
+add_executable(${draw_pagecomp_target}
+    ${draw_pagecomp_SRC_LIST}
+    ${SRC_LIST1}
+    ${SRC_LIST2}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${draw_pagecomp_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+    ${CMAKE_SOURCE_DIR}/page
+    ${CMAKE_SOURCE_DIR}/component
+)
+target_link_libraries(${draw_pagecomp_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)

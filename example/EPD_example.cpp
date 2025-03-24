@@ -119,10 +119,12 @@ int TestCode_2in13_V4(void)
         printf("Failed to apply for black memory...\r\n");
         return -1;
     }
+	PAINT Paint;
+	Paint.Image = BlackImage;
 
 	// 初始化绘图环境
-	Paint_NewImage(BlackImage, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, WHITE);
-	Paint_SelectImage(BlackImage);
+	Paint_NewImage(&Paint, EPD_2in13_V4_WIDTH, EPD_2in13_V4_HEIGHT, 0, WHITE);
+	Paint_SelectImage(&Paint);
 	Paint_SetMirroring(MIRROR_ORIGIN);
 	Paint_Clear(WHITE);
 
