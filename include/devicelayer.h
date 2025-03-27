@@ -40,7 +40,7 @@ public:
     Result<void> epdriver_ReadBmp(ImageBuffer_ptr, std::string, PointCoordinates) override;
 
     Result<void> epdriver_TouchInit(void) override;
-    Result<void> epdriver_TouchScan(void) override;
+    Result<PointCoordinates> epdriver_TouchScan(void) override;
 };
 
 #endif

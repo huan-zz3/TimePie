@@ -1,7 +1,6 @@
 #include "GT1151.h"
 
-GT1151_Dev Dev_Now, Dev_Old;
-UBYTE GT_Gesture_Mode = 0;
+static UBYTE GT_Gesture_Mode = 0;
 
 // 定义一个名为 GT_Reset 的函数，用于重置设备
 void GT_Reset(void)
@@ -77,6 +76,14 @@ UBYTE GT_Scan(void)
 {
 	char buf[100];
 	char mask[1] = {0x00};
+
+	// if(DEV_Digital_Read(INT) == 0) { // 如果检测到触摸
+	// 	Dev_Now.Touch = 1; // 标记为有触摸
+	// 	static size_t i = 0;
+	// 	Debug( "Touched: %d\n", i++);
+	// } else {
+	// 	Dev_Now.Touch = 0; // 否则标记为无触摸
+	// }
 
 	if (Dev_Now.Touch == 1)
 	{

@@ -198,29 +198,31 @@ Result<Dimensions> DeviceLayer::epdriver_GetDrawRange(std::string _string, Point
     UWORD Xpoint = _pc.x;
     UWORD Ypoint = _pc.y;
 
-    while (* pString != '\0') {
-        //if X direction filled , reposition to(Xstart,Ypoint),Ypoint is Y direction plus the Height of the character
-        if ((Xpoint + _fontype->Width ) > Paint.Width ) {
+    while (*pString != '\0')
+    {
+        // if X direction filled , reposition to(Xstart,Ypoint),Ypoint is Y direction plus the Height of the character
+        if ((Xpoint + _fontype->Width) > Paint.Width)
+        {
             Xpoint = _pc.x;
             Ypoint += _fontype->Height;
         }
 
         // If the Y direction is full, reposition to(Xstart, Ystart)
-        if ((Ypoint  + _fontype->Height ) > Paint.Height ) {
+        if ((Ypoint + _fontype->Height) > Paint.Height)
+        {
             Xpoint = _pc.x;
             Ypoint = _pc.y;
         }
 
-        //The next character of the address
-        pString ++;
+        // The next character of the address
+        pString++;
 
-        //The next word of the abscissa increases the font of the broadband
+        // The next word of the abscissa increases the font of the broadband
         Xpoint += _fontype->Width;
     }
     // Xpoint += _fontype->Width;
     Ypoint += _fontype->Height;
     return Result<Dimensions>::Success(Dimensions{static_cast<unsigned short>(Xpoint - _pc.x), static_cast<unsigned short>(Ypoint - _pc.y)});
-
 }
 
 Result<void> DeviceLayer::epdriver_ReadBmp(ImageBuffer_ptr _imagebuffer, std::string _path, PointCoordinates _pc)
@@ -234,8 +236,12 @@ Result<void> DeviceLayer::epdriver_TouchInit(void)
     GT_Init();
     return Result<void>::Success();
 }
-Result<void> DeviceLayer::epdriver_TouchScan(void)
+Result<PointCoordinates> DeviceLayer::epdriver_TouchScan(void)
 {
-    GT_Scan();
-    return Result<void>::Success();
+    UBYTE rt = GT_Scan();
+    if (rt == 1)
+    {
+        return Result<PointCoordinates>::Error("No prepared Touch data");
+    }
+    return Result<PointCoordinates>::Success(PointCoordinates{Dev_Now.X[0], Dev_Now.Y[0]});
 }
