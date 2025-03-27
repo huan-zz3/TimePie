@@ -406,3 +406,42 @@ target_link_libraries(${draw_pagecomp_target} PRIVATE
     pthread
     libtimer
 )
+
+# Create a stdthread_example executable (Point Line Rectangle Circle)
+set(stdthread_example_name stdthread)
+set(stdthread_target ${stdthread_example_name}_${PROJECT_NAME})
+set(stdthread_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${stdthread_target}.cpp)
+add_executable(${stdthread_target}
+    ${stdthread_SRC_LIST}
+)
+target_include_directories(${stdthread_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${stdthread_target} PRIVATE
+    # lg
+    # EPDriver
+    # sigc++
+    # pthread
+    # libtimer
+)
+# Create a keyepd_example executable (Point Line Rectangle Circle)
+set(keyepd_example_name keyepd)
+set(keyepd_target ${keyepd_example_name}_${PROJECT_NAME})
+set(keyepd_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${keyepd_target}.cpp)
+add_executable(${keyepd_target}
+    ${keyepd_SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/keyepd.cpp
+)
+target_include_directories(${keyepd_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${keyepd_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    # pthread
+    # libtimer
+)
