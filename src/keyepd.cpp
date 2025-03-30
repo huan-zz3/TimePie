@@ -20,7 +20,7 @@ void KeyEPD::touch_scan_thread_func(KeyEPD *instance)
     instance->driver_->epdriver_TouchInit();
     while (1)
     {
-        std::cout << "touch scan thread running" << std::endl;
+        // std::cout << "touch scan thread running" << std::endl;
         if (stop_flag)
             return;
 
