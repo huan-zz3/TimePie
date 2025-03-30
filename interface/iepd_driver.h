@@ -10,8 +10,14 @@ extern "C" {
 #include "GUI_BMPfile.h"
 #include "fonts.h"
 #include "GT1151.h"
-}
 extern int IIC_Address;
+extern GT1151_Dev Dev_Now, Dev_Old;
+extern sFONT Font24;
+extern sFONT Font20;
+extern sFONT Font16;
+extern sFONT Font12;
+extern sFONT Font8;
+}
 
 enum class InitMode
 {
@@ -89,6 +95,7 @@ enum class PointSize
     X22 = DOT_PIXEL_2X2,
     X33 = DOT_PIXEL_3X3,
     X44 = DOT_PIXEL_4X4,
+    X55 = DOT_PIXEL_5X5,
     X66 = DOT_PIXEL_6X6,
     X77 = DOT_PIXEL_7X7,
     X88 = DOT_PIXEL_8X8
@@ -114,11 +121,6 @@ enum class DrawFill
 
 typedef UWORD RaiusLength;
 
-extern sFONT Font24;
-extern sFONT Font20;
-extern sFONT Font16;
-extern sFONT Font12;
-extern sFONT Font8;
 #define Fontype sFONT *
 #define Font8 &Font8
 #define Font12 &Font12
@@ -137,6 +139,9 @@ typedef int32_t Number;
 //     UBYTE  Sec;   //0 - 59
 // };
 typedef PAINT_TIME Time;
+
+typedef sigc::signal<void, PointCoordinates>    Signal_coordinate;
+typedef sigc::slot<void, PointCoordinates>      Slot_coordinate;
 
 class IEPD_Driver
 {
@@ -183,6 +188,8 @@ public:
     virtual Result<void> epdriver_DrawTime(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
     virtual Result<void> epdriver_DrawDate(ImageBuffer_ptr, PointCoordinates, Time, Fontype, ImageColor, ImageColor) = 0;
 
+    virtual Result<Dimensions> epdriver_GetDrawRange(std::string, PointCoordinates, Fontype) = 0;
+
     /*
      * Encapsulations-func from GUI_BMPfile.h
      */
@@ -192,7 +199,7 @@ public:
      * Encapsulations-func from GT1151.h
      */
     virtual Result<void> epdriver_TouchInit(void) = 0;
-    virtual Result<void> epdriver_TouchScan(void) = 0;
+    virtual Result<PointCoordinates> epdriver_TouchScan(void) = 0;
     
 };
 

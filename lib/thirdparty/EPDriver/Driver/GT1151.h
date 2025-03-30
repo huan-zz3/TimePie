@@ -15,7 +15,6 @@ typedef struct{
 	UWORD Y[CT_MAX_TOUCH];
 	UWORD S[CT_MAX_TOUCH];
 }GT1151_Dev;
-static GT1151_Dev Dev_Now, Dev_Old;
 
 void GT_Reset(void);
 void GT_Write(UWORD Reg, char *Data, UBYTE len);
@@ -24,5 +23,7 @@ void GT_ReadVersion(void);
 UBYTE GT_Scan(void);
 void GT_Init(void);
 void GT_Gesture(void);
+
+UBYTE GT_Scan_2(void);
 
 #endif

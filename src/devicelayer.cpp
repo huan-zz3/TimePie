@@ -234,11 +234,12 @@ Result<void> DeviceLayer::epdriver_ReadBmp(ImageBuffer_ptr _imagebuffer, std::st
 Result<void> DeviceLayer::epdriver_TouchInit(void)
 {
     GT_Init();
+    epdriver_Delay(200);
     return Result<void>::Success();
 }
 Result<PointCoordinates> DeviceLayer::epdriver_TouchScan(void)
 {
-    UBYTE rt = GT_Scan();
+    UBYTE rt = GT_Scan_2();
     if (rt == 1)
     {
         return Result<PointCoordinates>::Error("No prepared Touch data");
