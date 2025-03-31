@@ -42,16 +42,8 @@ Result<void> TimerMode_Selection::initcomponents()
     }
     button_next = std::make_shared<Button>(epd_driver_);
     addcomponent(button_next);
-    button_next->signal_clicked_.connect([this]()
-                                         {  setPageNum(2); 
-                                            draw();
-                                            show(); });
     button_back = std::make_shared<Button>(epd_driver_);
     addcomponent(button_back);
-    button_back->signal_clicked_.connect([this]()
-                                         {  setPageNum(1); 
-                                            draw();
-                                            show(); });
 
     auto _font = Font24;
     auto _width = 2;
@@ -73,6 +65,36 @@ Result<void> TimerMode_Selection::initcomponents()
         buttonMap[TimerMode::OneEighty]->setall("180m", {90, 80}, true, _width, _margin, _font);
         button_back->setall("B.", {180, 80}, true, _width, _margin, _font);
     }
+    // 设置点击事件
+    {
+        buttonMap[TimerMode::Five]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Five); });
+        buttonMap[TimerMode::Ten]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Ten); });
+        buttonMap[TimerMode::Fifteen]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Fifteen); });
+        buttonMap[TimerMode::Twenty]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Twenty); });
+        buttonMap[TimerMode::TwentyFive]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::TwentyFive); });
+        button_next->signal_clicked_.connect([this]()
+                                             { setPageNum(2); draw(); show(); });
+    }
+    {
+        buttonMap[TimerMode::Thirty]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Thirty); });
+        buttonMap[TimerMode::FortyFive]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::FortyFive); });
+        buttonMap[TimerMode::Sixty]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Sixty); });
+        buttonMap[TimerMode::Ninety]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::Ninety); });
+        buttonMap[TimerMode::OneEighty]->signal_clicked_.connect([this]()
+                                             { signal_clickedTimerMode_.emit(TimerMode::OneEighty); });
+        button_back->signal_clicked_.connect([this]()
+                                             { setPageNum(1); draw(); show(); });
+    }
+    
 
     return Result<void>::Success();
 }
