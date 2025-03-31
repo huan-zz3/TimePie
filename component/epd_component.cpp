@@ -20,19 +20,19 @@ Result<void> EPD_Component::setparentpage(std::shared_ptr<EPD_Page> _page)
 }
 Result<void> EPD_Component::setvisable(bool _visable)
 {
-    auto convertpointer = std::static_pointer_cast<EPD_Component>(shared_from_this());
-    if (convertpointer == nullptr)
+    auto tishpointer = shared_from_this();
+    if (tishpointer == nullptr)
     {
-        return Result<void>::Error("EPD_Component::setvisable::convertpointer err");
+        return Result<void>::Error("EPD_Component::setvisable::tishpointer err");
     }
 
     if (_visable)
     {
-        parentpage_->addcomponent(convertpointer);
+        parentpage_->addcomponent(tishpointer);
     }
     else
     {
-        parentpage_->removecomponent(convertpointer);
+        parentpage_->removecomponent(tishpointer);
     }
     visible_ = _visable;
 
@@ -48,4 +48,8 @@ Result<void> EPD_Component::delete_remove()
     parentpage_.reset();
     epd_driver_.reset();
     return Result<void>::Success();
+}
+Result<void> EPD_Component::printrange(std::string descrstr){
+    std::cout << descrstr << std::endl;
+    printComponentRange(range_);
 }

@@ -16,19 +16,20 @@ public:
     explicit EPD_Component(std::shared_ptr<IEPD_Driver>);
     ~EPD_Component();
     virtual Result<void> draw() = 0;
-    virtual void slot_Clicked_() = 0;
+    Signal_void signal_clicked_;
 
     Result<void> setstartcordinate(PointCoordinates);
     Result<void> setparentpage(std::shared_ptr<EPD_Page>);
     Result<void> setvisable(bool);
     Result<bool> getvisable();
+    Result<void> printrange(std::string);
 
 private:
     Result<void> delete_remove();
 
 protected:
     std::shared_ptr<EPD_Page> parentpage_;
-    PointCoordinates startcordinate_ = {0, 0};
+    PointCoordinates startcordinate_ = {999, 999};
     ComponentRange range_ = {{{0, 0}}};
     bool visible_ = true;
 

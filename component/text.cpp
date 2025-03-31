@@ -21,15 +21,15 @@ Result<void> Text::draw()
     const auto _endpoint_x = startcordinate_.x + _rt1.successvalue().w;
     const auto _endpoint_y = startcordinate_.y + _rt1.successvalue().h;
     const auto _endpoint = PointCoordinates{_endpoint_x, _endpoint_y};
+    // 计算右上和左下点的坐标
+    auto _rupointer = PointCoordinates{static_cast<unsigned short>(_endpoint_x), startcordinate_.y};
+    auto _llpointer = PointCoordinates{startcordinate_.x, static_cast<unsigned short>(_endpoint_y)};
+
     if (range_.empty())
-    {
-        range_.push_back({{startcordinate_}, {_endpoint}});
-    }
-    else
-    {
-        range_.pop_front();
-        range_.push_back({{startcordinate_}, {_endpoint}});
-    }
+        range_.clear();
+        
+    range_.push_back({{startcordinate_}, {_rupointer}, {_endpoint}, {_llpointer}});
+
     // 将组件范围range同步至父页面
     auto convertpointer = std::static_pointer_cast<EPD_Component>(shared_from_this());
     if (convertpointer == nullptr)
@@ -39,10 +39,6 @@ Result<void> Text::draw()
     parentpage_->updatecomponentrange(convertpointer, range_);
 
     return Result<void>::Success();
-}
-void Text::slot_Clicked_()
-{
-    /* void */
 }
 Result<void> Text::set_text(std::string text)
 {

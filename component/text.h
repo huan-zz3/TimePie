@@ -11,14 +11,13 @@ public:
     Text(std::shared_ptr<IEPD_Driver> driver);
     ~Text();
     Result<void> draw() override;
-    void slot_Clicked_() override;
 
     Result<void> set_text(std::string text);
     Result<void> set_font(sFONT *_font);
     Result<void> set_color(ImageColor fontcolr, ImageColor backcolr);
 
 private:
-    std::string text_;
+    std::string text_ ={};
     sFONT *font_ = Font16;
     ImageColor fontcolr_ = ImageColor::Black;
     ImageColor backcolr_ = ImageColor::White;

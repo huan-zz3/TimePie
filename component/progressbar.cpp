@@ -20,16 +20,16 @@ Result<void> ProgressBar::draw()
     epd_driver_->epdriver_DrawRectangle(imageptr, startcordinate_, endcordinate_, ImageColor::Black, PointSize::X22, DrawFill::NoFill);
     epd_driver_->epdriver_DrawRectangle(imageptr, startcordinate_, progressCordnate, ImageColor::Black, PointSize::X11, DrawFill::Fill);
 
+    // 计算右上和左下点的坐标
+    auto _rupointer = PointCoordinates{static_cast<unsigned short>(endcordinate_.x), startcordinate_.y};
+    auto _llpointer = PointCoordinates{startcordinate_.x, static_cast<unsigned short>(endcordinate_.y)};
+
     // 更新组件范围range
     if (range_.empty())
-    {
-        range_.push_back({{startcordinate_}, {endcordinate_}});
-    }
-    else
-    {
-        range_.pop_front();
-        range_.push_back({{startcordinate_}, {endcordinate_}});
-    }
+        range_.clear();
+
+    range_.push_back({{startcordinate_}, {_rupointer}, {endcordinate_}, {_llpointer}});
+
     // 将组件范围range同步至父页面
     auto convertpointer = std::static_pointer_cast<EPD_Component>(shared_from_this());
     if (convertpointer == nullptr)
@@ -40,10 +40,6 @@ Result<void> ProgressBar::draw()
 
     return Result<void>::Success();
 }
-void ProgressBar::slot_Clicked_()
-{
-    /* void */
-}
 Result<void> ProgressBar::setendcordinate(PointCoordinates _pc)
 {
     endcordinate_ = _pc;
@@ -52,6 +48,7 @@ Result<void> ProgressBar::setendcordinate(PointCoordinates _pc)
 Result<void> ProgressBar::setProgress(uint8_t _progress)
 {
     progress_ = _progress;
+    return Result<void>::Success();
 }
 Result<void> ProgressBar::freshShow()
 {

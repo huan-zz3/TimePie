@@ -11,7 +11,6 @@ public:
     ProgressBar(std::shared_ptr<IEPD_Driver> driver);
     ~ProgressBar();
     Result<void> draw() override;
-    void slot_Clicked_() override;
 
     Result<void> setendcordinate(PointCoordinates);
     Result<void> setProgress(uint8_t progress);

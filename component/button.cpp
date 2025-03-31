@@ -11,7 +11,7 @@ Result<void> Button::draw()
 {
     auto _textstartcord = startcordinate_;
     const auto imageptr = parentpage_->getimagebuffer().successvalue();
-    PointCoordinates _endpoint = {0, 0};
+    PointCoordinates _endpoint = {0, 0}, _rupointer = {0, 0}, _llpointer = {0, 0};
     // 获取文本的绘制范围
     auto _rt1 = epd_driver_->epdriver_GetDrawRange(text_, startcordinate_, font_);
     if (!_rt1.isSuccess())
@@ -26,6 +26,11 @@ Result<void> Button::draw()
         const auto _endpoint_y = startcordinate_.y + _rt1.successvalue().h + padding_ * static_cast<unsigned short>(2);
         Debug("Button::draw::has_border_ _endpoint_x:%d _endpoint_y:%d \n", _endpoint_x, _endpoint_y);
         _endpoint = PointCoordinates{static_cast<unsigned short>(_endpoint_x), static_cast<unsigned short>(_endpoint_y)};
+
+        // 计算右上和左下点的坐标
+        _rupointer = PointCoordinates{static_cast<unsigned short>(_endpoint_x), startcordinate_.y};
+        _llpointer = PointCoordinates{startcordinate_.x, static_cast<unsigned short>(_endpoint_y)};
+
         // 更新文本起始坐标
         _textstartcord.x += padding_;
         _textstartcord.y += padding_;
@@ -33,7 +38,7 @@ Result<void> Button::draw()
         // 绘制文本,需在绘制外框之前
         epd_driver_->epdriver_DrawString_EN(imageptr, _textstartcord, text_, font_, fontcolr_, backcolr_);
         // 绘制外框
-        epd_driver_->epdriver_DrawRectangle(imageptr, startcordinate_, _endpoint, fontcolr_, PointSize::X22, DrawFill::NoFill);
+        epd_driver_->epdriver_DrawRectangle(imageptr, startcordinate_, _endpoint, fontcolr_, border_width_, DrawFill::NoFill);
     }
     else
     {
@@ -41,20 +46,23 @@ Result<void> Button::draw()
         const auto _endpoint_x = startcordinate_.x + _rt1.successvalue().w;
         const auto _endpoint_y = startcordinate_.y + _rt1.successvalue().h;
         _endpoint = PointCoordinates{static_cast<unsigned short>(_endpoint_x), static_cast<unsigned short>(_endpoint_y)};
+
+        // 计算右上和左下点的坐标
+        _rupointer = PointCoordinates{static_cast<unsigned short>(_endpoint_x), startcordinate_.y};
+        _llpointer = PointCoordinates{startcordinate_.x, static_cast<unsigned short>(_endpoint_y)};
+
         // 绘制文本
         epd_driver_->epdriver_DrawString_EN(imageptr, _textstartcord, text_, font_, fontcolr_, backcolr_);
     }
 
+    // 若range_不为空，则清空
+    if (!range_.empty())
+        range_.clear();
+
     // 更新组件范围range
-    if (range_.empty())
-    {
-        range_.push_back({{startcordinate_}, {_endpoint}});
-    }
-    else
-    {
-        range_.pop_front();
-        range_.push_back({{startcordinate_}, {_endpoint}});
-    }
+    range_.push_back({{startcordinate_}, {_rupointer}, {_llpointer}, {_endpoint}});
+
+    printComponentRange(range_);
     // 将组件范围range同步至父页面
     auto convertpointer = std::static_pointer_cast<EPD_Component>(shared_from_this());
     if (convertpointer == nullptr)
@@ -65,10 +73,10 @@ Result<void> Button::draw()
 
     return Result<void>::Success();
 }
-void Button::slot_Clicked_()
-{
-    Debug("Button::slot_Clicked_");
-}
+// void Button::slot_Clicked_()
+// {
+//     Debug("Button::slot_Clicked_");
+// }
 Result<void> Button::set_text(std::string text)
 {
     text_ = text;
@@ -126,5 +134,14 @@ Result<void> Button::set_color(ImageColor fontcolr, ImageColor backcolr)
 {
     fontcolr_ = fontcolr;
     backcolr_ = backcolr;
+    return Result<void>::Success();
+}
+Result<void> Button::setall(std::string text, PointCoordinates pc, bool has_border, uint8_t border_width, uint8_t padding, sFONT *_font)
+{
+    set_text(text);
+    setstartcordinate(pc);
+    enable_border(has_border);
+    set_border(border_width, padding);
+    set_font(_font);
     return Result<void>::Success();
 }
