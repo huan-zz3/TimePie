@@ -23,7 +23,8 @@ int main()
 
     button1->set_text("Button 1");
     button1->setstartcordinate({20, 40});
-    button1->enable_border(true);button1->set_border(4, 2);
+    button1->enable_border(true);
+    button1->set_border(4, 2);
     text1->set_text("Hello, World!");
     text1->setstartcordinate({20, 20});
     progressBar1->setstartcordinate({20, 100});
@@ -36,10 +37,12 @@ int main()
     timerMode_Selection->draw();
     timerMode_Selection->show();
 
-    for(uint8_t i = 0; i <= 100; i += 1)
+    for (uint8_t i = 0; i <= 100; i += 1)
     {
         deviceLayer->epdriver_Delay(50);
         progressBar1->setProgress(i);
         progressBar1->freshShow();
     }
+
+    return 0;
 }
