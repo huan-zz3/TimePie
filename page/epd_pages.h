@@ -15,9 +15,11 @@
 #include <stdexcept>
 #include <cstdint>
 
-typedef sigc::signal<void, PointCoordinates>      Signal_coordinate;
-typedef sigc::slot<void, PointCoordinates>  Slot_coordinate;
 using ComponentRange = std::list<std::vector<PointCoordinates>>;
+// 打印单个 PointCoordinates
+void printPointCoordinates(const PointCoordinates& point);
+// 打印整个 ComponentRange
+void printComponentRange(const ComponentRange& range);
 class EPD_Component;
 
 class OrderedComponentList
@@ -137,7 +139,6 @@ public:
 
     Result<ImageBuffer_ptr> getimagebuffer();
 
-    // Result<void> addcomponentzindex(std::shared_ptr<EPD_Component> comp);
     Result<void> updatecomponentzindex(uint8_t z, std::shared_ptr<EPD_Component> comp);
     Result<void> updatecomponentrange(std::shared_ptr<EPD_Component> comp, ComponentRange range);
 
@@ -146,7 +147,7 @@ protected:
     std::shared_ptr<IEPD_Driver> epd_driver_;
     ImageBuffer_ptr imageBuffer_;
 
-    std::unordered_map<std::shared_ptr<EPD_Component>, ComponentRange> componentToRange_;
+    std::unordered_map<std::shared_ptr<EPD_Component>, ComponentRange> componentToRange_ = {};
 
 public:
     Signal_coordinate signal_Clicked_;

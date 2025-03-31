@@ -20,9 +20,8 @@ enum class TimerMode
     Sixty = 60,
     Ninety = 90,
     OneEighty = 180,
-    // Custom
 };
-constexpr std::array<TimerMode, 11> AllTimerModes = {
+constexpr std::array<TimerMode, 10> AllTimerModes = {
     TimerMode::Five,
     TimerMode::Ten,
     TimerMode::Fifteen,
@@ -33,7 +32,6 @@ constexpr std::array<TimerMode, 11> AllTimerModes = {
     TimerMode::Sixty,
     TimerMode::Ninety,
     TimerMode::OneEighty,
-    // TimerMode::Custom
 };
 typedef sigc::slot<void, TimerMode> Slot_TimerMode;
 
@@ -54,7 +52,6 @@ private:
 
 public:
     using EPD_Page::signal_Clicked_;
-    // using EPD_Page::signal_commonClicked_;
     sigc::signal<void, TimerMode> signal_clickedTimerMode_;
 
     Result<void> setPageNum(size_t pageNum);
@@ -63,7 +60,6 @@ private:
     Result<void> initcomponents();
     bool firstcompinit = true;
 
-    // std::shared_ptr<Button> button_five, button_ten, button_fifteen, button_twenty, button_twentyFive, button_thirty, button_fortyFive, button_sixty, button_ninety, button_oneEighty, button_custom;
     std::map<TimerMode, std::shared_ptr<Button>> buttonMap;
     std::shared_ptr<Button> button_next, button_back;
 };

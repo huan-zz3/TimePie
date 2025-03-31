@@ -8,6 +8,8 @@ TimerMode_Selection::~TimerMode_Selection()
 }
 Result<void> TimerMode_Selection::draw()
 {
+    // 清白buffer
+    epd_driver_->epdriver_imgClear(imageBuffer_, ImageColor::White);
     // 从z较小的开始
     for (auto it = componentList_.begin(); it != componentList_.end(); ++it)
     {
@@ -40,8 +42,16 @@ Result<void> TimerMode_Selection::initcomponents()
     }
     button_next = std::make_shared<Button>(epd_driver_);
     addcomponent(button_next);
+    button_next->signal_clicked_.connect([this]()
+                                         {  setPageNum(2); 
+                                            draw();
+                                            show(); });
     button_back = std::make_shared<Button>(epd_driver_);
     addcomponent(button_back);
+    button_back->signal_clicked_.connect([this]()
+                                         {  setPageNum(1); 
+                                            draw();
+                                            show(); });
 
     auto _font = Font24;
     auto _width = 2;
@@ -90,6 +100,7 @@ Result<void> TimerMode_Selection::setPageNum(size_t pageNum)
         buttonMap[TimerMode::Sixty]->setvisable(false);
         buttonMap[TimerMode::Ninety]->setvisable(false);
         buttonMap[TimerMode::OneEighty]->setvisable(false);
+        button_back->setvisable(false);
         break;
 
     case 2:
@@ -105,6 +116,7 @@ Result<void> TimerMode_Selection::setPageNum(size_t pageNum)
         buttonMap[TimerMode::Sixty]->setvisable(true);
         buttonMap[TimerMode::Ninety]->setvisable(true);
         buttonMap[TimerMode::OneEighty]->setvisable(true);
+        button_back->setvisable(true);
         break;
     default:
         return Result<void>::Error("TimerMode_Selection::setPageNum() pageNum error");
