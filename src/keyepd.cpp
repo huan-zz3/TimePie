@@ -31,7 +31,7 @@ void KeyEPD::touch_scan_thread_func(KeyEPD *instance)
         }
         else
         {
-            std::cout << rt.errormsg() << std::endl;
+            // std::cout << rt.errormsg() << std::endl;
         }
         // driver_->epdriver_Delay(200);
         std::this_thread::sleep_for(std::chrono::milliseconds(200));

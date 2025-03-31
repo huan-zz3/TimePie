@@ -19,7 +19,7 @@ enum class TimerMode
     FortyFive = 45,
     Sixty = 60,
     Ninety = 90,
-    OneEighty = 180,
+    OneEighty = 180
 };
 constexpr std::array<TimerMode, 10> AllTimerModes = {
     TimerMode::Five,
@@ -31,7 +31,7 @@ constexpr std::array<TimerMode, 10> AllTimerModes = {
     TimerMode::FortyFive,
     TimerMode::Sixty,
     TimerMode::Ninety,
-    TimerMode::OneEighty,
+    TimerMode::OneEighty
 };
 typedef sigc::slot<void, TimerMode> Slot_TimerMode;
 
