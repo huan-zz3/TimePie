@@ -1,3 +1,6 @@
+#ifndef TIMER_H
+#define TIMER_H
+
 #include <thread>
 #include <atomic>
 #include <chrono>
@@ -48,3 +51,5 @@ public:
             _worker.join(); // 等待线程退出 [^3]
     }
 };
+
+#endif // TIMER_H
