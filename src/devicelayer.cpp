@@ -237,12 +237,24 @@ Result<void> DeviceLayer::epdriver_TouchInit(void)
     epdriver_Delay(200);
     return Result<void>::Success();
 }
-Result<PointCoordinates> DeviceLayer::epdriver_TouchScan(void)
-{
+Result<PointCoordinates> DeviceLayer::epdriver_TouchScan(void) {
     UBYTE rt = GT_Scan_2();
-    if (rt == 1)
-    {
+    if (rt == 1) {
         return Result<PointCoordinates>::Error("No prepared Touch data");
     }
+
+    // 获取当前时间
+    auto currentTime = std::chrono::steady_clock::now();
+
+    // 检查当前时间与上一次触摸时间的差值
+    if (currentTime - lastTouchTime < std::chrono::milliseconds(500)) {
+        // 如果差值小于500毫秒，则忽略这次触摸
+        return Result<PointCoordinates>::Error("Touch event ignored due to debounce");
+    }
+
+    // 更新上一次触摸时间
+    lastTouchTime = currentTime;
+
+    // 返回触摸坐标
     return Result<PointCoordinates>::Success(PointCoordinates{Dev_Now.X[0], Dev_Now.Y[0]});
 }
