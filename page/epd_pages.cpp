@@ -146,8 +146,8 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
     point.x = 250 - _temp;
     Debug("touch point: (x: %d, y: %d)\n", point.x, point.y);
 
-    // 按z序降序遍历组件，从z较大的开始
-    for (auto it = componentList_.end(); it != componentList_.begin(); --it)
+    // 按z序降序遍历组件，从z较大的开始(end指向末尾的下一个位置，无法解引用；begin指向第一个元素)
+    for (auto it = componentList_.end()--; it != --componentList_.begin(); --it)
     {
         auto component = *it;
         if (!component)
