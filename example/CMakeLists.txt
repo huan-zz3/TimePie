@@ -325,7 +325,7 @@ target_link_libraries(${draw_gesture_target} PRIVATE
     libtimer
 )
 
-# Create a EPD_touch_example executable (Point Line Rectangle Circle)
+# Create a EPD_touch_example executable
 set(EPD_touch_example_name EPD_touch)
 set(EPD_touch_target ${EPD_touch_example_name}_${PROJECT_NAME})
 set(EPD_touch_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${EPD_touch_target}.cpp)
@@ -350,7 +350,7 @@ target_link_libraries(${EPD_touch_target} PRIVATE
     libtimer
 )
 
-# Create a draw_multidirectionalbmp_example executable (Point Line Rectangle Circle)
+# Create a draw_multidirectionalbmp_example executable
 set(draw_multidirectionalbmp_example_name draw_multidirectionalbmp)
 set(draw_multidirectionalbmp_target ${draw_multidirectionalbmp_example_name}_${PROJECT_NAME})
 set(draw_multidirectionalbmp_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_multidirectionalbmp_target}.cpp)
@@ -375,7 +375,7 @@ target_link_libraries(${draw_multidirectionalbmp_target} PRIVATE
     libtimer
 )
 
-# Create a draw_pagecomp_example executable (Point Line Rectangle Circle)
+# Create a draw_pagecomp_example executable
 set(draw_pagecomp_example_name draw_pagecomp)
 set(draw_pagecomp_target ${draw_pagecomp_example_name}_${PROJECT_NAME})
 set(draw_pagecomp_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_pagecomp_target}.cpp)
@@ -407,7 +407,7 @@ target_link_libraries(${draw_pagecomp_target} PRIVATE
     libtimer
 )
 
-# Create a stdthread_example executable (Point Line Rectangle Circle)
+# Create a stdthread_example executable
 set(stdthread_example_name stdthread)
 set(stdthread_target ${stdthread_example_name}_${PROJECT_NAME})
 set(stdthread_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${stdthread_target}.cpp)
@@ -425,7 +425,7 @@ target_link_libraries(${stdthread_target} PRIVATE
     # pthread
     # libtimer
 )
-# Create a keyepd_example executable (Point Line Rectangle Circle)
+# Create a keyepd_example executable
 set(keyepd_example_name keyepd)
 set(keyepd_target ${keyepd_example_name}_${PROJECT_NAME})
 set(keyepd_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${keyepd_target}.cpp)
@@ -444,4 +444,109 @@ target_link_libraries(${keyepd_target} PRIVATE
     sigc++
     # pthread
     # libtimer
+)
+# Create a TimerModeSelection_example executable
+set(TimerModeSelection_example_name TimerModeSelection)
+set(TimerModeSelection_target ${TimerModeSelection_example_name}_${PROJECT_NAME})
+set(TimerModeSelection_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${TimerModeSelection_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/page
+#     SRC_LIST1
+# )
+aux_source_directory(
+    ${CMAKE_SOURCE_DIR}/component
+    SRC_LIST2
+)
+add_executable(${TimerModeSelection_target}
+    ${TimerModeSelection_SRC_LIST}
+    # ${SRC_LIST1}
+    ${SRC_LIST2}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/page/epd_pages.cpp
+    ${CMAKE_SOURCE_DIR}/page/TimerMode_Selection.cpp
+    ${CMAKE_SOURCE_DIR}/src/keyepd.cpp
+)
+target_include_directories(${TimerModeSelection_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+    ${CMAKE_SOURCE_DIR}/page
+    ${CMAKE_SOURCE_DIR}/component
+)
+target_link_libraries(${TimerModeSelection_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+)
+# Create a TimerDashboard_example executable
+set(TimerDashboard_example_name TimerDashboard)
+set(TimerDashboard_target ${TimerDashboard_example_name}_${PROJECT_NAME})
+set(TimerDashboard_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${TimerDashboard_target}.cpp)
+aux_source_directory(
+    ${CMAKE_SOURCE_DIR}/page
+    SRC_LIST1
+)
+aux_source_directory(
+    ${CMAKE_SOURCE_DIR}/component
+    SRC_LIST2
+)
+add_executable(${TimerDashboard_target}
+    ${TimerDashboard_SRC_LIST}
+    ${SRC_LIST1}
+    ${SRC_LIST2}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/servicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
+    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+)
+target_include_directories(${TimerDashboard_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+    ${CMAKE_SOURCE_DIR}/page
+    ${CMAKE_SOURCE_DIR}/component
+)
+target_link_libraries(${TimerDashboard_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+    serialib
+)
+
+# Create a dtutime_example executable
+set(dtutime_example_name dtutime)
+set(dtutime_target ${dtutime_example_name}_${PROJECT_NAME})
+set(dtutime_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${dtutime_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/page
+#     SRC_LIST1
+# )
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/component
+#     SRC_LIST2
+# )
+add_executable(${dtutime_target}
+    ${dtutime_SRC_LIST}
+    # ${SRC_LIST1}
+    # ${SRC_LIST2}
+    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/servicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
+    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+)
+target_include_directories(${dtutime_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/interface
+    # ${CMAKE_SOURCE_DIR}/page
+    # ${CMAKE_SOURCE_DIR}/component
+)
+target_link_libraries(${dtutime_target} PRIVATE
+    lg
+    EPDriver
+    sigc++
+    pthread
+    libtimer
+    serialib
 )
