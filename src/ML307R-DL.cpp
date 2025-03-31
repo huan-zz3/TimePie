@@ -107,7 +107,6 @@ Result<std::string> ML307R::dtuTIME(void)
             std::cout << "Failed to extract data: " << _rt.errormsg() << std::endl;
             return Result<std::string>::Error("No data received");
         }
-        return Result<std::string>::Success(std::move(result.successvalue()));
     }
     else
     {

@@ -17,7 +17,9 @@ DTUTime::DTUTime(std::shared_ptr<I4GDTU> _i4gdtu) : i4gdtu_(std::move(_i4gdtu))
 DTUTime::~DTUTime()
 {
     i4gdtu_.reset();
-    timer_ptr.reset();
+    timer_ptr->stop();
+    timer_ptr.reset();  
+    updatenowtime_signal_.clear();
 }
 void DTUTime::updateNowTime()
 {
@@ -90,6 +92,9 @@ void DTUTime::updateNowTime()
         // 使用mktime计算时间戳，注意需要包含 time.h 头文件
         // mktime(&tm_struct);
         nowTime.timestamp = static_cast<unsigned long>(mktime(&tm_struct) - 8 * 3600);
+
+        // 激发更新信号
+        updatenowtime_signal_.emit(nowTime.to_string());
     }
 }
 Result<timedata> DTUTime::getNowTime()

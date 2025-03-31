@@ -12,7 +12,8 @@
 
 #define UPDATE_TIME_INTERVAL 5
 
-class DTUTime : public IInternetTime{
+class DTUTime : public IInternetTime
+{
 public:
     DTUTime(std::shared_ptr<I4GDTU> _i4gdtu);
     ~DTUTime();
@@ -26,10 +27,13 @@ public:
     Result<int> getNowMillisecond() override;
     Result<unsigned long> getNowtTimeStamp() override;
 
+public:
+    using IInternetTime::updatenowtime_signal_;
+
 private:
     std::shared_ptr<I4GDTU> i4gdtu_;
     std::unique_ptr<Timer> timer_ptr;
-    using IInternetTime::updatenowtime_signal_;
+
     using IInternetTime::nowTime;
 
     void updateNowTime();
