@@ -4,5 +4,6 @@ add_subdirectory(thirdparty/EPDriver)
 add_subdirectory(thirdparty/lg)
 add_subdirectory(thirdparty/serialib)
 add_subdirectory(thirdparty/sqlite)
+add_subdirectory(thirdparty/eventpp)
 
 add_subdirectory(libtimer)

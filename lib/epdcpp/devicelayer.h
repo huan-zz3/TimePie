@@ -3,6 +3,7 @@
 
 #include "predefine.h"
 #include "iepd_driver.h"
+#include <chrono>
 
 class DeviceLayer : public IEPD_Driver
 {
@@ -41,6 +42,11 @@ public:
 
     Result<void> epdriver_TouchInit(void) override;
     Result<PointCoordinates> epdriver_TouchScan(void) override;
+
+private:
+    std::chrono::steady_clock::time_point lastTouchTime = std::chrono::steady_clock::now();
+    
+
 };
 
 #endif

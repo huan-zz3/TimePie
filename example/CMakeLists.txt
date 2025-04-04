@@ -550,3 +550,63 @@ target_link_libraries(${dtutime_target} PRIVATE
     libtimer
     serialib
 )
+# Create a eventpp_example executable
+set(eventpp_example_name eventpp)
+set(eventpp_target ${eventpp_example_name}_${PROJECT_NAME})
+set(eventpp_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${eventpp_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${eventpp_target}
+    ${eventpp_SRC_LIST}
+    # ${SRC_LIST}
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${eventpp_target} PRIVATE 
+    # ${CMAKE_SOURCE_DIR}/include
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${eventpp_target} PRIVATE
+    eventpp
+)
+# Create a eventpploop_example executable
+set(eventpploop_example_name eventpploop)
+set(eventpploop_target ${eventpploop_example_name}_${PROJECT_NAME})
+set(eventpploop_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${eventpploop_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${eventpploop_target}
+    ${eventpploop_SRC_LIST}
+    # ${SRC_LIST}
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${eventpploop_target} PRIVATE 
+    # ${CMAKE_SOURCE_DIR}/include
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${eventpploop_target} PRIVATE
+    eventpp
+)
+# Create a eventppapply_example executable
+set(eventppapply_example_name eventppapply)
+set(eventppapply_target ${eventppapply_example_name}_${PROJECT_NAME})
+set(eventppapply_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${eventppapply_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${eventppapply_target}
+    ${eventppapply_SRC_LIST}
+    # ${SRC_LIST}
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${eventppapply_target} PRIVATE 
+    # ${CMAKE_SOURCE_DIR}/include
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${eventppapply_target} PRIVATE
+    eventpp
+)

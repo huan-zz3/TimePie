@@ -12,9 +12,11 @@ public:
 
     virtual Result<void> epdserStartTomatoTimer(uint32_t) = 0;
     virtual Result<void> epdserStopTomatoTimer() = 0;
+    virtual Result<void> epdserStartInternetTime() = 0;
+    virtual Result<void> epdserStopInternetTime() = 0;
 
 public:
-    Signal_void on_timer_updated;
+    Signal_void on_tomatotimer_updated;
 
     // virtual void
 };
