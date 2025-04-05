@@ -3,12 +3,12 @@
 
 #include "predefine.h"
 #include "epd_component.h"
-#include "iepd_driver.h"
+// #include "iepd_driver.h"
 
 class Button : public EPD_Component
 {
 public:
-    Button(std::shared_ptr<IEPD_Driver> driver);
+    Button(std::shared_ptr<DeviceLayer> driver);
     ~Button();
     Result<void> draw() override;
 

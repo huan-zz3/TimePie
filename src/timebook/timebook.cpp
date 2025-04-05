@@ -1,11 +1,11 @@
 #include "timebook.h"
 
-Result<void> TimeBook::setI4GDTU(std::shared_ptr<I4GDTU> _i4gdtu)
+Result<void> TimeBook::setI4GDTU(std::shared_ptr<ML307R> _i4gdtu)
 {
     i4gdtu_ = std::move(_i4gdtu);
     return Result<void>::Success();
 }
-Result<void> TimeBook::setIDatabase(std::shared_ptr<IDatabase> _idatabase)
+Result<void> TimeBook::setIDatabase(std::shared_ptr<Sqlite3Database> _idatabase)
 {
     idatabase_ = std::move(_idatabase);
 

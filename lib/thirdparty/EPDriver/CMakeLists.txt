@@ -4,13 +4,13 @@ project(EPDriver)
 
 set(CMAKE_C_STANDARD 99)
 
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/Config
-        ${CMAKE_CURRENT_SOURCE_DIR}/Driver
-        ${CMAKE_CURRENT_SOURCE_DIR}/EPD
-        ${CMAKE_CURRENT_SOURCE_DIR}/Fonts
-        ${CMAKE_CURRENT_SOURCE_DIR}/GUI
-)
+# include_directories(
+#         ${CMAKE_CURRENT_SOURCE_DIR}/Config
+#         ${CMAKE_CURRENT_SOURCE_DIR}/Driver
+#         ${CMAKE_CURRENT_SOURCE_DIR}/EPD
+#         ${CMAKE_CURRENT_SOURCE_DIR}/Fonts
+#         ${CMAKE_CURRENT_SOURCE_DIR}/GUI
+# )
 
 # 指定所有源文件
 set(SOURCES
@@ -50,9 +50,10 @@ add_library(EPDriver STATIC ${SOURCES})
 
 target_compile_definitions(EPDriver PRIVATE USE_LGPIO_LIB)
 # target_include_directories(EPDriver PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lg)
-target_link_libraries(${PROJECT_NAME} PRIVATE 
+target_link_libraries(${PROJECT_NAME} PUBLIC 
         lg
 )
+
 target_include_directories(EPDriver PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/Config/
         ${CMAKE_CURRENT_SOURCE_DIR}/Driver/

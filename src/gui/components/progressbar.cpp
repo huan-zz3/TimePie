@@ -1,6 +1,6 @@
 #include "progressbar.h"
 
-ProgressBar::ProgressBar(std::shared_ptr<IEPD_Driver> driver)
+ProgressBar::ProgressBar(std::shared_ptr<DeviceLayer> driver)
     : EPD_Component(driver)
 {
 }

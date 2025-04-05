@@ -2,6 +2,7 @@
 
 ML307R::ML307R()
 {
+    serial_ptr_ = std::make_unique<serialib>();
 }
 ML307R::~ML307R()
 {
@@ -9,9 +10,8 @@ ML307R::~ML307R()
     std::cout << "ML307R instance is deleted now." << std::endl;
 }
 
-Result<void> ML307R::dtuInit(std::unique_ptr<serialib> _serial_ptr)
+Result<void> ML307R::dtuInit()
 {
-    serial_ptr_ = std::move(_serial_ptr);
     // 打开串口设备
     char errorOpening = serial_ptr_->openDevice(SERIAL_PORT, BAUDRATE);
     if (std::to_string(errorOpening) == "1")

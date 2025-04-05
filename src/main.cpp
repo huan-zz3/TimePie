@@ -1,6 +1,4 @@
 #include <iostream>
-#include "predefine.h"
-#include "applicationcore.h"
 
 int main()
 {

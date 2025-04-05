@@ -2,15 +2,14 @@
 #define TIMERDASHBOARD_H
 
 #include "epd_pages.h"
-#include "button.h"
-#include "text.h"
-#include "progressbar.h"
-#include "servicelayer.h"
+#include "gui/components/button.h"
+#include "gui/components/text.h"
+#include "gui/components/progressbar.h"
 
 class TimerDashboard : public EPD_Page
 {
 public:
-    explicit TimerDashboard(std::shared_ptr<IEPD_Driver> epdDriver, std::shared_ptr<ServiceLayer> serviceLayer);
+    explicit TimerDashboard(std::shared_ptr<DeviceLayer> epdDriver);
     ~TimerDashboard();
 
     Result<void> draw() override;

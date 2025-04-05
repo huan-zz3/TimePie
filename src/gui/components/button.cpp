@@ -1,6 +1,6 @@
 #include "button.h"
 
-Button::Button(std::shared_ptr<IEPD_Driver> driver)
+Button::Button(std::shared_ptr<DeviceLayer> driver)
     : EPD_Component(driver)
 {
 }

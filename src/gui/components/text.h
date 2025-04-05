@@ -3,12 +3,11 @@
 
 #include "predefine.h"
 #include "epd_component.h"
-#include "iepd_driver.h"
 
 class Text : public EPD_Component
 {
 public:
-    Text(std::shared_ptr<IEPD_Driver> driver);
+    Text(std::shared_ptr<DeviceLayer> driver);
     ~Text();
     Result<void> draw() override;
 

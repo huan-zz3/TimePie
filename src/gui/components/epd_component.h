@@ -2,8 +2,9 @@
 #define EPD_COMPOMENT_H
 
 #include "predefine.h"
-#include "iepd_driver.h"
-#include "epd_pages.h"
+// #include "iepd_driver.h"
+#include "devicelayer.h"
+#include "gui/pages/epd_pages.h"
 #include <memory>
 #include <map>
 #include <vector>
@@ -13,7 +14,7 @@ class EPD_Page;
 class EPD_Component : public std::enable_shared_from_this<EPD_Component>
 {
 public:
-    explicit EPD_Component(std::shared_ptr<IEPD_Driver>);
+    explicit EPD_Component(std::shared_ptr<DeviceLayer>);
     ~EPD_Component();
     virtual Result<void> draw() = 0;
     Signal_void signal_clicked_;
@@ -33,7 +34,7 @@ protected:
     ComponentRange range_ = {{{0, 0}}};
     bool visible_ = true;
 
-    std::shared_ptr<IEPD_Driver> epd_driver_;
+    std::shared_ptr<DeviceLayer> epd_driver_;
 };
 
 #endif // EPD_COMPOMENT_H

@@ -3,12 +3,11 @@
 
 #include "predefine.h"
 #include "epd_component.h"
-#include "iepd_driver.h"
 
 class ProgressBar : public EPD_Component
 {
 public:
-    ProgressBar(std::shared_ptr<IEPD_Driver> driver);
+    ProgressBar(std::shared_ptr<DeviceLayer> driver);
     ~ProgressBar();
     Result<void> draw() override;
 

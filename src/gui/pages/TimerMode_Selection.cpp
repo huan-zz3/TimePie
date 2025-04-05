@@ -1,6 +1,5 @@
 #include "TimerMode_Selection.h"
-TimerMode_Selection::TimerMode_Selection(std::shared_ptr<IEPD_Driver> _epdd)
-    : EPD_Page(std::move(_epdd))
+TimerMode_Selection::TimerMode_Selection(std::shared_ptr<DeviceLayer> _epdd)
 {
 }
 TimerMode_Selection::~TimerMode_Selection()

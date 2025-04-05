@@ -3,8 +3,8 @@
 
 #include "epd_pages.h"
 
-#include "button.h"
-#include "text.h"
+#include "gui/components/button.h"
+#include "gui/components/text.h"
 #include <vector>
 #include <map>
 
@@ -38,7 +38,7 @@ typedef sigc::slot<void, TimerMode> Slot_TimerMode;
 class TimerMode_Selection : public EPD_Page
 {
 public:
-    explicit TimerMode_Selection(std::shared_ptr<IEPD_Driver> epdDriver);
+    explicit TimerMode_Selection(std::shared_ptr<DeviceLayer> epdDriver);
     ~TimerMode_Selection();
 
     Result<void> draw() override;

@@ -1,6 +1,6 @@
 #include "epd_component.h"
 
-EPD_Component::EPD_Component(std::shared_ptr<IEPD_Driver> _driver)
+EPD_Component::EPD_Component(std::shared_ptr<DeviceLayer> _driver)
     : epd_driver_(_driver)
 {
 }

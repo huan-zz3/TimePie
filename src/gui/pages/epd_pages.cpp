@@ -1,6 +1,6 @@
 #include "epd_pages.h"
 
-EPD_Page::EPD_Page(std::shared_ptr<IEPD_Driver> _epdd)
+EPD_Page::EPD_Page(std::shared_ptr<DeviceLayer> _epdd)
     : epd_driver_(std::move(_epdd))
 {
     signal_Clicked_.connect(Slot_coordinate(Mem_fun(*this, EPD_Page::slot_Clicked_)));

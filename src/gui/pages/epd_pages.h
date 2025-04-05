@@ -1,9 +1,10 @@
 #ifndef EPD_PAGES_H
 #define EPD_PAGES_H
 
-#include "iepd_driver.h"
-#include "epd_component.h"
-#include "predefine.h"
+// #include "iepd_driver.h"
+#include "devicelayer.h"
+#include "gui/components/epd_component.h"
+// #include "predefine.h"
 #include <memory>
 #include <map>
 #include <unordered_map>
@@ -127,7 +128,7 @@ public:
 class EPD_Page : public std::enable_shared_from_this<EPD_Page>
 {
 public:
-    explicit EPD_Page(std::shared_ptr<IEPD_Driver> _epdd);
+    explicit EPD_Page(std::shared_ptr<DeviceLayer> _epdd);
     ~EPD_Page();
 
     virtual Result<void> draw() = 0;
@@ -144,7 +145,7 @@ public:
 
 protected:
     OrderedComponentList componentList_;
-    std::shared_ptr<IEPD_Driver> epd_driver_;
+    std::shared_ptr<DeviceLayer> epd_driver_;
     ImageBuffer_ptr imageBuffer_;
 
     std::unordered_map<std::shared_ptr<EPD_Component>, ComponentRange> componentToRange_ = {};

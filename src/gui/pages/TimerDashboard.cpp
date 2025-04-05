@@ -1,6 +1,6 @@
 #include "TimerDashboard.h"
-TimerDashboard::TimerDashboard(std::shared_ptr<IEPD_Driver> _epdd, std::shared_ptr<ServiceLayer> _serviceLayer)
-    : EPD_Page(std::move(_epdd)), servicelayer(_serviceLayer)
+TimerDashboard::TimerDashboard(std::shared_ptr<DeviceLayer> _epdd)
+    : EPD_Page(std::move(_epdd))
 {
     signal_finished_.connect([this]()
                              { stopPageUpdate(); });

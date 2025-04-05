@@ -1,5 +1,5 @@
 #include "dtutime.h"
-DTUTime::DTUTime(std::shared_ptr<I4GDTU> _i4gdtu) : i4gdtu_(std::move(_i4gdtu))
+DTUTime::DTUTime(std::shared_ptr<ML307R> _i4gdtu)
 {
     try
     {

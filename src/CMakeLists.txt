@@ -1,36 +1,34 @@
-aux_source_directory(
-    ${PROJECT_SOURCE_DIR}/src
-    SRC_LIST
+set(DIRECTORIES
+    eventbus
+    gui/components
+    gui/pages
+    interaction
+    macro
+    timebook
+    bgservice
 )
-aux_source_directory(
-    ${PROJECT_SOURCE_DIR}/component
-    COMPOMENT_LIST
-)
-aux_source_directory(
-    ${PROJECT_SOURCE_DIR}/page
-    PAGE_LIST
-)
+
+foreach(DIR ${DIRECTORIES})
+    aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/${DIR} ${DIR}_LIST)
+    list(APPEND SRC_LIST ${${DIR}_LIST})
+endforeach()
 
 add_executable(TimePie
     ${SRC_LIST}
-    ${COMPOMENT_LIST}
-    ${PAGE_LIST}
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 )
 
-target_include_directories(TimePie PUBLIC 
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/interface
-    ${PROJECT_SOURCE_DIR}/component
-    ${PROJECT_SOURCE_DIR}/page
+target_include_directories(TimePie PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    # ${PROJECT_SOURCE_DIR}/page
 )
 
 target_link_libraries(TimePie PRIVATE
-    EPDriver
-    lg
+    macro
+    epdcpp
     sigc++
     libtimer
-    sqlite
-    serialib
-    pthread
+    sqlite3cpp
     eventpp
+    4gdtu
 )
