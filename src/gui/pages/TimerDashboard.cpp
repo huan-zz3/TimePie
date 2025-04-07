@@ -33,8 +33,10 @@ Result<void> TimerDashboard::draw()
 }
 Result<void> TimerDashboard::show()
 {
-    epd_driver_->epdriver_Init(InitMode::Full);
-    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Normal);
+    epd_driver_->epdriver_Init(InitMode::Part);
+    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
+    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
+    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
     epd_driver_->epdriver_Delay(500);
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
@@ -91,11 +93,14 @@ Result<void> TimerDashboard::stopPageUpdate()
 }
 Result<void> TimerDashboard::updatePage(uint32_t remainsec, uint32_t totalsec, const std::string &time)
 {
-
-    countdown->set_text(std::to_string(remainsec));
-    nowtime->set_text(time);
     std::cout << "remainsec: " << remainsec << " totalsec: " << totalsec << std::endl;
-    uint8_t progress = static_cast<uint8_t>((remainsec * 100) / totalsec);
+
+    uint32_t minutes = remainsec / 60;
+    uint32_t seconds = remainsec % 60;
+    std::string countdownText = std::to_string(minutes) + ":" + std::to_string(seconds);
+    countdown->set_text(countdownText);
+    nowtime->set_text(time);
+    uint8_t progress = static_cast<uint8_t>(100 - (remainsec * 100) / totalsec);
     std::cout << "Progress: " << static_cast<int>(progress) << std::endl;
     progressbar->setProgress(progress);
 
