@@ -44,7 +44,7 @@ struct timedata
 class DTUTime
 {
 public:
-    DTUTime(std::shared_ptr<ML307R> _i4gdtu);
+    DTUTime(std::shared_ptr<ML307R> _ml307r);
     ~DTUTime();
 
     Result<timedata> getNowTime();
@@ -60,7 +60,7 @@ public:
     Signal_string updatenowtime_signal_;
 
 private:
-    std::shared_ptr<ML307R> i4gdtu_;
+    std::shared_ptr<ML307R> ml307r_;
     std::unique_ptr<Timer> timer_ptr;
 
     timedata nowTime;

@@ -1,24 +1,18 @@
-#include "iepd_driver.h"
-#include "epd_component.h"
-#include "epd_pages.h"
-
-#include "devicelayer.h"
-#include "keyepd.h"
-#include "TimerMode_Selection.h"
-#include "button.h"
-#include "text.h"
-#include "progressbar.h"
+#include <devicelayer.h>
+#include "gui/pages/TimerMode_Selection.h"
+#include "interaction/screentouch/keyepd.h"
 
 int main()
 {
-    std::shared_ptr<IEPD_Driver> deviceLayer = std::make_shared<DeviceLayer>();
+    auto deviceLayer = std::make_shared<DeviceLayer>();
 
     // 初始化设备层
     deviceLayer->epdriver_Init(InitMode::Hardware);
 
     // 创建页面
     auto timerMode_Selection = std::make_shared<TimerMode_Selection>(deviceLayer);
-    timerMode_Selection->signal_clickedTimerMode_.connect([](TimerMode tm){ 
+    timerMode_Selection->signal_clickedTimerMode_.connect([](TimerMode tm)
+                                                          { 
         switch (tm) {
             case TimerMode::Five
                 : std::cout << "Five" << std::endl; break;
@@ -42,14 +36,12 @@ int main()
                 : std::cout << "OneEighty" << std::endl; break;
             default
                 : std::cout << "default" << std::endl; break;
-        }
-    });
+        } });
 
     // 初始化触摸功能
     auto keyepd = std::make_shared<KeyEPD>(deviceLayer);
     keyepd->signal_touch.connect(Slot_coordinate([timerMode_Selection](PointCoordinates pc)
-                                                 { timerMode_Selection->signal_Clicked_.emit(pc); 
-                                                }));
+                                                 { timerMode_Selection->signal_Clicked_.emit(pc); }));
     keyepd->startTouchScan();
 
     // 页面调用绘制显示

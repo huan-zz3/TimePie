@@ -5,6 +5,7 @@
 #include "gui/components/button.h"
 #include "gui/components/text.h"
 #include "gui/components/progressbar.h"
+// #include "bgservice/servicelayer.h"
 
 class TimerDashboard : public EPD_Page
 {
@@ -15,8 +16,10 @@ public:
     Result<void> draw() override;
     Result<void> show() override;
 
-    Result<void> startPageUpdate(size_t);
+    Result<void> startPageUpdate();
     Result<void> stopPageUpdate();
+    Result<void> updatePage(uint32_t remainsec, uint32_t totalsec, const std::string &time);
+    Result<void> updatePage(uint32_t passedsec, const std::string &time);
 
 private:
     using EPD_Page::componentList_;
@@ -26,7 +29,7 @@ private:
 
 public:
     using EPD_Page::signal_Clicked_;
-    Signal_void signal_finished_;
+    // Signal_void signal_finished_;
 
 private:
     Result<void> initcomponents();
@@ -35,7 +38,6 @@ private:
     std::shared_ptr<Text> nowtime;
     std::shared_ptr<Button> countdown;
     std::shared_ptr<ProgressBar> progressbar;
-    std::shared_ptr<ServiceLayer> servicelayer;
 };
 
 #endif // TIMERDASHBOARD_H

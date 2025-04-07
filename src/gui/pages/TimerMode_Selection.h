@@ -31,8 +31,7 @@ constexpr std::array<TimerMode, 10> AllTimerModes = {
     TimerMode::FortyFive,
     TimerMode::Sixty,
     TimerMode::Ninety,
-    TimerMode::OneEighty
-};
+    TimerMode::OneEighty};
 typedef sigc::slot<void, TimerMode> Slot_TimerMode;
 
 class TimerMode_Selection : public EPD_Page
@@ -45,16 +44,17 @@ public:
     Result<void> show() override;
 
 private:
-    using EPD_Page::componentList_;
-    using EPD_Page::componentToRange_;
-    using EPD_Page::epd_driver_;
-    using EPD_Page::imageBuffer_;
+    OrderedComponentList componentList_;
+    std::shared_ptr<DeviceLayer> epd_driver_;
+    ImageBuffer_ptr imageBuffer_;
+
+    std::unordered_map<std::shared_ptr<EPD_Component>, ComponentRange> componentToRange_ = {};
 
 public:
-    using EPD_Page::signal_Clicked_;
+    Signal_coordinate signal_Clicked_;
     sigc::signal<void, TimerMode> signal_clickedTimerMode_;
 
-    Result<void> setPageNum(size_t pageNum);
+    Result<void> setPageNum(uint8_t pageNum);
 
 private:
     Result<void> initcomponents();

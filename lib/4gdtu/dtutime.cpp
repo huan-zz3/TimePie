@@ -1,5 +1,6 @@
 #include "dtutime.h"
-DTUTime::DTUTime(std::shared_ptr<ML307R> _i4gdtu)
+DTUTime::DTUTime(std::shared_ptr<ML307R> _ml307r)
+    : ml307r_(_ml307r)
 {
     try
     {
@@ -16,18 +17,18 @@ DTUTime::DTUTime(std::shared_ptr<ML307R> _i4gdtu)
 }
 DTUTime::~DTUTime()
 {
-    i4gdtu_.reset();
+    ml307r_.reset();
     timer_ptr->stop();
     timer_ptr.reset();  
     updatenowtime_signal_.clear();
 }
 void DTUTime::updateNowTime()
 {
-    if (!i4gdtu_->dtuIsOnline().isSuccess())
+    if (!ml307r_->dtuIsOnline().isSuccess())
     {
         return;
     }
-    auto _result = i4gdtu_->dtuTIME();
+    auto _result = ml307r_->dtuTIME();
     if (!_result.isSuccess())
     {
         return;

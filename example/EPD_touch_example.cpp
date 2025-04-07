@@ -5,6 +5,8 @@
 #include <signal.h>  //signal()
 #include <pthread.h> //pthread_create()
 
+#include "timerecorder.hpp"
+
 // 创建线程变量和标志位，用于控制线程的执行
 static pthread_t t1_2in13_V4;
 UBYTE flag_t_2in13_V4 = 1;

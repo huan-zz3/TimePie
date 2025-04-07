@@ -1,23 +1,27 @@
 #ifndef KEYEPD_H
 #define KEYEPD_H
 
-#include "itouchkey.h"
 #include <atomic>
 #include <chrono> 
+#include <thread>
+#include <result.hpp>
+#include <memory>
+#include <devicelayer.h>
 
-class KeyEPD : public ITouchKey
+class KeyEPD
 {
 public:
-    explicit KeyEPD(std::shared_ptr<IEPD_Driver> driver) : ITouchKey(driver){};
+    explicit KeyEPD(std::shared_ptr<DeviceLayer>driver) : driver_(driver){};
 
-    Result<void> startTouchScan() override;
-    Result<void> stopTouchScan() override;
+    Result<void> startTouchScan();
+    Result<void> stopTouchScan();
 
 public:
-    using ITouchKey::signal_touch;
+    Signal_coordinate signal_touch;
 
 
 private:
+    std::shared_ptr<DeviceLayer> driver_;
     std::thread touch_scan_thread;
     static void touch_scan_thread_func(KeyEPD* instance);
 

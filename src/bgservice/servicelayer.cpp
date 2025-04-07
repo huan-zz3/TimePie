@@ -1,7 +1,7 @@
 #include "servicelayer.h"
 
-ServiceLayer::ServiceLayer(std::unique_ptr<DTUTime> _dutime_ptr)
-    : dutime_ptr(std::move(_dutime_ptr))
+ServiceLayer::ServiceLayer(std::shared_ptr<DTUTime> _dutime_ptr)
+    : dutime_ptr(_dutime_ptr)
 {
     globed_dutime_ptr = dutime_ptr;
 }
@@ -13,7 +13,7 @@ ServiceLayer::~ServiceLayer()
 }
 Result<void> ServiceLayer::epdserInit()
 {
-    /* Nothing should do */
+    globed_servicelayer_ptr = shared_from_this();
     return Result<void>::Success();
 }
 Result<void> ServiceLayer::epdserExit()
@@ -22,13 +22,25 @@ Result<void> ServiceLayer::epdserExit()
     return Result<void>::Success();
 }
 
-Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _seconds)
+Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _totalminutes, uint32_t _intervalseconds)
 {
     try
     {
-        tomatotimer_ptr = std::make_unique<Timer>([this]()
-                                            { this->on_tomatotimer_updated.emit(); }, _seconds);
-        tomatotimer_ptr->start();
+        globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(
+            [_totalminutes, _intervalseconds]()
+            { 
+                // globed_servicelayer_ptr->on_tomatotimer_updated.emit(); 
+                static uint32_t count = 0;
+                count++;
+                auto remainsec = count * _intervalseconds >= _totalminutes * 60 ? 0 : _totalminutes * 60 - count * _intervalseconds;
+                if (remainsec == 0){
+                    // std::cout << "Tomato Finish" << std::endl;
+                    GetEventBus()->post(TomatoFinish());
+                }else{
+                    GetEventBus()->post(TomatoNums(count, _totalminutes*60, remainsec));
+                }
+            }, _intervalseconds);
+        globed_servicelayer_ptr->tomatotimer_ptr->start();
     }
     catch (std::exception &e)
     {
@@ -38,7 +50,8 @@ Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _seconds)
 }
 Result<void> ServiceLayer::epdserStopTomatoTimer()
 {
-    tomatotimer_ptr->stop();
+    globed_servicelayer_ptr->tomatotimer_ptr->stop();
+    globed_servicelayer_ptr->tomatotimer_ptr.reset();
     return Result<void>::Success();
 }
 Result<void> ServiceLayer::epdserStartInternetTime()

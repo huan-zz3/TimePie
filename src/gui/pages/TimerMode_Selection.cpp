@@ -1,5 +1,6 @@
 #include "TimerMode_Selection.h"
 TimerMode_Selection::TimerMode_Selection(std::shared_ptr<DeviceLayer> _epdd)
+    : EPD_Page(_epdd)
 {
 }
 TimerMode_Selection::~TimerMode_Selection()
@@ -67,37 +68,36 @@ Result<void> TimerMode_Selection::initcomponents()
     // 设置点击事件
     {
         buttonMap[TimerMode::Five]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Five); });
+                                                            { signal_clickedTimerMode_.emit(TimerMode::Five); });
         buttonMap[TimerMode::Ten]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Ten); });
+                                                           { signal_clickedTimerMode_.emit(TimerMode::Ten); });
         buttonMap[TimerMode::Fifteen]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Fifteen); });
+                                                               { signal_clickedTimerMode_.emit(TimerMode::Fifteen); });
         buttonMap[TimerMode::Twenty]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Twenty); });
+                                                              { signal_clickedTimerMode_.emit(TimerMode::Twenty); });
         buttonMap[TimerMode::TwentyFive]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::TwentyFive); });
+                                                                  { signal_clickedTimerMode_.emit(TimerMode::TwentyFive); });
         button_next->signal_clicked_.connect([this]()
                                              { setPageNum(2); draw(); show(); });
     }
     {
         buttonMap[TimerMode::Thirty]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Thirty); });
+                                                              { signal_clickedTimerMode_.emit(TimerMode::Thirty); });
         buttonMap[TimerMode::FortyFive]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::FortyFive); });
+                                                                 { signal_clickedTimerMode_.emit(TimerMode::FortyFive); });
         buttonMap[TimerMode::Sixty]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Sixty); });
+                                                             { signal_clickedTimerMode_.emit(TimerMode::Sixty); });
         buttonMap[TimerMode::Ninety]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::Ninety); });
+                                                              { signal_clickedTimerMode_.emit(TimerMode::Ninety); });
         buttonMap[TimerMode::OneEighty]->signal_clicked_.connect([this]()
-                                             { signal_clickedTimerMode_.emit(TimerMode::OneEighty); });
+                                                                 { signal_clickedTimerMode_.emit(TimerMode::OneEighty); });
         button_back->signal_clicked_.connect([this]()
                                              { setPageNum(1); draw(); show(); });
     }
-    
 
     return Result<void>::Success();
 }
-Result<void> TimerMode_Selection::setPageNum(size_t pageNum)
+Result<void> TimerMode_Selection::setPageNum(uint8_t pageNum)
 {
     // 如果是第一次绘制，则进行组件初始化
     if (firstcompinit)

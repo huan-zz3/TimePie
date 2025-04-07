@@ -1,36 +1,41 @@
 #ifndef SERVICELAYER_H
 #define SERVICELAYER_H
 
-#include "predefine.h"
+#include <predefine.h>
+#include "eventbus/eventinstance.hpp"
+#include "eventbus/categories/system.hpp"
 
 #include "timer.h"
 #include "dtutime.h"
 #include <iostream>
 #include <memory>
 
-static std::shared_ptr<DTUTime> globed_dutime_ptr = nullptr;
 
-class ServiceLayer
+class ServiceLayer : public std::enable_shared_from_this<ServiceLayer>
 {
 public:
-    ServiceLayer(std::unique_ptr<DTUTime>);
+    ServiceLayer(std::shared_ptr<DTUTime>);
     ~ServiceLayer();
     Result<void> epdserInit();
     Result<void> epdserExit();
 
-    Result<void> epdserStartTomatoTimer(uint32_t);
-    Result<void> epdserStopTomatoTimer();
+    static Result<void> epdserStartTomatoTimer(uint32_t _totalminutes, uint32_t _intervalseconds);
+    static Result<void> epdserStopTomatoTimer();
 
-    Result<void> epdserStartInternetTime();
-    Result<void> epdserStopInternetTime();
+    static Result<void> epdserStartInternetTime();
+    static Result<void> epdserStopInternetTime();
     static Result<std::string> nowTimestr();
 
 public:
-    Signal_void on_tomatotimer_updated;
+    
 
 private:
+    Signal_void on_tomatotimer_updated;
     std::unique_ptr<Timer> tomatotimer_ptr;
     std::shared_ptr<DTUTime> dutime_ptr;
 };
+
+static std::shared_ptr<DTUTime> globed_dutime_ptr = nullptr;
+static std::shared_ptr<ServiceLayer> globed_servicelayer_ptr = nullptr;
 
 #endif
