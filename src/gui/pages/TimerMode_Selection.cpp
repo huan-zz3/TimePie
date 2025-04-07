@@ -5,6 +5,12 @@ TimerMode_Selection::TimerMode_Selection(std::shared_ptr<DeviceLayer> _epdd)
 }
 TimerMode_Selection::~TimerMode_Selection()
 {
+    for (const auto &mode : AllTimerModes)
+    {
+        buttonMap[mode].reset();
+    }
+    button_next.reset();
+    button_back.reset();
 }
 Result<void> TimerMode_Selection::draw()
 {

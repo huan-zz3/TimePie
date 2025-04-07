@@ -44,16 +44,15 @@ public:
     Result<void> show() override;
 
 private:
-    OrderedComponentList componentList_;
-    std::shared_ptr<DeviceLayer> epd_driver_;
-    ImageBuffer_ptr imageBuffer_;
-
-    std::unordered_map<std::shared_ptr<EPD_Component>, ComponentRange> componentToRange_ = {};
+    using EPD_Page::componentList_;
+    using EPD_Page::epd_driver_;
+    using EPD_Page::imageBuffer_;
+    using EPD_Page::componentToRange_;
 
 public:
-    Signal_coordinate signal_Clicked_;
-    sigc::signal<void, TimerMode> signal_clickedTimerMode_;
+    using EPD_Page::signal_Clicked_;
 
+    sigc::signal<void, TimerMode> signal_clickedTimerMode_;
     Result<void> setPageNum(uint8_t pageNum);
 
 private:
