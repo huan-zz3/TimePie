@@ -507,6 +507,39 @@ target_link_libraries(${TimerDashboard_target} PRIVATE
     4gdtu
     eventpp
 )
+# Create a TimerCategoryGrid_example executable
+set(TimerCategoryGrid_example_name TimerCategoryGrid)
+set(TimerCategoryGrid_target ${TimerCategoryGrid_example_name}_${PROJECT_NAME})
+set(TimerCategoryGrid_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${TimerCategoryGrid_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/page
+#     SRC_LIST1
+# )
+aux_source_directory(
+    ${CMAKE_SOURCE_DIR}/src/gui/components
+    SRC_LIST2
+)
+add_executable(${TimerCategoryGrid_target}
+    ${TimerCategoryGrid_SRC_LIST}
+    # ${SRC_LIST1}
+    ${SRC_LIST2}
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/epd_pages.cpp
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/TimerCategoryGrid.cpp
+    ${CMAKE_SOURCE_DIR}/src/interaction/screentouch/keyepd.cpp
+    ${CMAKE_SOURCE_DIR}/src/bgservice/servicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/eventbus/eventinstance.cpp
+)
+target_include_directories(${TimerCategoryGrid_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+)
+target_link_libraries(${TimerCategoryGrid_target} PRIVATE
+    epdcpp
+    sigc++
+    pthread
+    libtimer
+    4gdtu
+    eventpp
+)
 
 # Create a dtutime_example executable
 set(dtutime_example_name dtutime)
