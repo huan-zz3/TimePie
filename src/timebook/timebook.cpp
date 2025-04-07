@@ -130,8 +130,84 @@ Result<std::string> TimeBook::addTimeItem(int _category, std::string _date, std:
 /* sync with cloud */
 Result<void> TimeBook::submitTimeItem(std::string _itemid)
 {
+    // 从数据库中获取所有synced值为0的数据
+    std::string query = "SELECT * FROM timeitem WHERE synced = 0;";
+    auto result = idatabase_->executeQuery(query);
+    if (!result.isSuccess())
+    {
+        return Result<void>::Error("Failed to get unsynced time items");
+    }
+
+    // 遍历未同步的数据
+    for (const auto &row : result.successvalue())
+    {
+        json jsonData;
+        jsonData["id"] = row.at("itemid");
+        jsonData["category"] = std::stoi(row.at("category"));
+        jsonData["date"] = row.at("date");
+        jsonData["start"] = row.at("starttime");
+        jsonData["end"] = row.at("endtime");
+        jsonData["duration"] = std::stoi(row.at("duration"));
+        jsonData["metrics"] = json::array(); // 初始化为空数组
+        jsonData["metrics"].push_back({{"metric", 0}, {"value", 0}}); // 添加示例metric
+        // 其他字段可以根据需要添加
+
+        std::string _sendata = std::string(METHOD_POST) + "||" + std::string(URL_SAVERECORD) + "||" + token_ + "||" + jsonData.dump();
+        std::cout << "SubmitData: " << _sendata << std::endl;
+
+        // 通过dtu提交数据
+        auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, 5000);
+        if (!_rt.isSuccess())
+        {
+            std::cout << _rt.errormsg() << std::endl;
+            return Result<void>::Error("Failed to submit time item");
+        }
+        std::cout << "submitTimeItem: " <<_rt.successvalue() << std::endl;
+
+        // 更新数据库中已提交的数据的synced值为1
+        std::map<std::string, std::string> data = {
+            {"synced", "1"},
+        };
+        auto updateResult = idatabase_->Update("timeitem", data, "itemid = " + row.at("itemid"));
+        if (!updateResult.isSuccess())
+        {
+            return Result<void>::Error("Failed to update synced status");
+        }
+    }
+
+    return Result<void>::Success();
 }
+
 /* return local data */
 Result<std::map<std::string, timebookitem>> TimeBook::getTimeItems()
 {
+    std::string query = "SELECT * FROM timeitem;";
+    auto result = idatabase_->executeQuery(query);
+    if (!result.isSuccess())
+    {
+        return Result<std::map<std::string, timebookitem>>::Error("Failed to get time items");
+    }
+
+    std::map<std::string, timebookitem> timeItems;
+    for (const auto &row : result.successvalue())
+    {
+        timebookitem item;
+        item.synced = (row.at("synced") == "1");
+        item.category = std::stoi(row.at("category"));
+        item.date = row.at("date");
+        item.starttime = row.at("starttime");
+        item.endtime = row.at("endtime");
+        item.duration = std::stoi(row.at("duration"));
+
+        timeItems[item.id] = item;
+    }
+
+    for (const auto &pair : timeItems)
+    {
+        std::cout << "Synced: " << pair.second.synced << std::endl;
+        std::cout << "Item category: " << pair.second.category << "||" << "Item date: " << pair.second.date << "||" << "Item starttime: " << pair.second.starttime << "||" << "Item endtime: " << pair.second.endtime << "||" << "Item duration: " << pair.second.duration << std::endl;
+        std::cout << "-----------------------------" << std::endl;
+    }
+
+    return Result<std::map<std::string, timebookitem>>::Success(timeItems);
 }

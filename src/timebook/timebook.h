@@ -22,6 +22,8 @@ struct Metric
 
 struct timebookitem
 {
+    bool synced = false;
+
     std::string id = "";
     int category;
     std::string date;
