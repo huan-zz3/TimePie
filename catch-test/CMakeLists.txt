@@ -5,13 +5,13 @@ add_definitions(-DCATCHDEBUG_MODE)
 
 # Add a test-case for dtuart
 set(main tests-main.cpp)
-set(SRC_LIST
-    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
-)
+# set(SRC_LIST
+    # ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+# )
 add_executable(uart-tests
     ${main}
-    ${SRC_LIST}
-    uart-tests.cpp
+    # ${SRC_LIST}
+    # uart-tests.cpp
 )
 target_include_directories(uart-tests PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
@@ -31,27 +31,24 @@ add_test(NAME uart-tests
 
 # Add a test-case for timebook
 set(main tests-main.cpp)
-set(SRC_LIST
-    ${CMAKE_SOURCE_DIR}/src/timebook.cpp
-    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
-    ${CMAKE_SOURCE_DIR}/src/sqlite3db.cpp
-)
+aux_source_directory(${CMAKE_SOURCE_DIR}/src/timebook SRC_LIST)
 add_executable(timebook-tests
     ${main}
     ${SRC_LIST}
-    timebook-tests.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/timebook-tests.cpp
+    ${CMAKE_SOURCE_DIR}/src/timebook/timebook.cpp
 )
 target_include_directories(timebook-tests PRIVATE 
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/interface
+    ${CMAKE_SOURCE_DIR}/src
 )
 target_link_libraries(timebook-tests
     # EPDriver
     # lg
     sigc++
     libtimer
-    sqlite
+    sqlite3cpp
     serialib
+    4gdtu
 )
 add_test(NAME timebook-tests
         COMMAND timebook-tests
@@ -64,14 +61,14 @@ add_test(NAME timebook-tests
 
 # Add a test-case for dtutime
 set(main tests-main.cpp)
-set(SRC_LIST
-    ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
-    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
-)
+# set(SRC_LIST
+#     ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
+#     ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+# )
 add_executable(dtutime-tests
     ${main}
-    ${SRC_LIST}
-    dtutime-tests.cpp
+    # ${SRC_LIST}
+    # dtutime-tests.cpp
 )
 target_include_directories(dtutime-tests PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
@@ -91,14 +88,14 @@ add_test(NAME dtutime-tests
 
 # Add a test-case for sqlite
 set(main tests-main.cpp)
-set(SRC_LIST
-    ${CMAKE_SOURCE_DIR}/src/sqlite3db.cpp
-    # ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
-)
+# set(SRC_LIST
+#     ${CMAKE_SOURCE_DIR}/src/sqlite3db.cpp
+#     # ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+# )
 add_executable(sqlite-tests
     ${main}
-    ${SRC_LIST}
-    sqlite-tests.cpp
+    # ${SRC_LIST}
+    # sqlite-tests.cpp
 )
 target_include_directories(sqlite-tests PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
