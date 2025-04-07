@@ -27,7 +27,7 @@ int main()
 
     // 初始化DTUTIME模块，并传入服务层
     auto dtutime = std::make_shared<DTUTime>(dtu); // 其构造函数开启了一个5秒间隔定时器用以刷新时间
-    std::this_thread::sleep_for(std::chrono::seconds(8)); // wait for dtu fully freshing updateNowTime
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // wait for dtu fully freshing updateNowTime
 
     // 初始化服务层，并传入DTUTIME模块
     auto servicelayer = std::make_shared<ServiceLayer>(dtutime);

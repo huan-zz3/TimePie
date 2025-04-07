@@ -74,6 +74,10 @@ Result<void> TimerDashboard::initcomponents()
     countdown->setvisable(true);
     progressbar->setvisable(true);
 
+    epd_driver_->epdriver_Init(InitMode::Full);
+    epd_driver_->epdriver_Clear(ClearMode::White);
+    epd_driver_->epdriver_Sleep();
+
     return Result<void>::Success();
 }
 Result<void> TimerDashboard::startPageUpdate()
