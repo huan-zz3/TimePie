@@ -43,8 +43,8 @@ target_include_directories(${epd_target} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
 )
 target_link_libraries(${epd_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
 )
@@ -60,8 +60,8 @@ target_include_directories(${result_target} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
 )
 target_link_libraries(${result_target} PRIVATE
-    # lg
-    # EPDriver
+    
+    # epdcpp
     sigc++
     # pthread
 )
@@ -77,8 +77,8 @@ target_include_directories(${keysysfsdetect_target} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
 )
 target_link_libraries(${keysysfsdetect_target} PRIVATE
-    # lg
-    # EPDriver
+    
+    # epdcpp
     # sigc++
     # pthread
 )
@@ -108,15 +108,15 @@ set(draw1_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw1_target}.cpp)
 add_executable(${draw1_target}
     ${draw1_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw1_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw1_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -140,8 +140,8 @@ target_include_directories(${serialib_target} PRIVATE
     # ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${serialib_target} PRIVATE
-    # lg
-    # EPDriver
+    
+    # epdcpp
     # sigc++
     # pthread
     # libtimer
@@ -167,8 +167,8 @@ target_include_directories(${json_target} PRIVATE
     # ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${json_target} PRIVATE
-    # lg
-    # EPDriver
+    
+    # epdcpp
     # sigc++
     # pthread
     # libtimer
@@ -186,15 +186,15 @@ set(draw_plrc_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_plrc_target}.cpp)
 add_executable(${draw_plrc_target}
     ${draw_plrc_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_plrc_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_plrc_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -211,15 +211,15 @@ set(draw_charstrnum_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_charstrnum_targe
 add_executable(${draw_charstrnum_target}
     ${draw_charstrnum_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_charstrnum_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_charstrnum_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -236,15 +236,15 @@ set(draw_timedate_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_timedate_target}.c
 add_executable(${draw_timedate_target}
     ${draw_timedate_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_timedate_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_timedate_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -261,15 +261,15 @@ set(draw_bmpvarymode_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_bmpvarymode_tar
 add_executable(${draw_bmpvarymode_target}
     ${draw_bmpvarymode_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_bmpvarymode_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_bmpvarymode_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -286,15 +286,15 @@ set(draw_partcleanshow_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_partcleanshow
 add_executable(${draw_partcleanshow_target}
     ${draw_partcleanshow_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_partcleanshow_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_partcleanshow_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -311,15 +311,15 @@ set(draw_gesture_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_gesture_target}.cpp
 add_executable(${draw_gesture_target}
     ${draw_gesture_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_gesture_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_gesture_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -336,18 +336,18 @@ set(EPD_touch_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${EPD_touch_target}.cpp)
 add_executable(${EPD_touch_target}
     ${EPD_touch_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${EPD_touch_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${EPD_touch_target} PRIVATE
-    lg
-    EPDriver
-    sigc++
+    epdcpp
+    # sigc++
     pthread
     libtimer
+    macro
 )
 
 # Create a draw_multidirectionalbmp_example executable
@@ -361,15 +361,15 @@ set(draw_multidirectionalbmp_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${draw_multidi
 add_executable(${draw_multidirectionalbmp_target}
     ${draw_multidirectionalbmp_SRC_LIST}
     # ${SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_multidirectionalbmp_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${draw_multidirectionalbmp_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -391,7 +391,7 @@ add_executable(${draw_pagecomp_target}
     ${draw_pagecomp_SRC_LIST}
     ${SRC_LIST1}
     ${SRC_LIST2}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
 )
 target_include_directories(${draw_pagecomp_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
@@ -400,8 +400,8 @@ target_include_directories(${draw_pagecomp_target} PRIVATE
     ${CMAKE_SOURCE_DIR}/component
 )
 target_link_libraries(${draw_pagecomp_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -419,8 +419,8 @@ target_include_directories(${stdthread_target} PRIVATE
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${stdthread_target} PRIVATE
-    # lg
-    # EPDriver
+    
+    # epdcpp
     # sigc++
     # pthread
     # libtimer
@@ -431,16 +431,16 @@ set(keyepd_target ${keyepd_example_name}_${PROJECT_NAME})
 set(keyepd_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${keyepd_target}.cpp)
 add_executable(${keyepd_target}
     ${keyepd_SRC_LIST}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
-    ${CMAKE_SOURCE_DIR}/src/keyepd.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/keyepd.cpp
 )
 target_include_directories(${keyepd_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${keyepd_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     # pthread
     # libtimer
@@ -454,27 +454,22 @@ set(TimerModeSelection_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${TimerModeSelection
 #     SRC_LIST1
 # )
 aux_source_directory(
-    ${CMAKE_SOURCE_DIR}/component
+    ${CMAKE_SOURCE_DIR}/src/gui/components
     SRC_LIST2
 )
 add_executable(${TimerModeSelection_target}
     ${TimerModeSelection_SRC_LIST}
     # ${SRC_LIST1}
     ${SRC_LIST2}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
-    ${CMAKE_SOURCE_DIR}/page/epd_pages.cpp
-    ${CMAKE_SOURCE_DIR}/page/TimerMode_Selection.cpp
-    ${CMAKE_SOURCE_DIR}/src/keyepd.cpp
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/epd_pages.cpp
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/TimerMode_Selection.cpp
+    ${CMAKE_SOURCE_DIR}/src/interaction/screentouch/keyepd.cpp
 )
 target_include_directories(${TimerModeSelection_target} PRIVATE 
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/interface
-    ${CMAKE_SOURCE_DIR}/page
-    ${CMAKE_SOURCE_DIR}/component
+    ${CMAKE_SOURCE_DIR}/src
 )
 target_link_libraries(${TimerModeSelection_target} PRIVATE
-    lg
-    EPDriver
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -483,36 +478,34 @@ target_link_libraries(${TimerModeSelection_target} PRIVATE
 set(TimerDashboard_example_name TimerDashboard)
 set(TimerDashboard_target ${TimerDashboard_example_name}_${PROJECT_NAME})
 set(TimerDashboard_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${TimerDashboard_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/page
+#     SRC_LIST1
+# )
 aux_source_directory(
-    ${CMAKE_SOURCE_DIR}/page
-    SRC_LIST1
-)
-aux_source_directory(
-    ${CMAKE_SOURCE_DIR}/component
+    ${CMAKE_SOURCE_DIR}/src/gui/components
     SRC_LIST2
 )
 add_executable(${TimerDashboard_target}
     ${TimerDashboard_SRC_LIST}
-    ${SRC_LIST1}
+    # ${SRC_LIST1}
     ${SRC_LIST2}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
-    ${CMAKE_SOURCE_DIR}/src/servicelayer.cpp
-    ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
-    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/epd_pages.cpp
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/TimerDashboard.cpp
+    ${CMAKE_SOURCE_DIR}/src/interaction/screentouch/keyepd.cpp
+    ${CMAKE_SOURCE_DIR}/src/bgservice/servicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/eventbus/eventinstance.cpp
 )
 target_include_directories(${TimerDashboard_target} PRIVATE 
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/interface
-    ${CMAKE_SOURCE_DIR}/page
-    ${CMAKE_SOURCE_DIR}/component
+    ${CMAKE_SOURCE_DIR}/src
 )
 target_link_libraries(${TimerDashboard_target} PRIVATE
-    lg
-    EPDriver
+    epdcpp
     sigc++
     pthread
     libtimer
-    serialib
+    4gdtu
+    eventpp
 )
 
 # Create a dtutime_example executable
@@ -531,10 +524,10 @@ add_executable(${dtutime_target}
     ${dtutime_SRC_LIST}
     # ${SRC_LIST1}
     # ${SRC_LIST2}
-    ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
     # ${CMAKE_SOURCE_DIR}/src/servicelayer.cpp
-    ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
-    ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
+    # ${CMAKE_SOURCE_DIR}/src/dtutime.cpp
+    # ${CMAKE_SOURCE_DIR}/src/ML307R-DL.cpp
 )
 target_include_directories(${dtutime_target} PRIVATE 
     ${CMAKE_SOURCE_DIR}/include
@@ -543,8 +536,8 @@ target_include_directories(${dtutime_target} PRIVATE
     # ${CMAKE_SOURCE_DIR}/component
 )
 target_link_libraries(${dtutime_target} PRIVATE
-    lg
-    EPDriver
+    
+    epdcpp
     sigc++
     pthread
     libtimer
@@ -608,5 +601,25 @@ target_include_directories(${eventppapply_target} PRIVATE
     # ${CMAKE_SOURCE_DIR}/interface
 )
 target_link_libraries(${eventppapply_target} PRIVATE
+    eventpp
+)
+# Create a eventbus_example executable
+set(eventbus_example_name eventbus)
+set(eventbus_target ${eventbus_example_name}_${PROJECT_NAME})
+set(eventbus_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${eventbus_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${eventbus_target}
+    ${eventbus_SRC_LIST}
+    # ${SRC_LIST}
+    # ${CMAKE_SOURCE_DIR}/src/devicelayer.cpp
+)
+target_include_directories(${eventbus_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${eventbus_target} PRIVATE
     eventpp
 )
