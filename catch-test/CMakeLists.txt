@@ -112,3 +112,26 @@ target_link_libraries(sqlite-tests
 add_test(NAME sqlite-tests
         COMMAND sqlite-tests
 )
+
+# Add a test-case for servicelayer
+set(main tests-main.cpp)
+add_executable(servicelayer-tests
+    ${main}
+    servicelayer-tests.cpp
+    ${CMAKE_SOURCE_DIR}/src/bgservice/servicelayer.cpp
+    ${CMAKE_SOURCE_DIR}/src/eventbus/eventinstance.cpp
+)
+target_include_directories(servicelayer-tests PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(servicelayer-tests
+    sigc++
+    4gdtu
+    libtimer
+    macro
+    eventpp
+)
+add_test(NAME servicelayer-tests
+        COMMAND servicelayer-tests
+)
