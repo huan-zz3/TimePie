@@ -1,7 +1,6 @@
 #ifndef KEYSYSFS_H
 #define KEYSYSFS_H
 
-#include "iphysicalkey.h"
 #include "predefine.h"
 
 #include <functional>
@@ -12,22 +11,22 @@ using Callback = std::function<void(const std::string &)>;
 
 class GpioButtonMonitor;
 
-class KeySysfs : public IPhysicalKey{
+class KeySysfs {
 public:
     KeySysfs();
-    void slot_nextKey(void) override;
-    void slot_prevKey(void) override;
-    void slot_longPressNextKey(void) override;
-    void slot_longPressPrevKey(void) override;
+    void slot_nextKey(void);
+    void slot_prevKey(void);
+    void slot_longPressNextKey(void);
+    void slot_longPressPrevKey(void);
 
 private:
     std::unique_ptr<GpioButtonMonitor> nextkey_, prevkey_;
     Callback nextshortrigger(const std::string& msg), nextlongtrigger(const std::string& msg);
 
-    using IPhysicalKey::nextkeysignal_;
-    using IPhysicalKey::prevkeysignal_;
-    using IPhysicalKey::longpressnextkeysignal_;
-    using IPhysicalKey::longpressprevkeysignal_;
+    Signal_void nextkeysignal_;
+    Signal_void prevkeysignal_;
+    Signal_void longpressnextkeysignal_;
+    Signal_void longpressprevkeysignal_;
 };
 
 #include <iostream>

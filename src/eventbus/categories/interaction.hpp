@@ -2,9 +2,9 @@
 #include <string>
 
 struct TouchInputEvent {
-    int posX;
-    int posY;
-    TouchInputEvent(int x, int y) : posX(x), posY(y) {}
+    uint16_t posX;
+    uint16_t posY;
+    TouchInputEvent(uint16_t x, uint16_t y) : posX(x), posY(y) {}
 };
 
 enum class PhysicalKeyState {
