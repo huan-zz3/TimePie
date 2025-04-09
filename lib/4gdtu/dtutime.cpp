@@ -38,7 +38,7 @@ void DTUTime::updateNowTime()
 
     // 由于_time已经是纯时间字符串，不需要再查找引号位置
     std::string timeStr = _time;
-    std::cout << "timeStr: " << timeStr << std::endl;
+    // std::cout << "timeStr: " << timeStr << std::endl;
 
     // 解析日期和时间
     size_t spacePos = timeStr.find(' ');

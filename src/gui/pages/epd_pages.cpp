@@ -165,7 +165,7 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
                 {
                     // 此时component为被点击的组件
                     Debug("EPD_Page::slot_Clicked_ Emit\n");
-                    printComponentRange(ranges);
+                    // printComponentRange(ranges);
                     component->signal_clicked_.emit(); // 触发点击信号
                     return;
                 }

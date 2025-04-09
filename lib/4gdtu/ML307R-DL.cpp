@@ -75,7 +75,7 @@ Result<void> ML307R::dtuIsOnline()
     Result<std::string> result = dtuSendandRec("AT+CEREG?", 1000);
     if (result.isSuccess())
     {
-        std::cout << "DTU查询驻网指令发送成功" << std::endl;
+        // std::cout << "DTU查询驻网指令发送成功" << std::endl;
         // std::this_thread::sleep_for(std::chrono::seconds(2));
         // auto _rt = dtuATRecvExtract(result.successvalue());  // 无需提取，直接判断
         if (result.successvalue().find("1") != std::string::npos || result.successvalue().find("5") != std::string::npos)
@@ -96,7 +96,7 @@ Result<std::string> ML307R::dtuTIME(void)
     Result<std::string> result = dtuSendandRec("AT+TIME", 1000);
     if (result.isSuccess())
     {
-        std::cout << "查询DTU设备网路时间指令发送成功" << std::endl;
+        // std::cout << "查询DTU设备网路时间指令发送成功" << std::endl;
         auto _rt = dtuATRecvExtract(result.successvalue());
         if (_rt.isSuccess())
         {
@@ -150,7 +150,7 @@ Result<std::string> ML307R::dtuSendandRec(std::string _data, unsigned int _timeo
             return Result<std::string>::Error("MaxNbBytes reached");
         case 0:
             std::cout << "buffer: " << buffer << std::endl;
-            std::cout << "Timeout while reading" << std::endl;
+            // std::cout << "Timeout while reading" << std::endl;
 
             return Result<std::string>::Success(std::string(buffer));
             break;
@@ -201,20 +201,20 @@ Result<std::string> ML307R::dtuATRecvExtract(const std::string input)
 }
 Result<std::string> ML307R::dtuJSONCommunication(std::string _data, unsigned int _timeout)
 {
-    auto result = dtuSendandRec(_data, _timeout);
-    if (!result.isSuccess())
+    auto _rt = dtuSendandRec(_data, _timeout);
+    if (!_rt.isSuccess())
     {
-        std::cout<< result.errormsg() << std::endl;
-        return Result<std::string>::Error("Failed to send data: " + result.errormsg());
+        std::cout<< _rt.errormsg() << std::endl;
+        return Result<std::string>::Error("Failed to send data: " + _rt.errormsg());
     }
-    auto _rt = result.successvalue();
-    size_t start_pos = _rt.find('{');
-    size_t end_pos = _rt.find_last_of('}');
+    auto _backmsg = _rt.successvalue();     // dtu收到的返回json字符串信息
+    size_t start_pos = _backmsg.find('{');
+    size_t end_pos = _backmsg.find_last_of('}');
     if (start_pos == std::string::npos || end_pos == std::string::npos)
     {
         return Result<std::string>::Error("No {} data found");
     }
-    return Result<std::string>::Success(_rt.substr(start_pos, end_pos - start_pos + 1));
+    return Result<std::string>::Success(_backmsg.substr(start_pos, end_pos - start_pos + 1));
 }
 Result<void> ML307R::dtuRecvClear(void)
 {

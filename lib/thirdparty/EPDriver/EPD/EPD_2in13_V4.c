@@ -85,7 +85,7 @@ parameter:
 ******************************************************************************/
 void EPD_2in13_V4_ReadBusy(void)
 {
-    Debug("e-Paper busy\r\n");
+    // Debug("e-Paper busy\r\n");
 	while(1)
 	{	 //=1 BUSY
 		if(DEV_Digital_Read(EPD_BUSY_PIN)==0) 
@@ -93,7 +93,7 @@ void EPD_2in13_V4_ReadBusy(void)
 		DEV_Delay_ms(10);
 	}
 	DEV_Delay_ms(10);
-    Debug("e-Paper busy release\r\n");
+    // Debug("e-Paper busy release\r\n");
 }
 
 /******************************************************************************
@@ -181,7 +181,7 @@ void EPD_2in13_V4_Init(UBYTE Mode)
 	{
 		Debug("Reset...1\r\n");
 		EPD_2in13_V4_Reset();
-		Debug("Reset...2\r\n");
+		// Debug("Reset...2\r\n");
 		EPD_2in13_V4_ReadBusy(); 		
 		EPD_2in13_V4_SendCommand(0x12);  //SWRESET
 		EPD_2in13_V4_ReadBusy();   
