@@ -1,5 +1,8 @@
 #include "servicelayer.h"
 
+static std::shared_ptr<DTUTime> globed_dutime_ptr = nullptr;
+static std::shared_ptr<ServiceLayer> globed_servicelayer_ptr = nullptr;
+
 ServiceLayer::ServiceLayer(std::shared_ptr<DTUTime> _dutime_ptr)
     : dutime_ptr(_dutime_ptr)
 {
@@ -28,18 +31,22 @@ Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _totalminutes, uint32
     {
         globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(
             [_totalminutes, _intervalseconds]()
-            { 
-                // globed_servicelayer_ptr->on_tomatotimer_updated.emit(); 
+            {
+                // globed_servicelayer_ptr->on_tomatotimer_updated.emit();
                 static uint32_t count = 0;
                 count++;
                 auto remainsec = count * _intervalseconds >= _totalminutes * 60 ? 0 : _totalminutes * 60 - count * _intervalseconds;
-                if (remainsec == 0){
+                if (remainsec == 0)
+                {
                     // std::cout << "Tomato Finish" << std::endl;
                     GetEventBus()->post(TomatoFinish());
-                }else{
-                    GetEventBus()->post(TomatoNums(count, _totalminutes*60, remainsec));
                 }
-            }, _intervalseconds);
+                else
+                {
+                    GetEventBus()->post(TomatoNums(count, _totalminutes * 60, remainsec));
+                }
+            },
+            _intervalseconds);
         globed_servicelayer_ptr->tomatotimer_ptr->start();
     }
     catch (std::exception &e)
@@ -70,5 +77,26 @@ Result<std::string> ServiceLayer::nowTimestr()
         return Result<std::string>::Error("dutime is null");
 
     auto rt = globed_dutime_ptr->getNowTime().successvalue();
-    return Result<std::string>::Success(std::to_string(rt.hour) + ":" + std::to_string(rt.minute));
+
+    // 使用 std::setw 和 std::setfill 来确保小时和分钟始终是两位数
+    std::ostringstream oss;
+    oss << std::setw(2) << std::setfill('0') << rt.hour << ":"
+        << std::setw(2) << std::setfill('0') << rt.minute;
+
+    return Result<std::string>::Success(oss.str());
+}
+Result<std::string> ServiceLayer::nowDatestr()
+{
+    if (globed_dutime_ptr == nullptr)
+        return Result<std::string>::Error("dutime is null");
+
+    auto rt = globed_dutime_ptr->getNowTime().successvalue();
+
+    // 使用 std::setw 和 std::setfill 来确保月份和日期始终是两位数
+    std::ostringstream oss;
+    oss << rt.year << "-"
+        << std::setw(2) << std::setfill('0') << rt.month << "-"
+        << std::setw(2) << std::setfill('0') << rt.day;
+
+    return Result<std::string>::Success(oss.str());
 }

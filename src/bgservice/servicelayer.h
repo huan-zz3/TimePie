@@ -9,6 +9,7 @@
 #include "dtutime.h"
 #include <iostream>
 #include <memory>
+#include <iomanip>
 
 
 class ServiceLayer : public std::enable_shared_from_this<ServiceLayer>
@@ -25,6 +26,7 @@ public:
     static Result<void> epdserStartInternetTime();
     static Result<void> epdserStopInternetTime();
     static Result<std::string> nowTimestr();
+    static Result<std::string> nowDatestr();
 
 public:
     
@@ -34,8 +36,5 @@ private:
     std::unique_ptr<Timer> tomatotimer_ptr;
     std::shared_ptr<DTUTime> dutime_ptr;
 };
-
-static std::shared_ptr<DTUTime> globed_dutime_ptr = nullptr;
-static std::shared_ptr<ServiceLayer> globed_servicelayer_ptr = nullptr;
 
 #endif
