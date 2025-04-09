@@ -62,7 +62,7 @@ Result<void> Button::draw()
     // 更新组件范围range
     range_.push_back({{startcordinate_}, {_rupointer}, {_llpointer}, {_endpoint}});
 
-    printComponentRange(range_);
+    // printComponentRange(range_);
     // 将组件范围range同步至父页面
     auto convertpointer = std::static_pointer_cast<EPD_Component>(shared_from_this());
     if (convertpointer == nullptr)
