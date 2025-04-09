@@ -2,7 +2,8 @@ set(DIRECTORIES
     eventbus
     gui/components
     gui/pages
-    interaction
+    interaction/physicalkey
+    interaction/screentouch
     macro
     timebook
     bgservice
@@ -20,7 +21,6 @@ add_executable(TimePie
 
 target_include_directories(TimePie PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}
-    # ${PROJECT_SOURCE_DIR}/page
 )
 
 target_link_libraries(TimePie PRIVATE
