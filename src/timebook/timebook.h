@@ -55,7 +55,7 @@ public:
     Result<void> setIDatabase(std::shared_ptr<Sqlite3Database>);
     Result<void> timebookLogin();
     /* handle in local*/
-    Result<std::string> addTimeItem(int _category, std::string _date, std::string _start, std::string _end, int duration);
+    Result<std::string> addTimeItem(int _category, std::string _date, std::string _start, std::string _end, uint32_t duration);
     /* sync with cloud */
     Result<void> submitTimeItem(std::string _itemid);
     /* return local data */

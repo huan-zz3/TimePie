@@ -88,7 +88,7 @@ Result<void> TimeBook::timebookLogin()
     }
 }
 /* handle in local*/
-Result<std::string> TimeBook::addTimeItem(int _category, std::string _date, std::string _start, std::string _end, int duration)
+Result<std::string> TimeBook::addTimeItem(int _category, std::string _date, std::string _start, std::string _end, uint32_t duration)
 {
     // 创建一个新的 timebookitem 实例
     timebookitem newItem;
@@ -123,9 +123,8 @@ Result<std::string> TimeBook::addTimeItem(int _category, std::string _date, std:
         return Result<std::string>::Error("Failed to get itemid");
     }
 
-    return Result<std::string>::Success(getItemidResult.successvalue().at(0).at("last_insert_rowid()"));    // 未能测试是否正确放回itemid
+    return Result<std::string>::Success(getItemidResult.successvalue().at(0).at("last_insert_rowid()")); // 未能测试是否正确放回itemid
 }
-
 
 /* sync with cloud */
 Result<void> TimeBook::submitTimeItem(std::string _itemid)
@@ -148,7 +147,7 @@ Result<void> TimeBook::submitTimeItem(std::string _itemid)
         jsonData["start"] = row.at("starttime");
         jsonData["end"] = row.at("endtime");
         jsonData["duration"] = std::stoi(row.at("duration"));
-        jsonData["metrics"] = json::array(); // 初始化为空数组
+        jsonData["metrics"] = json::array();                          // 初始化为空数组
         jsonData["metrics"].push_back({{"metric", 0}, {"value", 0}}); // 添加示例metric
         // 其他字段可以根据需要添加
 
@@ -162,7 +161,31 @@ Result<void> TimeBook::submitTimeItem(std::string _itemid)
             std::cout << _rt.errormsg() << std::endl;
             return Result<void>::Error("Failed to submit time item");
         }
-        std::cout << "submitTimeItem: " <<_rt.successvalue() << std::endl;
+        std::cout << "submitTimeItem: " << _rt.successvalue() << std::endl;
+
+        // 判断提交是否成功
+        std::string successValue = _rt.successvalue();
+        try
+        {
+            auto parsedJson = json::parse(successValue);
+
+            // 检查 "code" 字段的值
+            if (parsedJson.contains("code") && parsedJson["code"] == 0)
+            {
+                std::cout << "submitTimeItem: Success - " << parsedJson.dump(4) << std::endl;
+                // 此处不返回，继续以下数据库同步操作
+            }
+            else
+            {
+                std::cout << "submitTimeItem: Failed - " << parsedJson.dump(4) << std::endl;
+                return Result<void>::Error("Failed to submit time item due to non-zero code");
+            }
+        }
+        catch (json::parse_error &e)
+        {
+            std::cerr << "JSON parse error: " << e.what() << std::endl;
+            return Result<void>::Error("JSON parse error");
+        }
 
         // 更新数据库中已提交的数据的synced值为1
         std::map<std::string, std::string> data = {
