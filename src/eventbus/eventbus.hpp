@@ -24,6 +24,11 @@ public:
         queue.process();
     }
 
+    void processwait() {
+        queue.wait();
+        queue.process();
+    }
+
 private:
     using KeyType = std::type_index;
     using DataType = std::shared_ptr<void>;
