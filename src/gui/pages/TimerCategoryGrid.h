@@ -8,18 +8,18 @@
 
 enum class TimerCategory
 {
-    Study,
-    Read,
-    Transport,
-    Relax,
-    Social,
-    DailyAffair,
-    HaveFun,
-    Sport,
-    SelfEnhance,
-    Sleep,
-    News,
-    Sundry
+    Study = 3,
+    Read = 11,
+    Transport = 12,
+    Relax = 2,
+    Social = 6,
+    DailyAffair = 13,
+    HaveFun = 14,
+    Sport = 4,
+    SelfEnhance = 15,
+    Sleep = 16,
+    News = 17,
+    Sundry = 18
 };
 constexpr std::array<TimerCategory, 12> AllTimerCategory = {
     TimerCategory::Study,
@@ -35,6 +35,7 @@ constexpr std::array<TimerCategory, 12> AllTimerCategory = {
     TimerCategory::News,
     TimerCategory::Sundry
 };
+typedef sigc::slot<void, TimerCategory> Slot_TimerCategory;
 
 class TimerCategoryGrid : public EPD_Page
 {

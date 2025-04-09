@@ -64,10 +64,10 @@ Result<void> TimerDashboard::initcomponents()
     progressbar->setendcordinate({230, 120});
     progressbar->setProgress(0);
 
-    // countdown->signal_clicked_.connect([this]()
-    //                                    {
-    //     std::cout << "TimerDashboard::countdown clicked" << std::endl;
-    //     signal_finished_.emit(); });
+    countdown->signal_clicked_.connect([this]()
+                                       {
+        std::cout << "TimerDashboard::countdown clicked" << std::endl;
+        signal_Tomatofinished_.emit(); });
 
     // 配置组件都显示
     nowtime->setvisable(true);

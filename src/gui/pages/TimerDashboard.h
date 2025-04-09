@@ -29,7 +29,7 @@ private:
 
 public:
     using EPD_Page::signal_Clicked_;
-    // Signal_void signal_finished_;
+    Signal_void signal_Tomatofinished_;
 
 private:
     Result<void> initcomponents();
@@ -38,6 +38,9 @@ private:
     std::shared_ptr<Text> nowtime;
     std::shared_ptr<Button> countdown;
     std::shared_ptr<ProgressBar> progressbar;
+
+    // std::string starttime;
+    // std::string stoptime;
 };
 
 #endif // TIMERDASHBOARD_H
