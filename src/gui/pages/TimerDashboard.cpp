@@ -22,6 +22,8 @@ Result<void> TimerDashboard::draw()
         auto component = *it;
         if (!component)
             continue; // 确保组件指针有效
+        if (!component->getvisable().successvalue())
+            continue; // 确保组件可见
 
         auto rt = component->draw(); // 无需传入页面buffer，组件会自动获取
         if (!rt.isSuccess())
@@ -41,6 +43,13 @@ Result<void> TimerDashboard::show()
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
 }
+Result<void> TimerDashboard::showclear()
+{
+    epd_driver_->epdriver_Init(InitMode::Full);
+    epd_driver_->epdriver_Clear(ClearMode::White);
+    epd_driver_->epdriver_Sleep();
+    return Result<void>::Success();
+}
 Result<void> TimerDashboard::initcomponents()
 {
     nowtime = std::make_shared<Text>(epd_driver_);
@@ -55,7 +64,7 @@ Result<void> TimerDashboard::initcomponents()
     nowtime->setstartcordinate({10, 10});
     nowtime->set_font(Font12);
 
-    countdown->set_text("000");
+    countdown->set_text("0:00");
     countdown->set_border(1, 10);
     countdown->setstartcordinate({80, 40});
     countdown->set_font(Font24);
@@ -73,10 +82,6 @@ Result<void> TimerDashboard::initcomponents()
     nowtime->setvisable(true);
     countdown->setvisable(true);
     progressbar->setvisable(true);
-
-    epd_driver_->epdriver_Init(InitMode::Full);
-    epd_driver_->epdriver_Clear(ClearMode::White);
-    epd_driver_->epdriver_Sleep();
 
     return Result<void>::Success();
 }

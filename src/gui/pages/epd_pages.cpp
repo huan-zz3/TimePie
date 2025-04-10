@@ -83,6 +83,7 @@ Result<void> EPD_Page::addcomponent(std::shared_ptr<EPD_Component> component)
 
     // 设置组件的父页面为当前页面
     component->setparentpage(shared_from_this());
+    component->setvisable(true);
 
     return Result<void>::Success();
 }
@@ -91,7 +92,13 @@ Result<void> EPD_Page::removecomponent(std::shared_ptr<EPD_Component> component)
 {
     // 删除列表中存储的组件元素
     componentList_.remove(component);
+    component->setvisable(false);
 
+    return Result<void>::Success();
+}
+Result<void> EPD_Page::setcomponentvisable(std::shared_ptr<EPD_Component> component, bool visable)
+{
+    componentVisable_[component] = visable;
     return Result<void>::Success();
 }
 
@@ -147,11 +154,13 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
     Debug("touch point: (x: %d, y: %d)\n", point.x, point.y);
 
     // 按z序降序遍历组件，从z较大的开始(end指向末尾的下一个位置，无法解引用；begin指向第一个元素)
-    for (auto it = componentList_.end()--; it != --componentList_.begin(); --it)
+    for (size_t i = componentList_.size(); i-- > 0; ) 
     {
-        auto component = *it;
+        auto component = componentList_[i];
         if (!component)
             continue; // 确保组件指针有效
+        if (!component->getvisable().successvalue())
+            continue; // 确保组件可见
 
         // 获取组件的判定范围
         auto rangeIt = componentToRange_.find(component);

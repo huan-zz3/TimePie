@@ -113,6 +113,7 @@ public:
     // 其他辅助函数
     size_t size() const { return components.size(); }
     bool empty() const { return components.empty(); }
+    const std::shared_ptr<EPD_Component>& operator[](int index) const { return components[index]; }
     // 提供迭代器接口
     using Iterator = typename std::vector<std::shared_ptr<EPD_Component>>::iterator;
     using ConstIterator = typename std::vector<std::shared_ptr<EPD_Component>>::const_iterator;
@@ -140,6 +141,7 @@ public:
     Result<void> loadbmp(std::string _picpath);
     Result<void> addcomponent(std::shared_ptr<EPD_Component> component);
     Result<void> removecomponent(std::shared_ptr<EPD_Component> component);
+    Result<void> setcomponentvisable(std::shared_ptr<EPD_Component> component, bool visable);
 
     Result<ImageBuffer_ptr> getimagebuffer();
 
@@ -151,6 +153,7 @@ protected:
     std::shared_ptr<DeviceLayer> epd_driver_;
     ImageBuffer_ptr imageBuffer_;
 
+    std::unordered_map<std::shared_ptr<EPD_Component>, bool> componentVisable_ = {};
     std::unordered_map<std::shared_ptr<EPD_Component>, ComponentRange> componentToRange_ = {};
 
 public:

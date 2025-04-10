@@ -15,6 +15,7 @@ public:
 
     Result<void> draw() override;
     Result<void> show() override;
+    Result<void> showclear();
 
     Result<void> startPageUpdate();
     Result<void> stopPageUpdate();

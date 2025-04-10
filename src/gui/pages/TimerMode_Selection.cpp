@@ -22,6 +22,8 @@ Result<void> TimerMode_Selection::draw()
         auto component = *it;
         if (!component)
             continue; // 确保组件指针有效
+        if (!component->getvisable().successvalue())
+            continue; // 确保组件可见
 
         auto rt = component->draw(); // 无需传入页面buffer，组件会自动获取
         if (!rt.isSuccess())
