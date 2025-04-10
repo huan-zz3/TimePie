@@ -28,11 +28,13 @@ Result<void> EPD_Component::setvisable(bool _visable)
 
     if (_visable)
     {
-        parentpage_->addcomponent(tishpointer);
+        // parentpage_->addcomponent(tishpointer);
+        parentpage_->setcomponentvisable(tishpointer, true);
     }
     else
     {
-        parentpage_->removecomponent(tishpointer);
+        // parentpage_->removecomponent(tishpointer);
+        parentpage_->setcomponentvisable(tishpointer, false);
     }
     visible_ = _visable;
 
