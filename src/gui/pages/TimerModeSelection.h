@@ -1,5 +1,5 @@
-#ifndef TIMERMODE_SELECTION_H
-#define TIMERMODE_SELECTION_H
+#ifndef TIMERMODESELECTION_H
+#define TIMERMODESELECTION_H
 
 #include "epd_pages.h"
 
@@ -35,10 +35,10 @@ constexpr std::array<TimerMode, 11> AllTimerModes = {
     TimerMode::CountUP};
 typedef sigc::slot<void, TimerMode> Slot_TimerMode;
 
-class TimerMode_Selection : public EPD_Page {
+class TimerModeSelection : public EPD_Page {
 public:
-    explicit TimerMode_Selection(std::shared_ptr<DeviceLayer> epdDriver);
-    ~TimerMode_Selection();
+    explicit TimerModeSelection(std::shared_ptr<DeviceLayer> epdDriver);
+    ~TimerModeSelection();
 
     Result<void> draw() override;
     Result<void> show() override;
@@ -63,4 +63,4 @@ private:
     std::shared_ptr<Button> button_next, button_back;
 };
 
-#endif // TIMERMODE_SELECTION_H
+#endif // TIMERMODESELECTION_H

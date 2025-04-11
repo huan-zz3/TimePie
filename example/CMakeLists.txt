@@ -462,7 +462,7 @@ add_executable(${TimerModeSelection_target}
     # ${SRC_LIST1}
     ${SRC_LIST2}
     ${CMAKE_SOURCE_DIR}/src/gui/pages/epd_pages.cpp
-    ${CMAKE_SOURCE_DIR}/src/gui/pages/TimerMode_Selection.cpp
+    ${CMAKE_SOURCE_DIR}/src/gui/pages/TimerModeSelection.cpp
     ${CMAKE_SOURCE_DIR}/src/interaction/screentouch/keyepd.cpp
 )
 target_include_directories(${TimerModeSelection_target} PRIVATE 

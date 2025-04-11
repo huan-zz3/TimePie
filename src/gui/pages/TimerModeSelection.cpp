@@ -1,15 +1,15 @@
-#include "TimerMode_Selection.h"
-TimerMode_Selection::TimerMode_Selection(std::shared_ptr<DeviceLayer> _epdd) :
+#include "TimerModeSelection.h"
+TimerModeSelection::TimerModeSelection(std::shared_ptr<DeviceLayer> _epdd) :
     EPD_Page(_epdd) {
 }
-TimerMode_Selection::~TimerMode_Selection() {
+TimerModeSelection::~TimerModeSelection() {
     for (const auto &mode : AllTimerModes) {
         buttonMap[mode].reset();
     }
     button_next.reset();
     button_back.reset();
 }
-Result<void> TimerMode_Selection::draw() {
+Result<void> TimerModeSelection::draw() {
     // 清白buffer
     epd_driver_->epdriver_imgClear(imageBuffer_, ImageColor::White);
     // 从z较小的开始
@@ -22,19 +22,19 @@ Result<void> TimerMode_Selection::draw() {
 
         auto rt = component->draw(); // 无需传入页面buffer，组件会自动获取
         if (!rt.isSuccess()) {
-            return Result<void>::Error("TimerMode_Selection::draw() component->draw() failed");
+            return Result<void>::Error("TimerModeSelection::draw() component->draw() failed");
         }
     }
     return Result<void>::Success();
 }
-Result<void> TimerMode_Selection::show() {
+Result<void> TimerModeSelection::show() {
     epd_driver_->epdriver_Init(InitMode::Full);
     epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Normal);
     epd_driver_->epdriver_Delay(500);
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
 }
-Result<void> TimerMode_Selection::initcomponents() {
+Result<void> TimerModeSelection::initcomponents() {
     for (const auto &mode : AllTimerModes) {
         buttonMap[mode] = std::make_shared<Button>(epd_driver_);
         addcomponent(buttonMap[mode]);
@@ -84,7 +84,7 @@ Result<void> TimerMode_Selection::initcomponents() {
 
     return Result<void>::Success();
 }
-Result<void> TimerMode_Selection::setPageNum(uint8_t pageNum) {
+Result<void> TimerModeSelection::setPageNum(uint8_t pageNum) {
     // 如果是第一次绘制，则进行组件初始化
     if (firstcompinit) {
         initcomponents();
@@ -124,7 +124,7 @@ Result<void> TimerMode_Selection::setPageNum(uint8_t pageNum) {
         button_back->setvisable(true);
         break;
     default:
-        return Result<void>::Error("TimerMode_Selection::setPageNum() pageNum error");
+        return Result<void>::Error("TimerModeSelection::setPageNum() pageNum error");
     }
     return Result<void>::Success();
 }

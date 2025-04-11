@@ -1,5 +1,5 @@
 #include <devicelayer.h>
-#include "gui/pages/TimerMode_Selection.h"
+#include "gui/pages/TimerModeSelection.h"
 #include "interaction/screentouch/keyepd.h"
 
 int main()
@@ -10,8 +10,8 @@ int main()
     deviceLayer->epdriver_Init(InitMode::Hardware);
 
     // 创建页面
-    auto timerMode_Selection = std::make_shared<TimerMode_Selection>(deviceLayer);
-    timerMode_Selection->signal_clickedTimerMode_.connect([](TimerMode tm)
+    auto timerModeSelection = std::make_shared<TimerModeSelection>(deviceLayer);
+    timerModeSelection->signal_clickedTimerMode_.connect([](TimerMode tm)
                                                           { 
         switch (tm) {
             case TimerMode::Five
@@ -40,14 +40,14 @@ int main()
 
     // 初始化触摸功能
     auto keyepd = std::make_shared<KeyEPD>(deviceLayer);
-    keyepd->signal_touch.connect(Slot_coordinate([timerMode_Selection](PointCoordinates pc)
-                                                 { timerMode_Selection->signal_Clicked_.emit(pc); }));
+    keyepd->signal_touch.connect(Slot_coordinate([timerModeSelection](PointCoordinates pc)
+                                                 { timerModeSelection->signal_Clicked_.emit(pc); }));
     keyepd->startTouchScan();
 
     // 页面调用绘制显示
-    timerMode_Selection->setPageNum(1);
-    timerMode_Selection->draw();
-    timerMode_Selection->show();
+    timerModeSelection->setPageNum(1);
+    timerModeSelection->draw();
+    timerModeSelection->show();
 
     // 等待60秒，给予用户触摸使用的时间，然后停止触摸扫描
     std::this_thread::sleep_for(std::chrono::seconds(60));

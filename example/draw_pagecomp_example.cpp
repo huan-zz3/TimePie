@@ -3,7 +3,7 @@
 #include "epd_pages.h"
 
 #include "devicelayer.h"
-#include "TimerMode_Selection.h"
+#include "TimerModeSelection.h"
 #include "button.h"
 #include "text.h"
 #include "progressbar.h"
@@ -15,7 +15,7 @@ int main()
     // 初始化设备层
     deviceLayer->epdriver_Init(InitMode::Hardware);
 
-    auto timerMode_Selection = std::make_shared<TimerMode_Selection>(deviceLayer);
+    auto timerModeSelection = std::make_shared<TimerModeSelection>(deviceLayer);
 
     auto button1 = std::make_shared<Button>(deviceLayer);
     auto text1 = std::make_shared<Text>(deviceLayer);
@@ -31,11 +31,11 @@ int main()
     progressBar1->setendcordinate({240, 120});
     progressBar1->setProgress(0);
 
-    timerMode_Selection->addcomponent(text1);
-    timerMode_Selection->addcomponent(button1);
-    timerMode_Selection->addcomponent(progressBar1);
-    timerMode_Selection->draw();
-    timerMode_Selection->show();
+    timerModeSelection->addcomponent(text1);
+    timerModeSelection->addcomponent(button1);
+    timerModeSelection->addcomponent(progressBar1);
+    timerModeSelection->draw();
+    timerModeSelection->show();
 
     for (uint8_t i = 0; i <= 100; i += 1)
     {
