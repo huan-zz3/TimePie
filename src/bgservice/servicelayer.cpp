@@ -41,6 +41,24 @@ Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _totalminutes, uint32
     }
     return Result<void>::Success();
 }
+Result<void> ServiceLayer::epdserStartCountUPTimer(uint32_t _intervalseconds) {
+    try {
+        globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(
+            [_intervalseconds]() {
+                static uint32_t count = 0;
+                count++;
+                // auto remainsec = count * _intervalseconds >= _totalminutes * 60 ? 0 : _totalminutes * 60 - count * _intervalseconds;
+                auto passsec = count * _intervalseconds;
+
+                GetEventBus()->post(CountUPNums(count, passsec));
+            },
+            _intervalseconds);
+        globed_servicelayer_ptr->tomatotimer_ptr->start();
+    } catch (std::exception &e) {
+        return Result<void>::Error(e.what());
+    }
+    return Result<void>::Success();
+}
 Result<void> ServiceLayer::epdserStopTomatoTimer() {
     globed_servicelayer_ptr->tomatotimer_ptr->stop();
     globed_servicelayer_ptr->tomatotimer_ptr.reset();

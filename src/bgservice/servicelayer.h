@@ -11,9 +11,7 @@
 #include <memory>
 #include <iomanip>
 
-
-class ServiceLayer : public std::enable_shared_from_this<ServiceLayer>
-{
+class ServiceLayer : public std::enable_shared_from_this<ServiceLayer> {
 public:
     ServiceLayer(std::shared_ptr<DTUTime>);
     ~ServiceLayer();
@@ -21,6 +19,7 @@ public:
     Result<void> epdserExit();
 
     static Result<void> epdserStartTomatoTimer(uint32_t _totalminutes, uint32_t _intervalseconds);
+    static Result<void> epdserStartCountUPTimer(uint32_t _intervalseconds);
     static Result<void> epdserStopTomatoTimer();
 
     static Result<void> epdserStartInternetTime();
@@ -29,8 +28,6 @@ public:
     static Result<std::string> nowDatestr();
 
 public:
-    
-
 private:
     std::unique_ptr<Timer> tomatotimer_ptr;
     std::shared_ptr<DTUTime> dutime_ptr;

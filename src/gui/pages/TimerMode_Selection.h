@@ -8,8 +8,7 @@
 #include <vector>
 #include <map>
 
-enum class TimerMode
-{
+enum class TimerMode {
     Five = 5,
     Ten = 10,
     Fifteen = 15,
@@ -19,9 +18,10 @@ enum class TimerMode
     FortyFive = 45,
     Sixty = 60,
     Ninety = 90,
-    OneEighty = 180
+    OneEighty = 180,
+    CountUP = 0
 };
-constexpr std::array<TimerMode, 10> AllTimerModes = {
+constexpr std::array<TimerMode, 11> AllTimerModes = {
     TimerMode::Five,
     TimerMode::Ten,
     TimerMode::Fifteen,
@@ -31,11 +31,11 @@ constexpr std::array<TimerMode, 10> AllTimerModes = {
     TimerMode::FortyFive,
     TimerMode::Sixty,
     TimerMode::Ninety,
-    TimerMode::OneEighty};
+    TimerMode::OneEighty,
+    TimerMode::CountUP};
 typedef sigc::slot<void, TimerMode> Slot_TimerMode;
 
-class TimerMode_Selection : public EPD_Page
-{
+class TimerMode_Selection : public EPD_Page {
 public:
     explicit TimerMode_Selection(std::shared_ptr<DeviceLayer> epdDriver);
     ~TimerMode_Selection();

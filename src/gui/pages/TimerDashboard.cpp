@@ -1,24 +1,20 @@
 #include "TimerDashboard.h"
-TimerDashboard::TimerDashboard(std::shared_ptr<DeviceLayer> _epdd)
-    : EPD_Page(std::move(_epdd))
-{
+TimerDashboard::TimerDashboard(std::shared_ptr<DeviceLayer> _epdd) :
+    EPD_Page(std::move(_epdd)) {
     // signal_finished_.connect([this]()
     //                          { stopPageUpdate(); });
 }
-TimerDashboard::~TimerDashboard()
-{
+TimerDashboard::~TimerDashboard() {
     nowtime.reset();
     countdown.reset();
     progressbar.reset();
 }
-Result<void> TimerDashboard::draw()
-{
+Result<void> TimerDashboard::draw() {
     std::cout << "TimerDashboard::draw()" << std::endl;
     // 清白buffer
     epd_driver_->epdriver_imgClear(imageBuffer_, ImageColor::White);
     // 从z较小的开始
-    for (auto it = componentList_.begin(); it != componentList_.end(); ++it)
-    {
+    for (auto it = componentList_.begin(); it != componentList_.end(); ++it) {
         auto component = *it;
         if (!component)
             continue; // 确保组件指针有效
@@ -26,15 +22,13 @@ Result<void> TimerDashboard::draw()
             continue; // 确保组件可见
 
         auto rt = component->draw(); // 无需传入页面buffer，组件会自动获取
-        if (!rt.isSuccess())
-        {
+        if (!rt.isSuccess()) {
             return Result<void>::Error("TimerMode_Selection::draw() component->draw() failed");
         }
     }
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::show()
-{
+Result<void> TimerDashboard::show() {
     epd_driver_->epdriver_Init(InitMode::Part);
     epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
     epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
@@ -43,15 +37,13 @@ Result<void> TimerDashboard::show()
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::showclear()
-{
+Result<void> TimerDashboard::showclear() {
     epd_driver_->epdriver_Init(InitMode::Full);
     epd_driver_->epdriver_Clear(ClearMode::White);
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::initcomponents()
-{
+Result<void> TimerDashboard::initcomponents() {
     nowtime = std::make_shared<Text>(epd_driver_);
     countdown = std::make_shared<Button>(epd_driver_);
     progressbar = std::make_shared<ProgressBar>(epd_driver_);
@@ -73,8 +65,7 @@ Result<void> TimerDashboard::initcomponents()
     progressbar->setendcordinate({230, 120});
     progressbar->setProgress(0);
 
-    countdown->signal_clicked_.connect([this]()
-                                       {
+    countdown->signal_clicked_.connect([this]() {
         std::cout << "TimerDashboard::countdown clicked" << std::endl;
         signal_Tomatofinished_.emit(); });
 
@@ -85,23 +76,19 @@ Result<void> TimerDashboard::initcomponents()
 
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::startPageUpdate()
-{
+Result<void> TimerDashboard::startPageUpdate() {
     // 如果是第一次绘制，则进行组件初始化
-    if (firstcompinit)
-    {
+    if (firstcompinit) {
         initcomponents();
         firstcompinit = false;
     }
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::stopPageUpdate()
-{
+Result<void> TimerDashboard::stopPageUpdate() {
     /* Nothing should do */
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::updatePage(uint32_t remainsec, uint32_t totalsec, const std::string &time)
-{
+Result<void> TimerDashboard::updatePage(uint32_t remainsec, uint32_t totalsec, const std::string &time) {
     std::cout << "remainsec: " << remainsec << " totalsec: " << totalsec << std::endl;
 
     uint32_t minutes = remainsec / 60;
@@ -118,9 +105,12 @@ Result<void> TimerDashboard::updatePage(uint32_t remainsec, uint32_t totalsec, c
 
     return Result<void>::Success();
 }
-Result<void> TimerDashboard::updatePage(uint32_t passedsec, const std::string &time)
-{
-    countdown->set_text(std::to_string(passedsec));
+Result<void> TimerDashboard::updatePage(uint32_t passedsec, const std::string &time) {
+    uint32_t minutes = passedsec / 60;
+    uint32_t seconds = passedsec % 60;
+    std::string countdownText = std::to_string(minutes) + ":" + std::to_string(seconds);
+
+    countdown->set_text(countdownText);
     nowtime->set_text(time);
     progressbar->setProgress(0);
 
