@@ -23,7 +23,7 @@ Result<void> TimerDashboard::draw() {
 
         auto rt = component->draw(); // 无需传入页面buffer，组件会自动获取
         if (!rt.isSuccess()) {
-            return Result<void>::Error("TimerMode_Selection::draw() component->draw() failed");
+            return Result<void>::Error("TimerDashboard::draw() component->draw() failed");
         }
     }
     return Result<void>::Success();
