@@ -32,7 +32,6 @@ public:
     
 
 private:
-    Signal_void on_tomatotimer_updated;
     std::unique_ptr<Timer> tomatotimer_ptr;
     std::shared_ptr<DTUTime> dutime_ptr;
 };
