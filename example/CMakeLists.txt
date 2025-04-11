@@ -656,3 +656,26 @@ target_include_directories(${eventbus_target} PRIVATE
 target_link_libraries(${eventbus_target} PRIVATE
     eventpp
 )
+
+# Create a ledsysfs_example executable
+set(ledsysfs_example_name ledsysfs)
+set(ledsysfs_target ${ledsysfs_example_name}_${PROJECT_NAME})
+set(ledsysfs_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${ledsysfs_target}.cpp)
+# aux_source_directory(
+#     ${CMAKE_SOURCE_DIR}/devicelayer.cpp
+#     SRC_LIST
+# )
+add_executable(${ledsysfs_target}
+    ${ledsysfs_SRC_LIST}
+    # ${SRC_LIST}
+    ${CMAKE_SOURCE_DIR}/src/interaction/loglight/ledinstance.cpp
+    ${CMAKE_SOURCE_DIR}/src/interaction/loglight/ledsysfs.cpp
+)
+target_include_directories(${ledsysfs_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+    # ${CMAKE_SOURCE_DIR}/interface
+)
+target_link_libraries(${ledsysfs_target} PRIVATE
+    # eventpp
+    macro
+)
