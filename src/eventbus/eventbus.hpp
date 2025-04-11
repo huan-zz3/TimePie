@@ -7,15 +7,15 @@
 class EventBus {
 public:
     template <typename EventType>
-    void registerListener(const std::function<void(const EventType&)>& handler) {
-        auto wrapper = [handler](const std::shared_ptr<void>& data) {
-            handler(*static_cast<const EventType*>(data.get()));
+    void registerListener(const std::function<void(const EventType &)> &handler) {
+        auto wrapper = [handler](const std::shared_ptr<void> &data) {
+            handler(*static_cast<const EventType *>(data.get()));
         };
         queue.appendListener(std::type_index(typeid(EventType)), wrapper);
     }
 
     template <typename EventType>
-    void post(const EventType& event) {
+    void post(const EventType &event) {
         queue.enqueue(std::type_index(typeid(EventType)),
                       std::make_shared<EventType>(event));
     }
@@ -29,9 +29,21 @@ public:
         queue.process();
     }
 
+    void processone() {
+        queue.processOne();
+    }
+
+    void clear() {
+        queue.clearEvents();
+    }
+
+    void wait() {
+        queue.wait();
+    }
+
 private:
     using KeyType = std::type_index;
     using DataType = std::shared_ptr<void>;
-    using QueueType = eventpp::EventQueue<KeyType, void(const DataType&)>;
+    using QueueType = eventpp::EventQueue<KeyType, void(const DataType &)>;
     QueueType queue;
 };
