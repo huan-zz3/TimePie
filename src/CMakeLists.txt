@@ -4,6 +4,7 @@ set(DIRECTORIES
     gui/pages
     interaction/physicalkey
     interaction/screentouch
+    interaction/loglight
     macro
     timebook
     bgservice
