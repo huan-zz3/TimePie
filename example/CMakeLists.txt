@@ -679,3 +679,17 @@ target_link_libraries(${ledsysfs_target} PRIVATE
     # eventpp
     macro
 )
+
+# Create a glog_example executable
+set(glog_example_name glog)
+set(glog_target ${glog_example_name}_${PROJECT_NAME})
+set(glog_SRC_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${glog_target}.cpp)
+add_executable(${glog_target}
+    ${glog_SRC_LIST}
+)
+target_include_directories(${glog_target} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+)
+target_link_libraries(${glog_target} PRIVATE
+    glog
+)

@@ -32,4 +32,5 @@ target_link_libraries(TimePie PRIVATE
     sqlite3cpp
     eventpp
     4gdtu
+    glog
 )
