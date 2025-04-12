@@ -65,25 +65,25 @@ Result<void> TimeBook::timebookLogin()
     try
     {
         std::string _sendata = std::string(METHOD_POST) + "||" + std::string(URL_LOGIN) + "||||" + _logindata.dump();
-        std::cout << "LoginData: " << _sendata << std::endl;
+        LOG(INFO) << "LoginData: " << _sendata << std::endl;
         auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, 5000);
         if (!_rt.isSuccess())
         {
-            std::cout << _rt.errormsg() << std::endl;
+            LOG(ERROR) << _rt.errormsg() << std::endl;
             return Result<void>::Error("Login err");
         }
         json jsonData = json::parse(_rt.successvalue());
         token_ = jsonData["data"]["token"];
         expire_timestamp_ = jsonData["data"]["expire_at"];
 
-        std::cout << "token_: " << token_ << std::endl;
-        std::cout << "expire_timestamp_: " << expire_timestamp_ << std::endl;
+        LOG(INFO) << "token_: " << token_ << std::endl;
+        LOG(INFO) << "expire_timestamp_: " << expire_timestamp_ << std::endl;
 
         return Result<void>::Success();
     }
     catch (const std::exception &e)
     {
-        std::cout << "JSON error: " << e.what() << std::endl;
+        LOG(ERROR) << "JSON error: " << e.what() << std::endl;
         return Result<void>::Error("Json err");
     }
 }
@@ -152,16 +152,16 @@ Result<void> TimeBook::submitTimeItem(std::string _itemid)
         // 其他字段可以根据需要添加
 
         std::string _sendata = std::string(METHOD_POST) + "||" + std::string(URL_SAVERECORD) + "||" + token_ + "||" + jsonData.dump();
-        std::cout << "SubmitData: " << _sendata << std::endl;
+        LOG(INFO) << "SubmitData: " << _sendata << std::endl;
 
         // 通过dtu提交数据
         auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, 5000);
         if (!_rt.isSuccess())
         {
-            std::cout << _rt.errormsg() << std::endl;
+            LOG(ERROR) << _rt.errormsg() << std::endl;
             return Result<void>::Error("Failed to submit time item");
         }
-        std::cout << "submitTimeItem: " << _rt.successvalue() << std::endl;
+        LOG(INFO) << "submitTimeItem: " << _rt.successvalue() << std::endl;
 
         // 判断提交是否成功
         std::string successValue = _rt.successvalue();
@@ -172,12 +172,12 @@ Result<void> TimeBook::submitTimeItem(std::string _itemid)
             // 检查 "code" 字段的值
             if (parsedJson.contains("code") && parsedJson["code"] == 0)
             {
-                std::cout << "submitTimeItem: Success - " << parsedJson.dump(4) << std::endl;
+                LOG(INFO) << "submitTimeItem: Success - " << parsedJson.dump(4) << std::endl;
                 // 此处不返回，继续以下数据库同步操作
             }
             else
             {
-                std::cout << "submitTimeItem: Failed - " << parsedJson.dump(4) << std::endl;
+                LOG(ERROR) << "submitTimeItem: Failed - " << parsedJson.dump(4) << std::endl;
                 return Result<void>::Error("Failed to submit time item due to non-zero code");
             }
         }
@@ -227,9 +227,9 @@ Result<std::map<std::string, timebookitem>> TimeBook::getTimeItems()
 
     for (const auto &pair : timeItems)
     {
-        std::cout << "Synced: " << pair.second.synced << std::endl;
-        std::cout << "Item category: " << pair.second.category << "||" << "Item date: " << pair.second.date << "||" << "Item starttime: " << pair.second.starttime << "||" << "Item endtime: " << pair.second.endtime << "||" << "Item duration: " << pair.second.duration << std::endl;
-        std::cout << "-----------------------------" << std::endl;
+        LOG(INFO) << "Synced: " << pair.second.synced << std::endl;
+        LOG(INFO) << "Item category: " << pair.second.category << "||" << "Item date: " << pair.second.date << "||" << "Item starttime: " << pair.second.starttime << "||" << "Item endtime: " << pair.second.endtime << "||" << "Item duration: " << pair.second.duration << std::endl;
+        LOG(INFO) << "-----------------------------" << std::endl;
     }
 
     return Result<std::map<std::string, timebookitem>>::Success(timeItems);

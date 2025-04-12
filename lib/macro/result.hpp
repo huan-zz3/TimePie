@@ -59,4 +59,6 @@ private:
 // Include the implementation of template functions
 #include "result.ipp"
 
+#include <glog/logging.h>
+
 #endif // RESULT_HPP

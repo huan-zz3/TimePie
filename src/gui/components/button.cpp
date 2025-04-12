@@ -24,7 +24,7 @@ Result<void> Button::draw()
         // 计算外框的终点坐标
         const auto _endpoint_x = startcordinate_.x + _rt1.successvalue().w + padding_ * static_cast<unsigned short>(2);
         const auto _endpoint_y = startcordinate_.y + _rt1.successvalue().h + padding_ * static_cast<unsigned short>(2);
-        // Debug("Button::draw::has_border_ _endpoint_x:%d _endpoint_y:%d \n", _endpoint_x, _endpoint_y);
+        // LOG(INFO)("Button::draw::has_border_ _endpoint_x:%d _endpoint_y:%d \n", _endpoint_x, _endpoint_y);
         _endpoint = PointCoordinates{static_cast<unsigned short>(_endpoint_x), static_cast<unsigned short>(_endpoint_y)};
 
         // 计算右上和左下点的坐标
@@ -75,7 +75,7 @@ Result<void> Button::draw()
 }
 // void Button::slot_Clicked_()
 // {
-//     Debug("Button::slot_Clicked_");
+//     LOG(INFO)("Button::slot_Clicked_");
 // }
 Result<void> Button::set_text(std::string text)
 {

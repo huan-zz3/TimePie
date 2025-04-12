@@ -52,7 +52,7 @@ Result<void> EPD_Component::delete_remove()
     return Result<void>::Success();
 }
 Result<void> EPD_Component::printrange(std::string descrstr){
-    std::cout << descrstr << std::endl;
+    LOG(INFO) << descrstr << std::endl;
     // printComponentRange(range_);
     return Result<void>::Success();
 }

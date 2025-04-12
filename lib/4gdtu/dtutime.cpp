@@ -10,7 +10,7 @@ DTUTime::DTUTime(std::shared_ptr<ML307R> _ml307r)
     }
     catch (std::exception &e)
     {
-        std::cout << "DTUTime::DTUTime() error: " << e.what() << std::endl;
+        LOG(ERROR) << "DTUTime::DTUTime() error: " << e.what() << std::endl;
         return;
     }
     return;
@@ -34,11 +34,11 @@ void DTUTime::updateNowTime()
         return;
     }
     auto _time = _result.successvalue();
-    // std::cout << "_time: " << _time << std::endl;
+    // LOG(INFO) << "_time: " << _time << std::endl;
 
     // 由于_time已经是纯时间字符串，不需要再查找引号位置
     std::string timeStr = _time;
-    // std::cout << "timeStr: " << timeStr << std::endl;
+    // LOG(INFO) << "timeStr: " << timeStr << std::endl;
 
     // 解析日期和时间
     size_t spacePos = timeStr.find(' ');
@@ -46,8 +46,8 @@ void DTUTime::updateNowTime()
     {
         std::string dateStr = timeStr.substr(0, spacePos);
         std::string timePart = timeStr.substr(spacePos + 1);
-        // std::cout << "dateStr: " << dateStr << std::endl;
-        // std::cout << "timePart: " << timePart << std::endl;
+        // LOG(INFO) << "dateStr: " << dateStr << std::endl;
+        // LOG(INFO) << "timePart: " << timePart << std::endl;
 
         // 解析日期
         size_t hyphen1 = dateStr.find('-');

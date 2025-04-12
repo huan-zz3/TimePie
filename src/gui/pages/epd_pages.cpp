@@ -15,7 +15,7 @@ EPD_Page::~EPD_Page()
     auto _rt = delete_remove();
     if (!_rt.isSuccess())
     {
-        Debug("EPD_Page::~EPD_Page delete_remove error:%s", _rt.errormsg());
+        LOG(ERROR) << "EPD_Page::~EPD_Page delete_remove error: " + _rt.errormsg() << std::endl;
     }
 }
 
@@ -145,13 +145,13 @@ bool isPointInPolygon(PointCoordinates point, const vector<PointCoordinates> &po
 // slot_Clicked_的实现
 void EPD_Page::slot_Clicked_(PointCoordinates point)
 {
-    Debug("EPD_Page::slot_Clicked_ Enter\n");
+    LOG(INFO) << "EPD_Page::slot_Clicked_ Enter" << std::endl;
 
     // 将触摸坐标转换为屏幕坐标（只适用屏幕旋转90°，但暂不完成不同旋转角度的适配）
     const auto _temp = point.y;
     point.y = point.x;
     point.x = 250 - _temp;
-    Debug("touch point: (x: %d, y: %d)\n", point.x, point.y);
+    LOG(INFO) << "touch point: (x: " + std::to_string(point.x) + ", y: " + std::to_string(point.y) +")" << std::endl;
 
     // 按z序降序遍历组件，从z较大的开始(end指向末尾的下一个位置，无法解引用；begin指向第一个元素)
     for (size_t i = componentList_.size(); i-- > 0; ) 
@@ -173,7 +173,7 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
                 if (isPointInPolygon(point, range))
                 {
                     // 此时component为被点击的组件
-                    Debug("EPD_Page::slot_Clicked_ Emit\n");
+                    LOG(INFO) << "EPD_Page::slot_Clicked_ Emit" << std::endl;
                     // printComponentRange(ranges);
                     component->signal_clicked_.emit(); // 触发点击信号
                     return;
@@ -185,7 +185,7 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
 // 打印单个 PointCoordinates
 void printPointCoordinates(const PointCoordinates &point)
 {
-    std::cout << "(" << point.x << ", " << point.y << ")";
+    LOG(INFO) << "(" << point.x << ", " << point.y << ")";
 }
 // 打印整个 ComponentRange
 void printComponentRange(const ComponentRange &range)
@@ -193,14 +193,14 @@ void printComponentRange(const ComponentRange &range)
     int pointgroupIndex = 1;
     for (const auto &component : range)
     {
-        std::cout << "Pointgroup #" << pointgroupIndex++ << ":\n";
+        LOG(INFO) << "Pointgroup #" << pointgroupIndex++ << ":\n";
 
         int pointIndex = 0;
         for (const auto &point : component)
         {
-            std::cout << "  Point #" << pointIndex++ << ": ";
+            LOG(INFO) << "  Point #" << pointIndex++ << ": ";
             printPointCoordinates(point);
-            std::cout << "\n";
+            LOG(INFO) << "\n";
         }
     }
 }

@@ -2,6 +2,8 @@
 #include <thread>
 #include <chrono>
 
+#include <glog/logging.h>
+
 #include "eventbus/eventinstance.hpp"
 #include "eventbus/categories/system.hpp"
 #include "eventbus/categories/gui.hpp"
@@ -18,7 +20,16 @@
 
 #include "systeminitializer.hpp"
 
-int main() {
+int main(int argc, char **argv) {
+    // 初始化glog日志
+    google::InitGoogleLogging(argv[0]);
+    // 标志位
+    FLAGS_alsologtostderr = 1;
+    FLAGS_colorlogtostderr = true; // 设置输出颜色
+    FLAGS_v = 3;                   // 设置自定义日志最大显示等级(超过该等级将不记录log)
+    FLAGS_log_dir = "./logs";
+    FLAGS_max_log_size = 100 * 1024; // 100MB
+
     // 初始化事件总线
     GetEventBus() = std::make_unique<EventBus>();
 
@@ -68,7 +79,7 @@ int main() {
 
     // 监听触摸事件
     GetEventBus()->registerListener<TouchInputEvent>([&currentpage, timerselection, timerdashboard, timercategorygrid](const TouchInputEvent &e) {
-        std::cout << "touch input event: " << e.posX << ", " << e.posY << std::endl;
+        LOG(INFO) << "touch input event: " << e.posX << ", " << e.posY << std::endl;
         switch (currentpage) //  根据页面顺序处理触摸事件
         {
         case Pageorder::TimerModeSelection:
@@ -81,7 +92,7 @@ int main() {
             timercategorygrid->signal_Clicked_.emit({e.posX, e.posY});
             break;
         default:
-            std::cout << "pageorder error" << std::endl;
+            LOG(ERROR) << "pageorder error" << std::endl;
             break;
         }
     });
@@ -89,7 +100,7 @@ int main() {
     GetEventBus()->registerListener<TomatoNums>([timerdashboard, &tomatodurate_min](const TomatoNums &e) {
         auto rt = ServiceLayer::nowTimestr(); //  获取当前时间字符串
         if (!rt.isSuccess()) {
-            std::cout << rt.errormsg() << std::endl;
+            LOG(ERROR) << rt.errormsg() << std::endl;
         }
         timerdashboard->updatePage(e.remainSeconds, e.totalSeconds, rt.successvalue());
         tomatodurate_min = static_cast<uint32_t>((e.totalSeconds - e.remainSeconds) / 60) + 1; //  计算已用时（分钟），并更新tomatodurate_min变量
@@ -98,14 +109,14 @@ int main() {
     GetEventBus()->registerListener<CountUPNums>([timerdashboard, &tomatodurate_min](const CountUPNums &e) {
         auto rt = ServiceLayer::nowTimestr(); //  获取当前时间字符串
         if (!rt.isSuccess()) {
-            std::cout << rt.errormsg() << std::endl;
+            LOG(ERROR) << rt.errormsg() << std::endl;
         }
         timerdashboard->updatePage(e.passSeconds, rt.successvalue());
         tomatodurate_min = static_cast<uint32_t>(e.passSeconds / 60) + 1; //  计算已用时（分钟），并更新tomatodurate_min变量
     });
     // 监听番茄完成事件
     GetEventBus()->registerListener<TomatoFinish>([timercategorygrid, timerdashboard, &currentpage, &tomatostoptime_str, &tomatostopdate_str](const TomatoFinish &e) {
-        std::cout << "TimerDashboard finished" << std::endl;
+        LOG(INFO) << "TimerDashboard finished" << std::endl;
 
         GetLedSysfs()->winkGreenLed();
         ServiceLayer::epdserStopTomatoTimer();                          //  停止番茄钟定时器
@@ -119,7 +130,7 @@ int main() {
     });
     // 监听定时器模式选择事件
     GetEventBus()->registerListener<TimerModeSelected>([timerdashboard, &currentpage, &tomatostartime_str](const TimerModeSelected &e) {
-        std::cout << "TimerSelection finished" << std::endl;
+        LOG(INFO) << "TimerSelection finished" << std::endl;
 
         GetLedSysfs()->winkGreenLed();
         tomatostartime_str = ServiceLayer::nowTimestr().successvalue(); //  获取当前时间字符串，并赋值给tomatostartime_str
@@ -138,9 +149,9 @@ int main() {
     });
     // 监听计时保存事件
     GetEventBus()->registerListener<TimerCategory>([timerselection, &sysinit, &currentpage, &tomatostartime_str, &tomatostoptime_str, &tomatostopdate_str, &tomatodurate_min](const TimerCategory &e) {
-        std::cout << "timer category: " << static_cast<int>(e) << std::endl;
+        LOG(INFO) << "timer category: " << static_cast<int>(e) << std::endl;
 
-        std::cout << "Adding time item with category: " << static_cast<int>(e)
+        LOG(INFO) << "Adding time item with category: " << static_cast<int>(e)
                   << ", date: " << tomatostopdate_str
                   << ", start time: " << tomatostartime_str
                   << ", stop time: " << tomatostoptime_str
@@ -148,8 +159,8 @@ int main() {
 
         GetLedSysfs()->winkGreenLed();
         sysinit.timebook->addTimeItem(static_cast<int>(e), tomatostopdate_str,
-                                       tomatostartime_str, tomatostoptime_str,
-                                       tomatodurate_min); //  将计时器信息添加到时间记录中
+                                      tomatostartime_str, tomatostoptime_str,
+                                      tomatodurate_min); //  将计时器信息添加到时间记录中
         sysinit.timebook->submitTimeItem("no use");      //  提交时间记录
         timerselection->setPageNum(1);
         timerselection->draw();

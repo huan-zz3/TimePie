@@ -62,7 +62,7 @@ int main() {
     // 读取按钮状态示例（GPIO18 输入模式）
     GpioController button(18, "in");
     int val = button.read();
-    std::cout << "GPIO18 value: " << val << std::endl;
+    LOG(INFO) << "GPIO18 value: " << val << std::endl;
 
     return 0;
 }

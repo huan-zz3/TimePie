@@ -10,7 +10,7 @@ TimerDashboard::~TimerDashboard() {
     progressbar.reset();
 }
 Result<void> TimerDashboard::draw() {
-    std::cout << "TimerDashboard::draw()" << std::endl;
+    LOG(INFO) << "TimerDashboard::draw()" << std::endl;
     // 清白buffer
     epd_driver_->epdriver_imgClear(imageBuffer_, ImageColor::White);
     // 从z较小的开始
@@ -66,7 +66,7 @@ Result<void> TimerDashboard::initcomponents() {
     progressbar->setProgress(0);
 
     countdown->signal_clicked_.connect([this]() {
-        std::cout << "TimerDashboard::countdown clicked" << std::endl;
+        LOG(INFO) << "TimerDashboard::countdown clicked" << std::endl;
         signal_Tomatofinished_.emit(); });
 
     // 配置组件都显示
@@ -89,7 +89,7 @@ Result<void> TimerDashboard::stopPageUpdate() {
     return Result<void>::Success();
 }
 Result<void> TimerDashboard::updatePage(uint32_t remainsec, uint32_t totalsec, const std::string &time) {
-    std::cout << "remainsec: " << remainsec << " totalsec: " << totalsec << std::endl;
+    LOG(INFO) << "remainsec: " << remainsec << " totalsec: " << totalsec << std::endl;
 
     uint32_t minutes = remainsec / 60;
     uint32_t seconds = remainsec % 60;
@@ -97,7 +97,7 @@ Result<void> TimerDashboard::updatePage(uint32_t remainsec, uint32_t totalsec, c
     countdown->set_text(countdownText);
     nowtime->set_text(time);
     uint8_t progress = static_cast<uint8_t>(100 - (remainsec * 100) / totalsec);
-    std::cout << "Progress: " << static_cast<int>(progress) << std::endl;
+    LOG(INFO) << "Progress: " << static_cast<int>(progress) << std::endl;
     progressbar->setProgress(progress);
 
     draw();

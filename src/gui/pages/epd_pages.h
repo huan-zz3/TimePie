@@ -66,7 +66,7 @@ public:
         {
             // 不抛出异常，找不到组件是正常逻辑
             // throw std::invalid_argument("Component not found in the list");
-            std::cout << "Component not found in the list: " << component.get() << std::endl;
+            LOG(WARNING) << "Component not found in the list: " << component.get() << std::endl;
             return;
         }
         components.erase(components.begin() + index);

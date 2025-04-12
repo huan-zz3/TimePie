@@ -49,9 +49,9 @@ class SystemInitializer {
                 while (!s.timebook->timebookLogin().isSuccess()) {
                     static uint32_t count = 1;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
-                    std::cout << "timebook login failed, retrying..." << count++ << std::endl;
+                    LOG(INFO) << "timebook login failed, retrying..." << count++ << std::endl;
                 }
-                std::cout << "timebook login success" << std::endl;
+                LOG(INFO) << "timebook login success" << std::endl;
             });
             thread_for_timebook.detach();
     

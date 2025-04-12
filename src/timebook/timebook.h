@@ -49,7 +49,7 @@ class TimeBook
 {
 public:
     TimeBook(std::string _username, std::string _password) : username_(_username), password_(_password) {};
-    ~TimeBook() { std::cout << "TimeBook instance is deleted now." << std::endl; };
+    ~TimeBook() { LOG(INFO) << "TimeBook instance is deleted now." << std::endl; };
 
     Result<void> setI4GDTU(std::shared_ptr<ML307R>);
     Result<void> setIDatabase(std::shared_ptr<Sqlite3Database>);

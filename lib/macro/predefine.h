@@ -33,5 +33,6 @@ SIGC_USING_STD(endl)
 SIGC_USING_STD(string)
 /* end of sigc++ */
 
+#include <glog/logging.h>
 
 #endif //PREDEFINE_H

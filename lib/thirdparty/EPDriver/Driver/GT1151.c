@@ -116,7 +116,7 @@ UBYTE GT_Scan(void)
 				if (Dev_Now.TouchCount > 5 || Dev_Now.TouchCount < 1)
 				{
 					GT_Write(0x814E, mask, 1);
-					Debug("TouchCount number is wrong \n");
+					// Debug("TouchCount number is wrong \n");
 					return 1;
 				}
 				GT_Read(0x814F, &buf[1], Dev_Now.TouchCount * 8); // 读取手势辅助信息
@@ -152,7 +152,7 @@ UBYTE GT_Scan_2(void)
 	if(DEV_Digital_Read(INT) == 0) { // 如果检测到触摸
 		Dev_Now.Touch = 1; // 标记为有触摸
 		static size_t i = 0;
-		Debug( "Touched: %d\n", i++);
+		// Debug( "Touched: %d\n", i++);
 	} else {
 		Dev_Now.Touch = 0; // 否则标记为无触摸
 	}
@@ -186,7 +186,7 @@ UBYTE GT_Scan_2(void)
 				if (Dev_Now.TouchCount > 5 || Dev_Now.TouchCount < 1)
 				{
 					GT_Write(0x814E, mask, 1);
-					Debug("TouchCount number is wrong \n");
+					// Debug("TouchCount number is wrong \n");
 					return 1;
 				}
 				GT_Read(0x814F, &buf[1], Dev_Now.TouchCount * 8); // 读取手势辅助信息

@@ -14,7 +14,7 @@ TimerCategoryGrid::~TimerCategoryGrid()
 }
 Result<void> TimerCategoryGrid::draw()
 {
-    std::cout << "TimerCategoryGrid::draw()" << std::endl;
+    LOG(INFO) << "TimerCategoryGrid::draw()" << std::endl;
     // 清白buffer
     epd_driver_->epdriver_imgClear(imageBuffer_, ImageColor::White);
     // 从z较小的开始

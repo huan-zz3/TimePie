@@ -101,7 +101,7 @@ Result<void> Sqlite3Database::executeNonQuery(const std::string &query)
     if (sqlite3_exec(db_, query.c_str(), 0, 0, &errMsg) != SQLITE_OK)
     {
         auto result = Result<void>::Error(errMsg);
-        // std::cout << errMsg << std::endl;
+        LOG(ERROR) << errMsg << std::endl;
         sqlite3_free(errMsg);
         return result;
     }

@@ -179,7 +179,7 @@ void EPD_2in13_V4_Init(UBYTE Mode)
 
 	if(Mode == EPD_2IN13_V4_FULL)
 	{
-		Debug("Reset...1\r\n");
+		// Debug("Reset...1\r\n");
 		EPD_2in13_V4_Reset();
 		// Debug("Reset...2\r\n");
 		EPD_2in13_V4_ReadBusy(); 		

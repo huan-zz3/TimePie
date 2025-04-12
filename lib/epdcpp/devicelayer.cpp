@@ -28,7 +28,7 @@ Result<void> DeviceLayer::epdriver_Init(InitMode _initMode)
         IIC_Address = 0x14;
         if (DEV_ModuleInit())
         {
-            Debug("DEV_ModuleInit Failed!\n");
+            LOG(ERROR) << "DEV_ModuleInit Failed!" << std::endl;
             return Result<void>::Error("DEV_ModuleInit Failed!");
         }
         break;
@@ -154,11 +154,11 @@ Result<void> DeviceLayer::epdriver_DrawRectangle(ImageBuffer_ptr _imagebuffer, P
 }
 Result<void> DeviceLayer::epdriver_DrawCircle(ImageBuffer_ptr _imagebuffer, PointCoordinates _pc, RaiusLength _radius, ImageColor _imagecolor, PointSize _pointsize, DrawFill _drawfill)
 {
-    // Debug("DeviceLayer::epdriver_DrawCircle - select\n");
+    // LOG(INFO)("DeviceLayer::epdriver_DrawCircle - select\n");
     Paint_SelectImage(_imagebuffer->imgbuff_ptr);
-    // Debug("DeviceLayer::epdriver_DrawCircle - select ok\n");
+    // LOG(INFO)("DeviceLayer::epdriver_DrawCircle - select ok\n");
     Paint_DrawCircle(_pc.x, _pc.y, _radius, static_cast<UWORD>(_imagecolor), static_cast<DOT_PIXEL>(_pointsize), static_cast<DRAW_FILL>(_drawfill));
-    // Debug("DeviceLayer::epdriver_DrawCircle - draw ok\n");
+    // LOG(INFO)("DeviceLayer::epdriver_DrawCircle - draw ok\n");
     return Result<void>::Success();
 }
 

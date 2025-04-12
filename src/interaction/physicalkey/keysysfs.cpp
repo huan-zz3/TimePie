@@ -33,10 +33,10 @@ void KeySysfs::slot_longPressPrevKey(void)
 Callback KeySysfs::nextshortrigger(const std::string &msg)
 {
     nextkeysignal_.emit();
-    std::cout << "[EVENT] " << msg << std::endl;
+    LOG(INFO) << "[EVENT] " << msg << std::endl;
 }
 Callback KeySysfs::nextlongtrigger(const std::string &msg)
 {
     nextkeysignal_.emit();
-    std::cout << "[EVENT] " << msg << std::endl;
+    LOG(INFO) << "[EVENT] " << msg << std::endl;
 }
