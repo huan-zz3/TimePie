@@ -18,7 +18,27 @@ Result<void> LedSysfs::offBlueLed() {
     blue_led_->write(1);
     return Result<void>::Success();
 }
-Result<void> LedSysfs::winkBlueLed() {
+Result<void> LedSysfs::onGreenLed() {
+    green_led_->write(0);
+    return Result<void>::Success();
+}
+Result<void> LedSysfs::offGreenLed() {
+    green_led_->write(1);
+    return Result<void>::Success();
+}
+Result<void> LedSysfs::winkBlueLedOnce(){
+    onBlueLed();
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    offBlueLed();
+    return Result<void>::Success();
+}
+Result<void> LedSysfs::winkGreenLedOnce(){
+    onGreenLed();
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    offGreenLed();
+    return Result<void>::Success();
+}
+Result<void> LedSysfs::winkBlueLed3sec() {
     auto thread = std::thread([this]() {
         for (int i = 0; i < 3; i++) {
             blue_led_->write(0);
@@ -30,17 +50,33 @@ Result<void> LedSysfs::winkBlueLed() {
     thread.detach();
     return Result<void>::Success();
 }
-Result<void> LedSysfs::onGreenLed() {
-    green_led_->write(0);
-    return Result<void>::Success();
-}
-Result<void> LedSysfs::offGreenLed() {
-    green_led_->write(1);
-    return Result<void>::Success();
-}
-Result<void> LedSysfs::winkGreenLed() {
+Result<void> LedSysfs::winkGreenLed3sec() {
     auto thread = std::thread([this]() {
         for (int i = 0; i < 3; i++) {
+            green_led_->write(0);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            green_led_->write(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    });
+    thread.detach();
+    return Result<void>::Success();
+}
+Result<void> LedSysfs::winkBlueLed5sec() {
+    auto thread = std::thread([this]() {
+        for (int i = 0; i < 5; i++) {
+            blue_led_->write(0);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            blue_led_->write(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    });
+    thread.detach();
+    return Result<void>::Success();
+}
+Result<void> LedSysfs::winkGreenLed5sec() {
+    auto thread = std::thread([this]() {
+        for (int i = 0; i < 5; i++) {
             green_led_->write(0);
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             green_led_->write(1);

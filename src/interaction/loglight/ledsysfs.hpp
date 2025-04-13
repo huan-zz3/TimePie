@@ -19,10 +19,15 @@ public:
 
     Result<void> onBlueLed();
     Result<void> offBlueLed();
-    Result<void> winkBlueLed();
     Result<void> onGreenLed();
     Result<void> offGreenLed();
-    Result<void> winkGreenLed();
+
+    Result<void> winkBlueLedOnce();
+    Result<void> winkGreenLedOnce();
+    Result<void> winkBlueLed3sec();
+    Result<void> winkGreenLed3sec();
+    Result<void> winkBlueLed5sec();
+    Result<void> winkGreenLed5sec();
 
 private:
     std::unique_ptr<GpioController> blue_led_;
