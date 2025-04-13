@@ -5,9 +5,9 @@
 
 int main() {
     GetLedSysfs()->ledinit();
-    GetLedSysfs()->winkGreenLed();
+    GetLedSysfs()->winkGreenLed3sec();
     std::this_thread::sleep_for(std::chrono::seconds(5));
-    GetLedSysfs()->winkBlueLed();
+    GetLedSysfs()->winkBlueLed3sec();
     std::this_thread::sleep_for(std::chrono::seconds(5));
     return 0;
 }

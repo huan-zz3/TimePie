@@ -22,19 +22,19 @@ Result<void> ServiceLayer::epdserExit() {
 }
 
 Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _totalminutes, uint32_t _intervalseconds) {
+    LOG(INFO) << "epdserStartTomatoTimer: " << _totalminutes << "---" << _intervalseconds << std::endl;
+    globed_servicelayer_ptr->count = 0;
+    auto lamdba = [_totalminutes, _intervalseconds]() {
+        globed_servicelayer_ptr->count++;
+        auto remainsec = globed_servicelayer_ptr->count * _intervalseconds >= _totalminutes * 60 ? 0 : _totalminutes * 60 - globed_servicelayer_ptr->count * _intervalseconds;
+        if (remainsec == 0) {
+            GetEventBus()->post(TomatoFinish());
+        } else {
+            GetEventBus()->post(TomatoNums(globed_servicelayer_ptr->count, _totalminutes * 60, remainsec));
+        }
+    };
     try {
-        globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(
-            [_totalminutes, _intervalseconds]() {
-                static uint32_t count = 0;
-                count++;
-                auto remainsec = count * _intervalseconds >= _totalminutes * 60 ? 0 : _totalminutes * 60 - count * _intervalseconds;
-                if (remainsec == 0) {
-                    GetEventBus()->post(TomatoFinish());
-                } else {
-                    GetEventBus()->post(TomatoNums(count, _totalminutes * 60, remainsec));
-                }
-            },
-            _intervalseconds);
+        globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(lamdba, _intervalseconds);
         globed_servicelayer_ptr->tomatotimer_ptr->start();
     } catch (std::exception &e) {
         return Result<void>::Error(e.what());
@@ -42,17 +42,15 @@ Result<void> ServiceLayer::epdserStartTomatoTimer(uint32_t _totalminutes, uint32
     return Result<void>::Success();
 }
 Result<void> ServiceLayer::epdserStartCountUPTimer(uint32_t _intervalseconds) {
+    LOG(INFO) << "epdserStartCountUPTimer: " << _intervalseconds << std::endl;
+    globed_servicelayer_ptr->count = 0;
+    auto lambda = [_intervalseconds]() {
+        globed_servicelayer_ptr->count++;
+        auto passsec = globed_servicelayer_ptr->count * _intervalseconds;
+        GetEventBus()->post(CountUPNums(globed_servicelayer_ptr->count, passsec));
+    };
     try {
-        globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(
-            [_intervalseconds]() {
-                static uint32_t count = 0;
-                count++;
-                // auto remainsec = count * _intervalseconds >= _totalminutes * 60 ? 0 : _totalminutes * 60 - count * _intervalseconds;
-                auto passsec = count * _intervalseconds;
-
-                GetEventBus()->post(CountUPNums(count, passsec));
-            },
-            _intervalseconds);
+        globed_servicelayer_ptr->tomatotimer_ptr = std::make_unique<Timer>(lambda, _intervalseconds);
         globed_servicelayer_ptr->tomatotimer_ptr->start();
     } catch (std::exception &e) {
         return Result<void>::Error(e.what());
@@ -84,7 +82,11 @@ Result<std::string> ServiceLayer::nowTimestr() {
     oss << std::setw(2) << std::setfill('0') << rt.hour << ":"
         << std::setw(2) << std::setfill('0') << rt.minute;
 
-    return Result<std::string>::Success(oss.str());
+    auto rtstr = oss.str();
+    if(rtstr == "00:00")
+        return Result<std::string>::Error("time is 00:00, no successfully update");
+
+    return Result<std::string>::Success(rtstr);
 }
 Result<std::string> ServiceLayer::nowDatestr() {
     if (globed_dutime_ptr == nullptr)
