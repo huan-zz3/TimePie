@@ -20,15 +20,17 @@
 
 #include "systeminitializer.hpp"
 
-int main(int argc, char **argv) {
-    // 初始化glog日志
-    google::InitGoogleLogging(argv[0]);
-    // 标志位
+void initGlog() {
+    google::InitGoogleLogging("TimePie");
     FLAGS_alsologtostderr = 1;
     FLAGS_colorlogtostderr = true; // 设置输出颜色
-    FLAGS_v = 3;                   // 设置自定义日志最大显示等级(超过该等级将不记录log)
+    FLAGS_v = 5;                   // 设置自定义日志最大显示等级(超过该等级将不记录log)
     FLAGS_log_dir = "./logs";
     FLAGS_max_log_size = 100 * 1024; // 100MB
+}
+
+int main(int argc, char **argv) {
+    initGlog();
 
     // 初始化事件总线
     GetEventBus() = std::make_unique<EventBus>();
@@ -118,7 +120,7 @@ int main(int argc, char **argv) {
     GetEventBus()->registerListener<TomatoFinish>([timercategorygrid, timerdashboard, &currentpage, &tomatostoptime_str, &tomatostopdate_str](const TomatoFinish &e) {
         LOG(INFO) << "TimerDashboard finished" << std::endl;
 
-        GetLedSysfs()->winkGreenLed();
+        GetLedSysfs()->winkGreenLed5sec();
         ServiceLayer::epdserStopTomatoTimer();                          //  停止番茄钟定时器
         tomatostoptime_str = ServiceLayer::nowTimestr().successvalue(); //  获取当前时间字符串并更新tomatostoptime_str变量
         tomatostopdate_str = ServiceLayer::nowDatestr().successvalue(); //  获取当前日期字符串并更新tomatostopdate_str变量
@@ -132,8 +134,14 @@ int main(int argc, char **argv) {
     GetEventBus()->registerListener<TimerModeSelected>([timerdashboard, &currentpage, &tomatostartime_str](const TimerModeSelected &e) {
         LOG(INFO) << "TimerSelection finished" << std::endl;
 
-        GetLedSysfs()->winkGreenLed();
-        tomatostartime_str = ServiceLayer::nowTimestr().successvalue(); //  获取当前时间字符串，并赋值给tomatostartime_str
+        GetLedSysfs()->winkGreenLed3sec();
+
+        auto rt = ServiceLayer::nowTimestr();
+        if(!rt.isSuccess()){
+            LOG(ERROR) << rt.errormsg() << std::endl;
+            return;
+        }
+        tomatostartime_str = rt.successvalue(); //  获取当前时间字符串，并赋值给tomatostartime_str
 
         if (e.countminute == 0) {
             ServiceLayer::epdserStartCountUPTimer(5);
@@ -157,11 +165,16 @@ int main(int argc, char **argv) {
                   << ", stop time: " << tomatostoptime_str
                   << ", duration: " << tomatodurate_min << " minutes" << std::endl;
 
-        GetLedSysfs()->winkGreenLed();
+        GetLedSysfs()->winkGreenLed3sec();
         sysinit.timebook->addTimeItem(static_cast<int>(e), tomatostopdate_str,
                                       tomatostartime_str, tomatostoptime_str,
-                                      tomatodurate_min); //  将计时器信息添加到时间记录中
-        sysinit.timebook->submitTimeItem("no use");      //  提交时间记录
+                                      tomatodurate_min);      //  将计时器信息添加到时间记录中
+        auto rt = sysinit.timebook->submitTimeItem("no use"); //  提交时间记录
+        if (rt.isSuccess()) {                                   //  提交时间记录
+            GetLedSysfs()->winkBlueLed5sec();
+        } else {
+            LOG(ERROR) << rt.errormsg() << std::endl;
+        }
         timerselection->setPageNum(1);
         timerselection->draw();
         timerselection->show();
@@ -173,15 +186,10 @@ int main(int argc, char **argv) {
 
     while (1) //  无限循环，处理事件总线中的事件
     {
-        // GetEventBus()->processwait();
         GetEventBus()->wait();
         GetEventBus()->processone();
 
-        GetLedSysfs()->onBlueLed();
-        // GetLedSysfs()->onGreenLed();
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        GetLedSysfs()->offBlueLed();
-        // GetLedSysfs()->offGreenLed();
+        GetLedSysfs()->winkBlueLedOnce();
     }
 
     return 0;
