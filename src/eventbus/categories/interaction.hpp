@@ -7,13 +7,17 @@ struct TouchInputEvent {
     TouchInputEvent(uint16_t x, uint16_t y) : posX(x), posY(y) {}
 };
 
+enum class KeySysfsID {
+    NEXT = 1,
+    PREV = 2
+};
 enum class PhysicalKeyState {
     LongPressed,
     Pressed,
     Released
 };
 struct PhysicalKey {
-    unsigned int keyid;
+    KeySysfsID keyid;
     PhysicalKeyState state;
-    PhysicalKey(unsigned int k, PhysicalKeyState s) : keyid(k), state(s) {}
+    PhysicalKey(KeySysfsID k, PhysicalKeyState s) : keyid(k), state(s) {}
 };

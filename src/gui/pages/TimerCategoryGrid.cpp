@@ -110,6 +110,10 @@ Result<void> TimerCategoryGrid::initcomponents()
         button_back->signal_clicked_.connect([this]()
                                              {setPageNum(1);draw();show(); });
     }
+    { // 设置前页后页信号连接
+        signal_clickeyNext_.connect([this]() { button_next->signal_clicked_.emit(); });
+        signal_clickeyPrev_.connect([this]() { button_back->signal_clicked_.emit(); });
+    }
 
     return Result<void>::Success();
 }

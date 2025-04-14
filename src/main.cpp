@@ -58,6 +58,8 @@ int main(int argc, char **argv) {
 
     // 初始化触摸功能
     auto keyepd = std::make_shared<KeyEPD>(sysinit.device);
+    // 初始化物理按键功能
+    auto keysysfs = std::make_shared<KeySysfs>();
 
     // 初始化LED提示灯功能
     GetLedSysfs()->ledinit();
@@ -65,6 +67,19 @@ int main(int argc, char **argv) {
     // 绑定发送触摸事件
     keyepd->signal_touch.connect(Slot_coordinate([](PointCoordinates pc) {
         GetEventBus()->post(TouchInputEvent{pc.x, pc.y});
+    }));
+    // 绑定发送物理按键事件
+    keysysfs->nextkeysignal_.connect(Slot_void([]() {
+        GetEventBus()->post(PhysicalKey{KeySysfsID::NEXT, PhysicalKeyState::Pressed});
+    }));
+    keysysfs->longpressnextkeysignal_.connect(Slot_void([]() {
+        GetEventBus()->post(PhysicalKey{KeySysfsID::NEXT, PhysicalKeyState::LongPressed});
+    }));
+    keysysfs->prevkeysignal_.connect(Slot_void([]() {
+        GetEventBus()->post(PhysicalKey{KeySysfsID::PREV, PhysicalKeyState::Pressed});
+    }));
+    keysysfs->longpressprevkeysignal_.connect(Slot_void([]() {
+        GetEventBus()->post(PhysicalKey{KeySysfsID::PREV, PhysicalKeyState::LongPressed});
     }));
     // 绑定定时器模式选择页面
     timerselection->signal_clickedTimerMode_.connect(Slot_TimerMode([](TimerMode tm) {
@@ -92,6 +107,29 @@ int main(int argc, char **argv) {
             break;
         case Pageorder::TimerCategoryGrid:
             timercategorygrid->signal_Clicked_.emit({e.posX, e.posY});
+            break;
+        default:
+            LOG(ERROR) << "pageorder error" << std::endl;
+            break;
+        }
+    });
+    // 监听物理按键事件
+    GetEventBus()->registerListener<PhysicalKey>([&currentpage, timerselection, timercategorygrid](const PhysicalKey &e) {
+        switch (currentpage) //  根据页面顺序处理触摸事件
+        {
+        case Pageorder::TimerModeSelection:
+            if (e.keyid == KeySysfsID::NEXT) {
+                timerselection->signal_clickeyNext_.emit();
+            } else if (e.keyid == KeySysfsID::PREV) {
+                timerselection->signal_clickeyPrev_.emit();
+            }
+            break;
+        case Pageorder::TimerCategoryGrid:
+            if (e.keyid == KeySysfsID::NEXT) {
+                timercategorygrid->signal_clickeyNext_.emit();
+            } else if (e.keyid == KeySysfsID::PREV) {
+                timercategorygrid->signal_clickeyPrev_.emit();
+            }
             break;
         default:
             LOG(ERROR) << "pageorder error" << std::endl;
@@ -137,7 +175,7 @@ int main(int argc, char **argv) {
         GetLedSysfs()->winkGreenLed3sec();
 
         auto rt = ServiceLayer::nowTimestr();
-        if(!rt.isSuccess()){
+        if (!rt.isSuccess()) {
             LOG(ERROR) << rt.errormsg() << std::endl;
             return;
         }
@@ -170,7 +208,7 @@ int main(int argc, char **argv) {
                                       tomatostartime_str, tomatostoptime_str,
                                       tomatodurate_min);      //  将计时器信息添加到时间记录中
         auto rt = sysinit.timebook->submitTimeItem("no use"); //  提交时间记录
-        if (rt.isSuccess()) {                                   //  提交时间记录
+        if (rt.isSuccess()) {                                 //  提交时间记录
             GetLedSysfs()->winkBlueLed5sec();
         } else {
             LOG(ERROR) << rt.errormsg() << std::endl;

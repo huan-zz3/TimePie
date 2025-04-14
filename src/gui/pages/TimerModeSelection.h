@@ -55,6 +55,9 @@ public:
     sigc::signal<void, TimerMode> signal_clickedTimerMode_;
     Result<void> setPageNum(uint8_t pageNum);
 
+    Signal_void signal_clickeyNext_;
+    Signal_void signal_clickeyPrev_;
+
 private:
     Result<void> initcomponents();
     bool firstcompinit = true;

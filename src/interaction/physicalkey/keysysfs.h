@@ -14,19 +14,15 @@ class GpioButtonMonitor;
 class KeySysfs {
 public:
     KeySysfs();
-    void slot_nextKey(void);
-    void slot_prevKey(void);
-    void slot_longPressNextKey(void);
-    void slot_longPressPrevKey(void);
-
-private:
-    std::unique_ptr<GpioButtonMonitor> nextkey_, prevkey_;
-    Callback nextshortrigger(const std::string& msg), nextlongtrigger(const std::string& msg);
-
     Signal_void nextkeysignal_;
     Signal_void prevkeysignal_;
     Signal_void longpressnextkeysignal_;
     Signal_void longpressprevkeysignal_;
+
+private:
+    std::unique_ptr<GpioButtonMonitor> nextkey_, prevkey_;
+    Callback nextshortrigger(const std::string &msg), nextlongtrigger(const std::string &msg);
+    Callback prevshortrigger(const std::string &msg), prevlongtrigger(const std::string &msg);
 };
 
 #include <iostream>
@@ -41,19 +37,16 @@ private:
 #include <functional>
 #include <fstream>
 
-class GpioButtonMonitor
-{
+class GpioButtonMonitor {
 public:
     // Constructor: Create a monitoring instance for the specified GPIO pin
     GpioButtonMonitor(int pin,
                       Callback short_press_cb = nullptr,
-                      Callback long_press_cb = nullptr)
-        : pin_(pin),
-          short_press_cb_(short_press_cb),
-          long_press_cb_(long_press_cb),
-          running_(false)
-    {
-
+                      Callback long_press_cb = nullptr) :
+        pin_(pin),
+        short_press_cb_(short_press_cb),
+        long_press_cb_(long_press_cb),
+        running_(false) {
         // Configure GPIO
         export_gpio();
         std::string direction_path = "/sys/class/gpio/gpio" + std::to_string(pin_) + "/direction";
@@ -65,8 +58,7 @@ public:
     }
 
     // Destructor: Automatically clean up resources
-    ~GpioButtonMonitor()
-    {
+    ~GpioButtonMonitor() {
         stop();
         if (fd_ != -1)
             close(fd_);
@@ -74,8 +66,7 @@ public:
     }
 
     // Start monitoring thread
-    void start()
-    {
+    void start() {
         if (fd_ == -1)
             return;
 
@@ -84,11 +75,9 @@ public:
     }
 
     // Stop monitoring thread
-    void stop()
-    {
+    void stop() {
         running_ = false;
-        if (monitor_thread_.joinable())
-        {
+        if (monitor_thread_.joinable()) {
             monitor_thread_.join();
         }
     }
@@ -104,34 +93,27 @@ private:
     const int long_press_threshold = 1000; // Long press threshold (ms)
 
     // Export GPIO
-    void export_gpio()
-    {
+    void export_gpio() {
         write_file("/sys/class/gpio/export", std::to_string(pin_));
     }
 
     // Unexport GPIO
-    void unexport_gpio()
-    {
+    void unexport_gpio() {
         write_file("/sys/class/gpio/unexport", std::to_string(pin_));
     }
 
     // General file write function
-    static void write_file(const std::string &path, const std::string &value)
-    {
+    static void write_file(const std::string &path, const std::string &value) {
         std::ofstream file(path);
-        if (file)
-        {
+        if (file) {
             file << value;
-        }
-        else
-        {
+        } else {
             std::cerr << "Error writing to " << path << std::endl;
         }
     }
 
     // Monitoring main loop
-    void monitor_loop()
-    {
+    void monitor_loop() {
         struct pollfd pfd;
         pfd.fd = fd_;
         pfd.events = POLLPRI;
@@ -144,23 +126,19 @@ private:
         char dummy[2];
         read(fd_, dummy, sizeof(dummy));
 
-        while (running_)
-        {
+        while (running_) {
             int ret = poll(&pfd, 1, 1000); // Poll with timeout
-            if (ret < 0)
-            {
+            if (ret < 0) {
                 std::cerr << "Poll error: " << strerror(errno) << std::endl;
                 break;
             }
 
-            if (ret > 0 && (pfd.revents & POLLPRI))
-            {
+            if (ret > 0 && (pfd.revents & POLLPRI)) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(debounce_delay));
 
                 lseek(fd_, 0, SEEK_SET);
                 char buf[2];
-                if (read(fd_, buf, sizeof(buf)) > 0)
-                {
+                if (read(fd_, buf, sizeof(buf)) > 0) {
                     const int value = atoi(buf);
                     handle_button_event(value, press_start_time, press_detected);
                 }
@@ -169,34 +147,25 @@ private:
     }
 
     // Handle button event
-    void handle_button_event(int value, long &press_start_time, bool &press_detected)
-    {
+    void handle_button_event(int value, long &press_start_time, bool &press_detected) {
         const auto now = std::chrono::system_clock::now();
         const auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                                    now.time_since_epoch())
                                    .count();
 
-        if (value == 0)
-        { // Press event
+        if (value == 0) { // Press event
             press_start_time = timestamp;
             press_detected = true;
-        }
-        else if (value == 1 && press_detected)
-        { // Release event
+        } else if (value == 1 && press_detected) { // Release event
             const auto duration = timestamp - press_start_time;
             press_detected = false;
 
-            if (duration >= long_press_threshold)
-            {
-                if (long_press_cb_)
-                {
+            if (duration >= long_press_threshold) {
+                if (long_press_cb_) {
                     long_press_cb_("GPIO" + std::to_string(pin_) + " Long press");
                 }
-            }
-            else
-            {
-                if (short_press_cb_)
-                {
+            } else {
+                if (short_press_cb_) {
                     short_press_cb_("GPIO" + std::to_string(pin_) + " Short press");
                 }
             }

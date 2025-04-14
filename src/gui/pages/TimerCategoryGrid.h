@@ -6,8 +6,7 @@
 #include "gui/components/text.h"
 #include "gui/components/progressbar.h"
 
-enum class TimerCategory
-{
+enum class TimerCategory {
     Study = 3,
     Read = 11,
     Transport = 12,
@@ -33,12 +32,10 @@ constexpr std::array<TimerCategory, 12> AllTimerCategory = {
     TimerCategory::SelfEnhance,
     TimerCategory::Sleep,
     TimerCategory::News,
-    TimerCategory::Sundry
-};
+    TimerCategory::Sundry};
 typedef sigc::slot<void, TimerCategory> Slot_TimerCategory;
 
-class TimerCategoryGrid : public EPD_Page
-{
+class TimerCategoryGrid : public EPD_Page {
 public:
     explicit TimerCategoryGrid(std::shared_ptr<DeviceLayer> epdDriver);
     ~TimerCategoryGrid();
@@ -57,6 +54,9 @@ public:
 
     sigc::signal<void, TimerCategory> signal_clickedTimerCategory_;
     Result<void> setPageNum(uint8_t pageNum);
+
+    Signal_void signal_clickeyNext_;
+    Signal_void signal_clickeyPrev_;
 
 private:
     Result<void> initcomponents();
