@@ -30,7 +30,7 @@ Result<void> TimerModeSelection::draw() {
 Result<void> TimerModeSelection::show() {
     epd_driver_->epdriver_Init(InitMode::Full);
     epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Normal);
-    epd_driver_->epdriver_Delay(500);
+    // epd_driver_->epdriver_Delay(500);
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
 }

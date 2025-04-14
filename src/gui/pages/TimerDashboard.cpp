@@ -30,10 +30,10 @@ Result<void> TimerDashboard::draw() {
 }
 Result<void> TimerDashboard::show() {
     epd_driver_->epdriver_Init(InitMode::Part);
-    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
-    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
-    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
-    epd_driver_->epdriver_Delay(500);
+    // epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
+    // epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial_Wait);
+    epd_driver_->epdriver_Display(imageBuffer_, DisplayMode::Partial);
+    // epd_driver_->epdriver_Delay(500); // 这个刷新时全局阻塞，不应使用
     epd_driver_->epdriver_Sleep();
     return Result<void>::Success();
 }

@@ -14,6 +14,7 @@ class GpioButtonMonitor;
 class KeySysfs {
 public:
     KeySysfs();
+    ~KeySysfs();
     Signal_void nextkeysignal_;
     Signal_void prevkeysignal_;
     Signal_void longpressnextkeysignal_;
@@ -21,8 +22,6 @@ public:
 
 private:
     std::unique_ptr<GpioButtonMonitor> nextkey_, prevkey_;
-    Callback nextshortrigger(const std::string &msg), nextlongtrigger(const std::string &msg);
-    Callback prevshortrigger(const std::string &msg), prevlongtrigger(const std::string &msg);
 };
 
 #include <iostream>
