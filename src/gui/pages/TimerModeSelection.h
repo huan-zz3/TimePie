@@ -16,12 +16,13 @@ enum class TimerMode {
     TwentyFive = 25,
     Thirty = 30,
     FortyFive = 45,
+    Fivety = 50,
     Sixty = 60,
     Ninety = 90,
     OneEighty = 180,
     CountUP = 0
 };
-constexpr std::array<TimerMode, 11> AllTimerModes = {
+constexpr std::array<TimerMode, 12> AllTimerModes = {
     TimerMode::Five,
     TimerMode::Ten,
     TimerMode::Fifteen,
@@ -29,6 +30,7 @@ constexpr std::array<TimerMode, 11> AllTimerModes = {
     TimerMode::TwentyFive,
     TimerMode::Thirty,
     TimerMode::FortyFive,
+    TimerMode::Fivety,
     TimerMode::Sixty,
     TimerMode::Ninety,
     TimerMode::OneEighty,

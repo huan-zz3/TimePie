@@ -52,17 +52,20 @@ Result<void> TimerModeSelection::initcomponents() {
         buttonMap[TimerMode::Five]->setall("5m", {10, 20}, true, _width, _margin, _font);
         buttonMap[TimerMode::Ten]->setall("10m", {90, 20}, true, _width, _margin, _font);
         buttonMap[TimerMode::Fifteen]->setall("15m", {180, 20}, true, _width, _margin, _font);
-        buttonMap[TimerMode::Twenty]->setall("20m", {10, 80}, true, _width, _margin, _font);
+        // buttonMap[TimerMode::Twenty]->setall("20m", {10, 80}, true, _width, _margin, _font);
         buttonMap[TimerMode::TwentyFive]->setall("25m", {90, 80}, true, _width, _margin, _font);
-        button_next->setall("N.", {180, 80}, true, _width, _margin, _font);
+        // button_next->setall("N.", {180, 80}, true, _width, _margin, _font);
+        buttonMap[TimerMode::Fivety]->setall("50m", {180, 80}, true, _width, _margin, _font);
+        buttonMap[TimerMode::CountUP]->setall("++m", {10, 80}, true, _width, _margin, _font);
     }
     {
         buttonMap[TimerMode::Thirty]->setall("30m", {10, 20}, true, _width, _margin, _font);
         buttonMap[TimerMode::FortyFive]->setall("45m", {90, 20}, true, _width, _margin, _font);
         buttonMap[TimerMode::Sixty]->setall("60m", {180, 20}, true, _width, _margin, _font);
         buttonMap[TimerMode::Ninety]->setall("90m", {10, 80}, true, _width, _margin, _font);
-        buttonMap[TimerMode::CountUP]->setall("++m", {90, 80}, true, _width, _margin, _font);
-        button_back->setall("B.", {180, 80}, true, _width, _margin, _font);
+        // buttonMap[TimerMode::CountUP]->setall("++m", {90, 80}, true, _width, _margin, _font);
+        // button_back->setall("B.", {180, 80}, true, _width, _margin, _font);
+        buttonMap[TimerMode::Twenty]->setall("20m", {90, 80}, true, _width, _margin, _font);
     }
     // 设置点击事件
     {
@@ -71,6 +74,7 @@ Result<void> TimerModeSelection::initcomponents() {
         buttonMap[TimerMode::Fifteen]->signal_clicked_.connect([this]() { signal_clickedTimerMode_.emit(TimerMode::Fifteen); });
         buttonMap[TimerMode::Twenty]->signal_clicked_.connect([this]() { signal_clickedTimerMode_.emit(TimerMode::Twenty); });
         buttonMap[TimerMode::TwentyFive]->signal_clicked_.connect([this]() { signal_clickedTimerMode_.emit(TimerMode::TwentyFive); });
+        buttonMap[TimerMode::Fivety]->signal_clicked_.connect([this]() { signal_clickedTimerMode_.emit(TimerMode::Fivety); });
         button_next->signal_clicked_.connect([this]() { setPageNum(2); draw(); show(); });
     }
     {
@@ -100,32 +104,38 @@ Result<void> TimerModeSelection::setPageNum(uint8_t pageNum) {
         buttonMap[TimerMode::Five]->setvisable(true);
         buttonMap[TimerMode::Ten]->setvisable(true);
         buttonMap[TimerMode::Fifteen]->setvisable(true);
-        buttonMap[TimerMode::Twenty]->setvisable(true);
+        // buttonMap[TimerMode::Twenty]->setvisable(true);
         buttonMap[TimerMode::TwentyFive]->setvisable(true);
-        button_next->setvisable(true);
+        // button_next->setvisable(true);
+        buttonMap[TimerMode::Fivety]->setvisable(true);
+        buttonMap[TimerMode::CountUP]->setvisable(true);
 
         buttonMap[TimerMode::Thirty]->setvisable(false);
         buttonMap[TimerMode::FortyFive]->setvisable(false);
         buttonMap[TimerMode::Sixty]->setvisable(false);
         buttonMap[TimerMode::Ninety]->setvisable(false);
-        buttonMap[TimerMode::CountUP]->setvisable(false);
-        button_back->setvisable(false);
+        // buttonMap[TimerMode::CountUP]->setvisable(false);
+        // button_back->setvisable(false);
+        buttonMap[TimerMode::Twenty]->setvisable(false);
         break;
 
     case 2:
         buttonMap[TimerMode::Five]->setvisable(false);
         buttonMap[TimerMode::Ten]->setvisable(false);
         buttonMap[TimerMode::Fifteen]->setvisable(false);
-        buttonMap[TimerMode::Twenty]->setvisable(false);
+        // buttonMap[TimerMode::Twenty]->setvisable(false);
         buttonMap[TimerMode::TwentyFive]->setvisable(false);
-        button_next->setvisable(false);
+        // button_next->setvisable(false);
+        buttonMap[TimerMode::Fivety]->setvisable(false);
+        buttonMap[TimerMode::CountUP]->setvisable(false);
 
         buttonMap[TimerMode::Thirty]->setvisable(true);
         buttonMap[TimerMode::FortyFive]->setvisable(true);
         buttonMap[TimerMode::Sixty]->setvisable(true);
         buttonMap[TimerMode::Ninety]->setvisable(true);
-        buttonMap[TimerMode::CountUP]->setvisable(true);
-        button_back->setvisable(true);
+        // buttonMap[TimerMode::CountUP]->setvisable(true);
+        // button_back->setvisable(true);
+        buttonMap[TimerMode::Twenty]->setvisable(true);
         break;
     default:
         return Result<void>::Error("TimerModeSelection::setPageNum() pageNum error");

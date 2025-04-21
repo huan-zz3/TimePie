@@ -1,8 +1,7 @@
 #include "epd_pages.h"
 
-EPD_Page::EPD_Page(std::shared_ptr<DeviceLayer> _epdd)
-    : epd_driver_(std::move(_epdd))
-{
+EPD_Page::EPD_Page(std::shared_ptr<DeviceLayer> _epdd) :
+    epd_driver_(std::move(_epdd)) {
     signal_Clicked_.connect(Slot_coordinate(Mem_fun(*this, EPD_Page::slot_Clicked_)));
 
     auto rt = epd_driver_->epdriver_NewImage(ImageColor::White);
@@ -10,25 +9,21 @@ EPD_Page::EPD_Page(std::shared_ptr<DeviceLayer> _epdd)
     epd_driver_->epdriver_SetRotate(imageBuffer_, RotateMode::Rotate_90);
 }
 
-EPD_Page::~EPD_Page()
-{
+EPD_Page::~EPD_Page() {
     auto _rt = delete_remove();
-    if (!_rt.isSuccess())
-    {
+    if (!_rt.isSuccess()) {
         LOG(ERROR) << "EPD_Page::~EPD_Page delete_remove error: " + _rt.errormsg() << std::endl;
     }
 }
 
-Result<void> EPD_Page::delete_remove()
-{
+Result<void> EPD_Page::delete_remove() {
     // 遍历 zToComponent_ 的所有值，并逐个调用 removecomponent 函数
     for (auto it = componentList_.begin(); it != componentList_.end();)
 
     {
         auto component = *it;
         auto result = removecomponent(component);
-        if (!result.isSuccess())
-        {
+        if (!result.isSuccess()) {
             return Result<void>::Error(result.errormsg());
         }
         // 移动迭代器到下一个元素，以避免在删除过程中出现迭代器失效的问题
@@ -43,19 +38,16 @@ Result<void> EPD_Page::delete_remove()
     return Result<void>::Success();
 }
 
-Result<void> EPD_Page::loadbmp(std::string _picpath)
-{
+Result<void> EPD_Page::loadbmp(std::string _picpath) {
     // 判断文件路径是否合法
     std::ifstream pic_file(_picpath);
-    if (!pic_file)
-    {
+    if (!pic_file) {
         return Result<void>::Error("EPD_Page::loadbmp: Invalid file path");
     }
     pic_file.close();
 
     // 判断是否为 .bmp 文件
-    if (_picpath.size() < 4 || _picpath.substr(_picpath.size() - 4) != ".bmp")
-    {
+    if (_picpath.size() < 4 || _picpath.substr(_picpath.size() - 4) != ".bmp") {
         return Result<void>::Error("EPD_Page::loadbmp: Not a .bmp file");
     }
 
@@ -68,53 +60,46 @@ Result<void> EPD_Page::loadbmp(std::string _picpath)
 
     // 读取 bmp 文件
     auto result = epd_driver_->epdriver_ReadBmp(imageBuffer_, _picpath, {0, 0});
-    if (!result.isSuccess())
-    {
+    if (!result.isSuccess()) {
         std::cerr << "Failed to read bmp: " << result.errormsg() << std::endl;
         return Result<void>::Error("EPD_Page::loadbmp: Failed to read bmp");
     }
     return Result<void>::Success();
 }
 
-Result<void> EPD_Page::addcomponent(std::shared_ptr<EPD_Component> component)
-{
+Result<void> EPD_Page::addcomponent(std::shared_ptr<EPD_Component> component) {
     // 将组件添加到componentList_中
     componentList_.add(component);
 
     // 设置组件的父页面为当前页面
     component->setparentpage(shared_from_this());
-    component->setvisable(true);
+    component->setvisable(false); // 组件添加时，默认不可见
 
     return Result<void>::Success();
 }
 
-Result<void> EPD_Page::removecomponent(std::shared_ptr<EPD_Component> component)
-{
+Result<void> EPD_Page::removecomponent(std::shared_ptr<EPD_Component> component) {
     // 删除列表中存储的组件元素
     componentList_.remove(component);
     component->setvisable(false);
 
     return Result<void>::Success();
 }
-Result<void> EPD_Page::setcomponentvisable(std::shared_ptr<EPD_Component> component, bool visable)
-{
+Result<void> EPD_Page::setcomponentvisable(std::shared_ptr<EPD_Component> component, bool visable) {
     componentVisable_[component] = visable;
     return Result<void>::Success();
 }
 
-Result<void> EPD_Page::updatecomponentzindex(uint8_t z, std::shared_ptr<EPD_Component> comp)
-{
+Result<void> EPD_Page::updatecomponentzindex(uint8_t z, std::shared_ptr<EPD_Component> comp) {
     componentList_.updateIndex(comp, z);
     return Result<void>::Success();
 }
 
-Result<ImageBuffer_ptr> EPD_Page::getimagebuffer()
-{
+Result<ImageBuffer_ptr> EPD_Page::getimagebuffer() {
     return Result<ImageBuffer_ptr>::Success(imageBuffer_);
 }
 
-Result<void> EPD_Page::updatecomponentrange(std::shared_ptr<EPD_Component> comp, ComponentRange range)
-{
+Result<void> EPD_Page::updatecomponentrange(std::shared_ptr<EPD_Component> comp, ComponentRange range) {
     // 在组件添加时，调用以下函数更新组件的范围信息
     componentToRange_[comp] = range;
     return Result<void>::Success();
@@ -126,16 +111,11 @@ using namespace std;
 // 函数：判断一个点是否在多边形内部
 // 参数：point - 要判断的点，polygon - 多边形的顶点数组
 // 返回值：如果点在多边形内部，返回true；否则返回false
-bool isPointInPolygon(PointCoordinates point, const vector<PointCoordinates> &polygon)
-{
+bool isPointInPolygon(PointCoordinates point, const vector<PointCoordinates> &polygon) {
     int numVertices = polygon.size();
     bool isInside = false;
-    for (size_t i = 0, j = numVertices - 1; i < numVertices; j = i++)
-    {
-        bool intersect = ((polygon[i].y > point.y) != (polygon[j].y > point.y)) &&
-                         (point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) /
-                                            (polygon[j].y - polygon[i].y) +
-                                        polygon[i].x);
+    for (size_t i = 0, j = numVertices - 1; i < numVertices; j = i++) {
+        bool intersect = ((polygon[i].y > point.y) != (polygon[j].y > point.y)) && (point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x);
         if (intersect)
             isInside = !isInside;
     }
@@ -143,19 +123,17 @@ bool isPointInPolygon(PointCoordinates point, const vector<PointCoordinates> &po
 }
 
 // slot_Clicked_的实现
-void EPD_Page::slot_Clicked_(PointCoordinates point)
-{
+void EPD_Page::slot_Clicked_(PointCoordinates point) {
     LOG(INFO) << "EPD_Page::slot_Clicked_ Enter" << std::endl;
 
     // 将触摸坐标转换为屏幕坐标（只适用屏幕旋转90°，但暂不完成不同旋转角度的适配）
     const auto _temp = point.y;
     point.y = point.x;
     point.x = 250 - _temp;
-    LOG(INFO) << "touch point: (x: " + std::to_string(point.x) + ", y: " + std::to_string(point.y) +")" << std::endl;
+    LOG(INFO) << "touch point: (x: " + std::to_string(point.x) + ", y: " + std::to_string(point.y) + ")" << std::endl;
 
     // 按z序降序遍历组件，从z较大的开始(end指向末尾的下一个位置，无法解引用；begin指向第一个元素)
-    for (size_t i = componentList_.size(); i-- > 0; ) 
-    {
+    for (size_t i = componentList_.size(); i-- > 0;) {
         auto component = componentList_[i];
         if (!component)
             continue; // 确保组件指针有效
@@ -164,14 +142,11 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
 
         // 获取组件的判定范围
         auto rangeIt = componentToRange_.find(component);
-        if (rangeIt != componentToRange_.end())
-        {
+        if (rangeIt != componentToRange_.end()) {
             const ComponentRange &ranges = rangeIt->second;
             // 遍历所有封闭图形
-            for (const auto &range : ranges)
-            {
-                if (isPointInPolygon(point, range))
-                {
+            for (const auto &range : ranges) {
+                if (isPointInPolygon(point, range)) {
                     // 此时component为被点击的组件
                     LOG(INFO) << "EPD_Page::slot_Clicked_ Emit" << std::endl;
                     // printComponentRange(ranges);
@@ -183,21 +158,17 @@ void EPD_Page::slot_Clicked_(PointCoordinates point)
     }
 }
 // 打印单个 PointCoordinates
-void printPointCoordinates(const PointCoordinates &point)
-{
+void printPointCoordinates(const PointCoordinates &point) {
     LOG(INFO) << "(" << point.x << ", " << point.y << ")";
 }
 // 打印整个 ComponentRange
-void printComponentRange(const ComponentRange &range)
-{
+void printComponentRange(const ComponentRange &range) {
     int pointgroupIndex = 1;
-    for (const auto &component : range)
-    {
+    for (const auto &component : range) {
         LOG(INFO) << "Pointgroup #" << pointgroupIndex++ << ":\n";
 
         int pointIndex = 0;
-        for (const auto &point : component)
-        {
+        for (const auto &point : component) {
             LOG(INFO) << "  Point #" << pointIndex++ << ": ";
             printPointCoordinates(point);
             LOG(INFO) << "\n";

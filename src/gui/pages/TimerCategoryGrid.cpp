@@ -54,28 +54,30 @@ Result<void> TimerCategoryGrid::initcomponents()
     button_back = std::make_shared<Button>(epd_driver_);
     addcomponent(button_back);
 
-    auto _fontbig = Font20;
-    auto _fontsmall = Font16;
-    auto _width = 2;
-    auto _margin = 4;
+    const auto _fontbig = Font24;
+    const auto _fontsmall = Font16;
+    const auto _width = 2;
+    const auto _margin = 4;
+    const uint16_t firstline = 20;
+    const uint16_t secondline = 70;
 
     {
-        buttonMap[TimerCategory::Study]->setall("STU", {10, 50}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Read]->setall("RD", {90, 50}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Transport]->setall("TR", {180, 50}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Relax]->setall("RLX", {10, 90}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Social]->setall("SOC", {90, 90}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::DailyAffair]->setall("DA", {180, 90}, true, _width, _margin, _fontbig);
-        button_next->setall(">", {220, 10}, true, _width, _margin, _fontsmall);
+        buttonMap[TimerCategory::Study]->setall("STU", {10, firstline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Read]->setall("RD", {90, firstline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Transport]->setall("TR", {180, firstline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Relax]->setall("RLX", {10, secondline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Social]->setall("SOC", {90, secondline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::DailyAffair]->setall("DA", {180, secondline}, true, _width, _margin, _fontbig);
+        // button_next->setall(">", {220, 10}, true, _width, _margin, _fontsmall);
     }
     {
-        buttonMap[TimerCategory::HaveFun]->setall("HF", {10, 50}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Sport]->setall("SPT", {90, 50}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::SelfEnhance]->setall("SEN", {180, 50}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Sleep]->setall("SLP", {10, 90}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::News]->setall("NS", {90, 90}, true, _width, _margin, _fontbig);
-        buttonMap[TimerCategory::Sundry]->setall("SUN", {180, 90}, true, _width, _margin, _fontbig);
-        button_back->setall("<", {220, 10}, true, _width, _margin, _fontsmall);
+        buttonMap[TimerCategory::HaveFun]->setall("HF", {10, firstline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Sport]->setall("SPT", {90, firstline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::SelfEnhance]->setall("SEN", {180, firstline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Sleep]->setall("SLP", {10, secondline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::News]->setall("NS", {90, secondline}, true, _width, _margin, _fontbig);
+        buttonMap[TimerCategory::Sundry]->setall("SUN", {180, secondline}, true, _width, _margin, _fontbig);
+        // button_back->setall("<", {220, 10}, true, _width, _margin, _fontsmall);
     }
     // 设置点击事件
     {
@@ -135,7 +137,7 @@ Result<void> TimerCategoryGrid::setPageNum(uint8_t pageNum)
         buttonMap[TimerCategory::Relax]->setvisable(true);
         buttonMap[TimerCategory::Social]->setvisable(true);
         buttonMap[TimerCategory::DailyAffair]->setvisable(true);
-        button_next->setvisable(true);
+        // button_next->setvisable(true);
 
         buttonMap[TimerCategory::HaveFun]->setvisable(false);
         buttonMap[TimerCategory::Sport]->setvisable(false);
@@ -143,7 +145,7 @@ Result<void> TimerCategoryGrid::setPageNum(uint8_t pageNum)
         buttonMap[TimerCategory::Sleep]->setvisable(false);
         buttonMap[TimerCategory::News]->setvisable(false);
         buttonMap[TimerCategory::Sundry]->setvisable(false);
-        button_back->setvisable(false);
+        // button_back->setvisable(false);
         break;
 
     case 2:
@@ -153,7 +155,7 @@ Result<void> TimerCategoryGrid::setPageNum(uint8_t pageNum)
         buttonMap[TimerCategory::Relax]->setvisable(false);
         buttonMap[TimerCategory::Social]->setvisable(false);
         buttonMap[TimerCategory::DailyAffair]->setvisable(false);
-        button_next->setvisable(false);
+        // button_next->setvisable(false);
 
         buttonMap[TimerCategory::HaveFun]->setvisable(true);
         buttonMap[TimerCategory::Sport]->setvisable(true);
@@ -161,7 +163,7 @@ Result<void> TimerCategoryGrid::setPageNum(uint8_t pageNum)
         buttonMap[TimerCategory::Sleep]->setvisable(true);
         buttonMap[TimerCategory::News]->setvisable(true);
         buttonMap[TimerCategory::Sundry]->setvisable(true);
-        button_back->setvisable(true);
+        // button_back->setvisable(true);
         break;
     default:
         return Result<void>::Error("TimerCategory_Selection::setPageNum() pageNum error");
