@@ -66,7 +66,7 @@ Result<void> TimeBook::timebookLogin()
     {
         std::string _sendata = std::string(METHOD_POST) + "||" + std::string(URL_LOGIN) + "||||" + _logindata.dump();
         LOG(INFO) << "LoginData: " << _sendata << std::endl;
-        auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, 5000);
+        auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, DTU_WAITIME);
         if (!_rt.isSuccess())
         {
             LOG(ERROR) << _rt.errormsg() << std::endl;
@@ -155,7 +155,7 @@ Result<void> TimeBook::submitTimeItem(std::string _itemid)
         LOG(INFO) << "SubmitData: " << _sendata << std::endl;
 
         // 通过dtu提交数据
-        auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, 5000);
+        auto _rt = i4gdtu_->dtuJSONCommunication(_sendata, DTU_WAITIME);
         if (!_rt.isSuccess())
         {
             LOG(ERROR) << _rt.errormsg() << std::endl;

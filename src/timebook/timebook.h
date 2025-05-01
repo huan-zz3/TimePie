@@ -13,6 +13,7 @@ using json = nlohmann::json;
 #define URL_LOGIN "/api/unibackend/login/"
 #define URL_SAVERECORD "/api/mytime/time_record/detail/"
 #define SQLDB_PATH "./timeitem.db"
+#define DTU_WAITIME 2000
 
 struct Metric
 {
