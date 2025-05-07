@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <cstdlib>
 
 #include "devicelayer.h"
 #include "bgservice/servicelayer.h"
 #include "timebook/timebook.h"
-#define ACCOUNT "2805033624@qq.com"
-#define PASSWORD "whl003388"
+
+#define TIMEPIE_ACCOUNT "TIMEPIE_ACCOUNT"
+#define TIMEPIE_PASSWORD "TIMEPIE_PASSWORD"
 
 class SystemInitializer {
 public:
@@ -40,8 +42,20 @@ public:
         s.service = std::make_shared<ServiceLayer>(s.dtuTime);
         s.service->epdserInit();
 
+        // 从环境变量中获取账号和密码
+        const char *account_env = std::getenv(TIMEPIE_ACCOUNT);
+        const char *password_env = std::getenv(TIMEPIE_PASSWORD);
+
+        if (!account_env || !password_env) {
+            LOG(ERROR) << "环境变量TIMEPIE_ACCOUNT或TIMEPIE_PASSWORD未设置" << std::endl;
+            throw std::runtime_error("环境变量TIMEPIE_ACCOUNT或TIMEPIE_PASSWORD未设置");
+        }
+
+        std::string account(account_env);
+        std::string password(password_env);
+
         // 阶段5：初始化timebook模块
-        s.timebook = std::make_shared<TimeBook>(ACCOUNT, PASSWORD);
+        s.timebook = std::make_shared<TimeBook>(account, password);
         s.timebook->setI4GDTU(s.dtu);
         std::shared_ptr<Sqlite3Database> database = std::make_shared<Sqlite3Database>();
         s.timebook->setIDatabase(database);
