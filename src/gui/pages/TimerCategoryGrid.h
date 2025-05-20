@@ -7,7 +7,7 @@
 #include "gui/components/progressbar.h"
 
 enum class TimerCategory {
-    Study = 3,
+    Academic = 3,
     Read = 11,
     Transport = 12,
     Relax = 2,
@@ -18,10 +18,11 @@ enum class TimerCategory {
     SelfEnhance = 15,
     Sleep = 16,
     News = 17,
-    Sundry = 18
+    Sundry = 18,
+    Career = 19
 };
-constexpr std::array<TimerCategory, 12> AllTimerCategory = {
-    TimerCategory::Study,
+constexpr std::array<TimerCategory, 13> AllTimerCategory = {
+    TimerCategory::Academic,
     TimerCategory::Read,
     TimerCategory::Transport,
     TimerCategory::Relax,
@@ -32,7 +33,9 @@ constexpr std::array<TimerCategory, 12> AllTimerCategory = {
     TimerCategory::SelfEnhance,
     TimerCategory::Sleep,
     TimerCategory::News,
-    TimerCategory::Sundry};
+    TimerCategory::Sundry,
+    TimerCategory::Career
+};
 typedef sigc::slot<void, TimerCategory> Slot_TimerCategory;
 
 class TimerCategoryGrid : public EPD_Page {
@@ -61,6 +64,7 @@ public:
 private:
     Result<void> initcomponents();
     bool firstcompinit = true;
+    uint8_t pageNum_ = 1;
 
     std::map<TimerCategory, std::shared_ptr<Button>> buttonMap;
     std::shared_ptr<Button> button_next, button_back;

@@ -171,14 +171,13 @@ int main(int argc, char **argv) {
     // 监听定时器模式选择事件
     GetEventBus()->registerListener<TimerModeSelected>([timerdashboard, &currentpage, &tomatostartime_str](const TimerModeSelected &e) {
         LOG(INFO) << "TimerSelection finished" << std::endl;
-
-        GetLedSysfs()->winkGreenLed3sec();
-
         auto rt = ServiceLayer::nowTimestr();
         if (!rt.isSuccess()) {
             LOG(ERROR) << rt.errormsg() << std::endl;
             return;
         }
+        
+        GetLedSysfs()->winkGreenLed3sec();
         tomatostartime_str = rt.successvalue(); //  获取当前时间字符串，并赋值给tomatostartime_str
 
         if (e.countminute == 0) {
