@@ -176,14 +176,14 @@ int main(int argc, char **argv) {
             LOG(ERROR) << rt.errormsg() << std::endl;
             return;
         }
-        
+
         GetLedSysfs()->winkGreenLed3sec();
         tomatostartime_str = rt.successvalue(); //  获取当前时间字符串，并赋值给tomatostartime_str
 
         if (e.countminute == 0) {
-            ServiceLayer::epdserStartCountUPTimer(5);
+            ServiceLayer::epdserStartCountUPTimer(2);
         } else {
-            ServiceLayer::epdserStartTomatoTimer(e.countminute, 5); //  启动番茄计时器，参数为e.countminute和5
+            ServiceLayer::epdserStartTomatoTimer(e.countminute, 2); //  启动番茄计时器，参数为e.countminute和2
         }
 
         timerdashboard->startPageUpdate(); //  开始更新计时器仪表盘页面

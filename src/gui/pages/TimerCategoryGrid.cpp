@@ -185,5 +185,6 @@ Result<void> TimerCategoryGrid::setPageNum(uint8_t pageNum) {
     default:
         return Result<void>::Error("TimerCategory_Selection::setPageNum() pageNum error");
     }
+    pageNum_ = pageNum;
     return Result<void>::Success();
 }
